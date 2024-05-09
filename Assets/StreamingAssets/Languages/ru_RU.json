@@ -1,0 +1,68 @@
+{
+  "items":[
+    {
+      "key": "select_language_settings_header",
+      "value": "Выбор языка"
+    },
+    {
+      "key": "port_name",
+      "value": "Имя порта"
+    },
+    {
+      "key": "save",
+      "value": "Сохранить"
+    },
+    {
+      "key": "cancel",
+      "value": "Отмена"
+    },
+    {
+      "key": "school_level_1",
+      "value": "Школа, уровень 1"
+    },
+    {
+      "key": "school_level_2",
+      "value": "Школа, уровень 1"
+    },
+    {
+      "key": "home_level_1",
+      "value": "Дом, уровень 1"
+    },
+    {
+      "key": "home_level_2",
+      "value": "Дом, уровень 2"
+    },
+    {
+      "key": "pick_scenario",
+      "value": "Выберите сценарий:"
+    },
+    {
+      "key": "fire_in_school",
+      "value": "Пожар в школе"
+    },
+    {
+      "key": "house_fire",
+      "value": "Пожар дома"
+    },
+    {
+      "key": "level_1",
+      "value": "Уровень 1"
+    },
+    {
+      "key": "next",
+      "value": "Далее"
+    },
+    {
+      "key": "level_2",
+      "value": "Уровень 2"
+    },
+    {
+      "key": "repeat",
+      "value": "Повторить"
+    },
+    {
+      "key": "reminder",
+      "value": "МЧС НАПОМИНАЕТ: ЕСЛИ НЕ ПОЛУЧАЕТСЯ СПРАВИТЬСЯ С ОГНЕМ - БЕГИТЕ"
+    }
+  ]
+}

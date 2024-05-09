@@ -1,0 +1,87 @@
+# Exported from Fuse 2017.1.0
+
+newmtl Hair
+illum 4 
+Kd 1.00 1.00 1.00 
+Tf 1.00 1.00 1.00 
+Ni 1.00 
+Ks 1.00 1.00 1.00 
+Ns 512 
+adobe_reflectivity 0.04 
+adobe_bump_strength 0.0 
+d 1.0 
+
+map_d teen_Hair_Opacity.png
+map_Kd teen_Hair_Diffuse.png
+adobe_map_normal teen_Hair_Normal.png
+map_Ks teen_Hair_Specular.png
+adobe_map_shininess teen_Hair_Gloss.png
+
+newmtl Bottom
+illum 4 
+Kd 1.00 1.00 1.00 
+Tf 1.00 1.00 1.00 
+Ni 1.00 
+Ks 1.00 1.00 1.00 
+Ns 512 
+adobe_reflectivity 0.04 
+adobe_bump_strength 0.0 
+d 1.0 
+
+map_d teen_Bottom_Opacity.png
+map_Kd teen_Bottom_Diffuse.png
+adobe_map_normal teen_Bottom_Normal.png
+map_Ks teen_Bottom_Specular.png
+adobe_map_shininess teen_Bottom_Gloss.png
+
+newmtl Shoes
+illum 4 
+Kd 1.00 1.00 1.00 
+Tf 1.00 1.00 1.00 
+Ni 1.00 
+Ks 1.00 1.00 1.00 
+Ns 512 
+adobe_reflectivity 0.04 
+adobe_bump_strength 0.0 
+d 1.0 
+
+map_d teen_Shoes_Opacity.png
+map_Kd teen_Shoes_Diffuse.png
+adobe_map_normal teen_Shoes_Normal.png
+map_Ks teen_Shoes_Specular.png
+adobe_map_shininess teen_Shoes_Gloss.png
+
+newmtl Top
+illum 4 
+Kd 1.00 1.00 1.00 
+Tf 1.00 1.00 1.00 
+Ni 1.00 
+Ks 1.00 1.00 1.00 
+Ns 512 
+adobe_reflectivity 0.04 
+adobe_bump_strength 0.0 
+d 1.0 
+
+map_d teen_Top_Opacity.png
+map_Kd teen_Top_Diffuse.png
+adobe_map_normal teen_Top_Normal.png
+map_Ks teen_Top_Specular.png
+adobe_map_shininess teen_Top_Gloss.png
+
+newmtl Body
+illum 4 
+Kd 1.00 1.00 1.00 
+Tf 1.00 1.00 1.00 
+Ni 1.00 
+Ks 1.00 1.00 1.00 
+Ns 512 
+adobe_reflectivity 0.04 
+adobe_bump_strength 0.0 
+d 1.0 
+
+map_d teen_Body_Opacity.png
+map_Kd teen_Body_Diffuse.png
+adobe_map_normal teen_Body_Normal.png
+map_Ks teen_Body_Specular.png
+adobe_map_shininess teen_Body_Gloss.png
+
