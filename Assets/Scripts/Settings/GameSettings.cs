@@ -116,7 +116,7 @@ namespace Settings
         {
             return new LevelSettings
             {
-               deadTimer = 180.0f,
+               deadTimer = 120.0f,
                star2Time = 120f,
                star1Time = 60f
             };

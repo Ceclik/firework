@@ -18,7 +18,7 @@ public class GameManager : Singleton<GameManager>
 
     private FireSystem _fireSystem;
     //private FireMeter _fireMeter;
-    private Stars _stars;
+    private AfterLevelMenuDisplayer _stars;
     private Timer _timer;
     private float _sceneDelay = 8f;
     private int _currentLevel;
@@ -79,13 +79,18 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene("Calibrate");
     }
 
+    public void SceneMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void SceneSettings()
     {
         Cursor.visible = true;
         MyInput.Instance.gameObject.SetActive(false);
         SceneManager.LoadScene("Settings");
     }
-    // Use this for initialization
+    
     void Start()
     {
         MyInput.Instance.Init();
@@ -112,8 +117,7 @@ public class GameManager : Singleton<GameManager>
         MyInput.Instance.Init();
         Cursor.visible = false;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -125,8 +129,7 @@ public class GameManager : Singleton<GameManager>
     private void FindFireSystems()
     {
         _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
-        //_fireMeter = ((FireMeter)FindObjectOfType(typeof(FireMeter)));
-        _stars = ((Stars)FindObjectOfType(typeof(Stars)));
+        _stars = ((AfterLevelMenuDisplayer)FindObjectOfType(typeof(AfterLevelMenuDisplayer)));
         _timer = ((Timer)FindObjectOfType(typeof(Timer)));
         _stars.gameObject.SetActive(false);
         _timer.gameObject.SetActive(false);
@@ -180,7 +183,6 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("Manager starting fire");
         _fireSystem.StartFire();
         _timer.gameObject.SetActive(true);
-        //_fireMeter.Show();
         
         foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
         {
@@ -190,62 +192,13 @@ public class GameManager : Singleton<GameManager>
         FireStarted = true;
     }
 
-    private IEnumerator SceneDelay(float delay, string scene)
-    {
-        float timer = 0;
-        while (timer < delay)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        SceneManager.LoadScene(scene);
-    }
-
     public void EndScene()
     {        
             Debug.Log(_stars);
             _stars.gameObject.SetActive(true);
             Debug.Log("timer" + _timer);
             _stars.Show(_timer.Stars());
-            _timer.gameObject.SetActive(false);          /*TODO*/
+            _timer.gameObject.SetActive(false);          
             _fireSystem.gameObject.SetActive(false);
-
-            string nextScene = "MainMenu";
-            var m_Scene = SceneManager.GetActiveScene();
-            string currentScene = m_Scene.name;
-
-            if (currentScene == "SceneOne") nextScene = "SceneOnePartTwo";
-            if (currentScene == "SceneOne" && _timer.Stars() < 1) nextScene = "SceneOne";
-            if (currentScene == "SceneTwo") nextScene = "SceneTwoPartTwo";
-            if (currentScene == "SceneTwo" && _timer.Stars() < 1) nextScene = "SceneTwo";
-        //if (_timer.Stars() > 0)
-        //{
-        //    StartCoroutine(SceneDelay(_sceneDelay, nextScene));
-        //}
-    }
-
-    public void NextScene()
-    {
-        var m_Scene = SceneManager.GetActiveScene();
-        string currentScene = m_Scene.name;
-        string nextScene="";
-        switch (currentScene)
-        {
-            case "SceneOne": nextScene = "SceneOnePartTwo";
-                break;
-            case "SceneTwo": nextScene = "SceneTwoPartTwo";
-                break;
-            default:nextScene = "MainMenu";
-                break;
-        }
-
-        SceneManager.LoadScene(nextScene);
-    }
-
-    public void Repeat()
-    {
-        var m_Scene = SceneManager.GetActiveScene();
-        string currentScene = m_Scene.name;
-        SceneManager.LoadScene(currentScene);
     }
 }

@@ -12,7 +12,6 @@ public class Timer : MonoBehaviour {
     public float star1Time = 1f;
     public float star2Time = 3f;    
     
-	// Use this for initialization
 	void Start () {        
         Debug.Log("getted start timer for level:"+startTime);
         star1Time = GameManager.Instance.GetLevelSettings().star1Time / 60f;
