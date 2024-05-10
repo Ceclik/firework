@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
+using Scenes;
 using UnityEngine;
 
 //This script is handling outlet object in scene. Interaction with it and its behaviour.

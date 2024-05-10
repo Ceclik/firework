@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
     private GameSettings _settings;
 
     private FireSystem _fireSystem;
-    private FireMeter _fireMeter;
+    //private FireMeter _fireMeter;
     private Stars _stars;
     private Timer _timer;
     private float _sceneDelay = 8f;
@@ -125,7 +125,7 @@ public class GameManager : Singleton<GameManager>
     private void FindFireSystems()
     {
         _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
-        _fireMeter = ((FireMeter)FindObjectOfType(typeof(FireMeter)));
+        //_fireMeter = ((FireMeter)FindObjectOfType(typeof(FireMeter)));
         _stars = ((Stars)FindObjectOfType(typeof(Stars)));
         _timer = ((Timer)FindObjectOfType(typeof(Timer)));
         _stars.gameObject.SetActive(false);
@@ -179,7 +179,8 @@ public class GameManager : Singleton<GameManager>
         }
         Debug.Log("Manager starting fire");
         _fireSystem.StartFire();
-        _fireMeter.Show();
+        _timer.gameObject.SetActive(true);
+        //_fireMeter.Show();
         
         foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
         {
