@@ -26,8 +26,8 @@ public class Outlet : MonoBehaviour
         anim = GetComponent<Animator>();
         collider = GetComponentInChildren<BoxCollider>();
         audio = GetComponent<AudioSource>();
-        _com = new SerialPort(GameManager.Instance.ComPort, 9600);
-        Debug.Log("Opening com port:" + GameManager.Instance.ComPort);
+        _com = new SerialPort(GameManager.Instance.comPort, 9600);
+        Debug.Log("Opening com port:" + GameManager.Instance.comPort);
         _com.Open();
         _com.ReadTimeout = 1;
         if (_com.IsOpen) Debug.Log("COM PORT OPENED");
@@ -37,7 +37,7 @@ public class Outlet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!falled && GameManager.Instance.FireStarted)
+        if (!falled && GameManager.Instance.fireStarted)
         {
             int fromCom = int.MaxValue;
             int comExpected = gasCrane ? 3 : 2;

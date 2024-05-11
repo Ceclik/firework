@@ -4,6 +4,7 @@ using Settings;
 using Tracking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 //Script in which all main game actions are implemented like changing scenes, finding fire systems in scenes etc. 
 //Using game manager is bad practice. All actions should be in separate scripts.
@@ -11,15 +12,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
 
-    public bool FirstRun = true;
-    public bool FireStarted;
-    public string ComPort;
+    public bool firstRun = true;
+    public bool fireStarted;
+    public string comPort;
     private GameSettings _settings;
 
     private FireSystem _fireSystem;
     private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
     public Timer Timer { get; set; }
-    private float _sceneDelay = 8f;
     private int _currentLevel;
 
     public bool FireSeekGameMode { get; set; }
@@ -112,12 +112,12 @@ public class GameManager : Singleton<GameManager>
         {
             Cursor.visible = false;
         }
-        ComPort = PlayerPrefs.GetString("COM");
-        Debug.Log("Com port settings:" + ComPort);
-        if (string.IsNullOrEmpty(ComPort))
+        comPort = PlayerPrefs.GetString("COM");
+        Debug.Log("Com port settings:" + comPort);
+        if (string.IsNullOrEmpty(comPort))
         {
             Debug.Log("Cant load comport settings");
-            ComPort = "COM0";
+            comPort = "COM0";
         }
     }
 
@@ -204,7 +204,7 @@ public class GameManager : Singleton<GameManager>
             trigger.GetComponent<Animator>().SetTrigger("Fire");
         }
 
-        FireStarted = true;
+        fireStarted = true;
     }
 
     public void EndScene()

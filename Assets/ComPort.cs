@@ -12,7 +12,7 @@ public class ComPort : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GetComponent<InputField>().text = GameManager.Instance.ComPort;
+        GetComponent<InputField>().text = GameManager.Instance.comPort;
         Debug.Log("setting comport string");
     }
 
@@ -26,7 +26,7 @@ public class ComPort : MonoBehaviour
     {
         if (counter > 0)
         {
-            GameManager.Instance.ComPort = com;
+            GameManager.Instance.comPort = com;
             PlayerPrefs.SetString("COM", com);
             Debug.Log("Com port settings saved:" + com);
         }

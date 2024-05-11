@@ -25,10 +25,10 @@ public class Slideshow : MonoBehaviour
     
     private void Start()
     {
-        if (GameManager.Instance.FirstRun)
+        if (GameManager.Instance.firstRun)
         {
             StartCoroutine(Fade(0));
-            GameManager.Instance.FirstRun = false;
+            GameManager.Instance.firstRun = false;
         }
         else
         {

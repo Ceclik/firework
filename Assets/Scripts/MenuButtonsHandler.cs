@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MenuButtonsHandler : MonoBehaviour
 {
@@ -43,12 +42,14 @@ public class MenuButtonsHandler : MonoBehaviour
     public void OnSeekFireModeButtonClick()
     {
         FindFirstObjectByType<GameManager>().FireSeekGameMode = true;
+        FindFirstObjectByType<GameManager>().FireAimGameMode = false;
         pickGameMode.SetActive(false);
         pickLocation.SetActive(true);
     }
 
     public void OnFireAimModeButtonClick()
     {
+        FindFirstObjectByType<GameManager>().FireSeekGameMode = false;
         FindFirstObjectByType<GameManager>().FireAimGameMode = true;
         pickGameMode.SetActive(false);
         pickLocation.SetActive(true);
