@@ -1,21 +1,29 @@
-﻿using UnityEngine;
+﻿using Instructions;
+using UnityEngine;
 
 namespace AnimationTriggers
 {
 	public class FireStartCam : StateMachineBehaviour {
+		
+		private LevelInstructionShower _instruction;
+		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
+		{
+			_instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
+			_instruction.OnStartButtonClicked += StartFire;
+		}
 
-		// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-		override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		private void StartFire()
+		{
 			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(1f));
+		}
+		
+		public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+		{
+			_instruction.OnStartButtonClicked -= StartFire;
 		}
 
 		// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 		//override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		//
-		//}
-
-		// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-		//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		//
 		//}
 

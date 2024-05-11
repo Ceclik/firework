@@ -1,4 +1,3 @@
-using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +7,9 @@ namespace Instructions
     {
         [SerializeField] private GameObject levelInstruction;
         [SerializeField] private Button startButton;
+
+        public delegate void StartFire();
+        public event StartFire OnStartButtonClicked;
 
         private void Start()
         {
@@ -21,11 +23,8 @@ namespace Instructions
 
         private void OnStartButtonClick()
         {
-            var can = GameObject.Find("TrashCan");
-            TrashCan trashCan = can.GetComponent<TrashCan>();
-            if (!trashCan.falled)
-                trashCan.TrashFall();
             levelInstruction.SetActive(false);
+            OnStartButtonClicked?.Invoke();
         }
     }
 }
