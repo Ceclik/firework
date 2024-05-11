@@ -1,24 +1,38 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class MenuActions : MonoBehaviour
+public class MenuButtonsHandler : MonoBehaviour
 {
 
     [SerializeField] private GameObject pickGameMode;
     [SerializeField] private GameObject pickLocation;
-    
-	public void OnExitButtonClick()
+
+    private GameManager _gameManager;
+
+    private void Start()
+    {
+        _gameManager = FindFirstObjectByType<GameManager>();
+    }
+
+    public void OnExitButtonClick()
     {
         Application.Quit();
     }
     
     public void OnSchoolSceneButtonClick()
     {
-        FindFirstObjectByType<GameManager>().SceneOne(); 
+        if (_gameManager.FireSeekGameMode)
+            _gameManager.LoadSchoolFireSeekScene();
+        else
+            _gameManager.LoadSchoolFireAimScene(); 
     }
 
     public void OnHomeSceneButtonClick()
     {
-        FindFirstObjectByType<GameManager>().SceneTwo();
+        if(_gameManager.FireSeekGameMode)
+            _gameManager.LoadHomeFireSeekScene();
+        else
+            _gameManager.LoadHomeFireAimScene();
     }
 
     public void OnSettingsSceneButtonClick()

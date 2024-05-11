@@ -64,16 +64,28 @@ public class GameManager : Singleton<GameManager>
         return _settings.GetSettings(_currentLevel);
     }
 
-    public void SceneOne()
+    public void LoadSchoolFireAimScene()
     {
         Cursor.visible = false;
-        SceneManager.LoadScene("SceneOne");
+        SceneManager.LoadScene("SchoolFireAim");
     }
 
-    public void SceneTwo()
+    public void LoadSchoolFireSeekScene()
     {
         Cursor.visible = false;
-        SceneManager.LoadScene("SceneTwo");
+        SceneManager.LoadScene("SchoolFireSeekScene");
+    }
+
+    public void LoadHomeFireSeekScene()
+    {
+        Cursor.visible = false;
+        SceneManager.LoadScene("HomeFireSeekScene");
+    }
+
+    public void LoadHomeFireAimScene()
+    {
+        Cursor.visible = false;
+        SceneManager.LoadScene("HomeFireAimScene");
     }
 
     public void SceneCalibrate()

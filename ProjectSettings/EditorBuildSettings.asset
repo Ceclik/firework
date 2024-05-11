@@ -9,16 +9,16 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 5145160629119734f83fcd598e585867
   - enabled: 1
-    path: Assets/Scenes/SceneOne.unity
+    path: Assets/Scenes/SchoolFireAim.unity
     guid: 3a0f2fd6a5de56c40b02af11463c9c7d
   - enabled: 1
-    path: Assets/Scenes/SceneOnePartTwo.unity
+    path: Assets/Scenes/SchoolFireSeekScene.unity
     guid: e2b0bf8e975495f43860787472056bac
   - enabled: 1
-    path: Assets/Scenes/SceneTwo.unity
+    path: Assets/Scenes/HomeFireSeekScene.unity
     guid: ca84d959780d8af4bbba4b4959b7cbe2
   - enabled: 1
-    path: Assets/Scenes/SceneTwoPartTwo.unity
+    path: Assets/Scenes/HomeFireAimScene.unity
     guid: 25268d808d0386c47ae0f0c32b9a018b
   - enabled: 1
     path: Assets/Scenes/Calibrate.unity
@@ -27,3 +27,4 @@ EditorBuildSettings:
     path: Assets/Scenes/Settings.unity
     guid: 1b44406c1660a5846ad9591214de2975
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

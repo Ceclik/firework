@@ -442,7 +442,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1257257107}
-        m_TargetAssemblyTypeName: MenuActions, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuButtonsHandler, Assembly-CSharp
         m_MethodName: OnExitButtonClick
         m_Mode: 1
         m_Arguments:
@@ -762,7 +762,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1257257107}
-        m_TargetAssemblyTypeName: MenuActions, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuButtonsHandler, Assembly-CSharp
         m_MethodName: OnHomeSceneButtonClick
         m_Mode: 1
         m_Arguments:
@@ -1167,7 +1167,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1257257107}
-        m_TargetAssemblyTypeName: MenuActions, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuButtonsHandler, Assembly-CSharp
         m_MethodName: OnSettingsSceneButtonClick
         m_Mode: 1
         m_Arguments:
@@ -1380,7 +1380,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1257257107}
-        m_TargetAssemblyTypeName: MenuActions, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuButtonsHandler, Assembly-CSharp
         m_MethodName: OnSeekFireModeButtonClick
         m_Mode: 1
         m_Arguments:
@@ -1445,7 +1445,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &929108954
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1825,7 +1825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1160963680
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2237,7 +2237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1257257104
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2308,7 +2308,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1257257103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e972dd8985f1264198b237c50c4b883, type: 3}
+  m_Script: {fileID: 11500000, guid: 46a27d0c7cfb6cfe3861cfcc4cb40c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pickGameMode: {fileID: 1785800628}
@@ -2477,7 +2477,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1257257107}
-        m_TargetAssemblyTypeName: MenuActions, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuButtonsHandler, Assembly-CSharp
         m_MethodName: OnSchoolSceneButtonClick
         m_Mode: 1
         m_Arguments:
@@ -2913,7 +2913,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1257257107}
-        m_TargetAssemblyTypeName: MenuActions, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuButtonsHandler, Assembly-CSharp
         m_MethodName: OnFireAimModeButtonClick
         m_Mode: 1
         m_Arguments:
@@ -3583,7 +3583,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

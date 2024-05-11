@@ -21,14 +21,11 @@ namespace Instructions
 
         private void OnStartButtonClick()
         {
-            levelInstruction.SetActive(false);
-            
             var can = GameObject.Find("TrashCan");
             TrashCan trashCan = can.GetComponent<TrashCan>();
             if (!trashCan.falled)
-            {
                 trashCan.TrashFall();
-            }
+            levelInstruction.SetActive(false);
         }
     }
 }

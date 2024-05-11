@@ -1,13 +1,12 @@
-﻿using Instructions;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Scenes
+namespace AnimationTriggers
 {
     public class TrashFallTrigger : StateMachineBehaviour
     {
         public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
-            GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>().ShowInstructionWindow();
+            
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
