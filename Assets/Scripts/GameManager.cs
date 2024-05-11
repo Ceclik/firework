@@ -17,8 +17,8 @@ public class GameManager : Singleton<GameManager>
     private GameSettings _settings;
 
     private FireSystem _fireSystem;
-    private AfterLevelMenuDisplayer _stars;
-    private Timer _timer;
+    private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
+    public Timer Timer { get; set; }
     private float _sceneDelay = 8f;
     private int _currentLevel;
 
@@ -143,10 +143,11 @@ public class GameManager : Singleton<GameManager>
     private void FindFireSystems()
     {
         _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
-        _stars = ((AfterLevelMenuDisplayer)FindObjectOfType(typeof(AfterLevelMenuDisplayer)));
-        _timer = ((Timer)FindObjectOfType(typeof(Timer)));
-        _stars.gameObject.SetActive(false);
-        _timer.gameObject.SetActive(false);
+        _afterLevelMenuDisplayer = FindFirstObjectByType<AfterLevelMenuDisplayer>();
+        //Timer = FindFirstObjectByType<Timer>();
+        _afterLevelMenuDisplayer.gameObject.SetActive(false);
+        
+        Timer.gameObject.SetActive(false);
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -196,7 +197,7 @@ public class GameManager : Singleton<GameManager>
         }
         Debug.Log("Manager starting fire");
         _fireSystem.StartFire();
-        _timer.gameObject.SetActive(true);
+        Timer.gameObject.SetActive(true);
         
         foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
         {
@@ -208,11 +209,11 @@ public class GameManager : Singleton<GameManager>
 
     public void EndScene()
     {        
-            Debug.Log(_stars);
-            _stars.gameObject.SetActive(true);
-            Debug.Log("timer" + _timer);
-            _stars.Show(_timer.Stars());
-            _timer.gameObject.SetActive(false);          
+            Debug.Log(_afterLevelMenuDisplayer);
+            _afterLevelMenuDisplayer.gameObject.SetActive(true);
+            Debug.Log("timer" + Timer);
+            _afterLevelMenuDisplayer.Show(Timer.Stars());
+            Timer.gameObject.SetActive(false);          
             _fireSystem.gameObject.SetActive(false);
     }
 }
