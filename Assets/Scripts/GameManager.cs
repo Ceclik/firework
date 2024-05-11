@@ -17,11 +17,13 @@ public class GameManager : Singleton<GameManager>
     private GameSettings _settings;
 
     private FireSystem _fireSystem;
-    //private FireMeter _fireMeter;
     private AfterLevelMenuDisplayer _stars;
     private Timer _timer;
     private float _sceneDelay = 8f;
     private int _currentLevel;
+
+    public bool FireSeekGameMode { get; set; }
+    public bool FireAimGameMode { get; set; }
 
     void OnEnable()
     {

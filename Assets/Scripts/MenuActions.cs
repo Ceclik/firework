@@ -1,29 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+public class MenuActions : MonoBehaviour
+{
 
-//button handler methods
-public class MenuActions : MonoBehaviour {
-
-	public void MenuExit()
+    [SerializeField] private GameObject pickGameMode;
+    [SerializeField] private GameObject pickLocation;
+    
+	public void OnExitButtonClick()
     {
         Application.Quit();
     }
-
-    public void SceneOne()
+    
+    public void OnSchoolSceneButtonClick()
     {
-        Debug.Log("starting scene one");
-        FindObjectOfType<GameManager>().SceneOne(); //its better to use FindFirstObjectOfType<>();
+        FindFirstObjectByType<GameManager>().SceneOne(); 
     }
 
-    public void SceneTwo()
+    public void OnHomeSceneButtonClick()
     {
-        FindObjectOfType<GameManager>().SceneTwo();
+        FindFirstObjectByType<GameManager>().SceneTwo();
     }
 
-    public void Calibrate()
+    public void OnSettingsSceneButtonClick()
     {
-        FindObjectOfType<GameManager>().SceneSettings();
+        FindFirstObjectByType<GameManager>().SceneSettings();
+    }
+
+    public void OnSeekFireModeButtonClick()
+    {
+        FindFirstObjectByType<GameManager>().FireSeekGameMode = true;
+        pickGameMode.SetActive(false);
+        pickLocation.SetActive(true);
+    }
+
+    public void OnFireAimModeButtonClick()
+    {
+        FindFirstObjectByType<GameManager>().FireAimGameMode = true;
+        pickGameMode.SetActive(false);
+        pickLocation.SetActive(true);
     }
 }
