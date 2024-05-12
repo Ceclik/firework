@@ -1,11 +1,11 @@
-﻿using Standard_Assets.ParticleSystems.Scripts;
+using Standard_Assets.ParticleSystems.Scripts;
 using Tracking;
 using UnityEngine;
 using UnityStandardAssets.Effects;
 
-namespace Scenes
+namespace FireSeekingScripts
 {
-    public class FireSystem : MonoBehaviour 
+    public class SeekingFireSystemHandler : MonoBehaviour
     {
         public GameObject[] fires;
         public float fireStopSpeed = 1f;

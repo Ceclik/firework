@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Standard_Assets.ParticleSystems.Scripts;
+using UnityEngine;
 using UnityStandardAssets.Effects;
 
 //This script launches an animation of trash can fall.

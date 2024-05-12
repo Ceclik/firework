@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityStandardAssets.Effects
+namespace Standard_Assets.ParticleSystems.Scripts
 {
     //This script changes values of multiple particle systems of which fire is made up and start/stop them
     

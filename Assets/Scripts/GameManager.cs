@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager>
 {
 
     public bool firstRun = true;
-    public bool fireStarted;
+    public bool IsFireStarted { get; private set; }
     public string comPort;
     private GameSettings _settings;
 
@@ -203,7 +203,7 @@ public class GameManager : Singleton<GameManager>
             trigger.GetComponent<Animator>().SetTrigger("Fire");
         }
 
-        fireStarted = true;
+        IsFireStarted = true;
     }
 
     public void EndScene()

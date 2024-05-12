@@ -37,7 +37,7 @@ public class Outlet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!falled && GameManager.Instance.fireStarted)
+        if (!falled && GameManager.Instance.IsFireStarted)
         {
             int fromCom = int.MaxValue;
             int comExpected = gasCrane ? 3 : 2;
