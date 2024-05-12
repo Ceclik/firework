@@ -144,7 +144,6 @@ public class GameManager : Singleton<GameManager>
     {
         _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
         _afterLevelMenuDisplayer = FindFirstObjectByType<AfterLevelMenuDisplayer>();
-        //Timer = FindFirstObjectByType<Timer>();
         _afterLevelMenuDisplayer.gameObject.SetActive(false);
         
         Timer.gameObject.SetActive(false);

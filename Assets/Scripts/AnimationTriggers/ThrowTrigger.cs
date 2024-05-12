@@ -1,15 +1,30 @@
-﻿using UnityEngine;
+﻿using Instructions;
+using UnityEngine;
 
 namespace AnimationTriggers
 {
-	public class RemoteNotKinematic : StateMachineBehaviour
+	public class ThrowTrigger : StateMachineBehaviour
 	{
-		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
+
+		private LevelInstructionShower _instructions;
+		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+		{
+			_instructions = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
+			_instructions.OnStartButtonClicked += ThrowRemote;
+		}
+
+		private void ThrowRemote()
 		{
 			var remote = GameObject.FindGameObjectWithTag("Remote");
-			remote.GetComponent<Animator>().enabled = false;
-			remote.GetComponent<Rigidbody>().isKinematic = false;
-			Camera.main.GetComponent<Animator>().SetTrigger("Throw");
+			var anim = remote.GetComponent<Animator>();
+			anim.SetTrigger("Throw");
+			var selfAnimator = GameObject.Find("teen@Sitting").GetComponent<Animator>();
+			selfAnimator.SetTrigger("TeenThrowing");
+		}
+		
+		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
+		{
+			_instructions.OnStartButtonClicked -= ThrowRemote;
 		}
 
 		// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
