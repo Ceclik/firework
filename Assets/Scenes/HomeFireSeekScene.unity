@@ -6701,7 +6701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b6893f4e9986d47808a52bbce643cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireSystem: {fileID: 1640926075}
+  fireSystem: {fileID: 0}
   keyControlled: 1
   gas: {fileID: 0}
   kettleSound: {fileID: 0}
@@ -6893,7 +6893,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ed1b89d39279f564ea077ad8e46f3595, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12768,7 +12767,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1640926076}
-  - component: {fileID: 1640926075}
+  - component: {fileID: 1640926077}
   - component: {fileID: 1640926074}
   m_Layer: 0
   m_Name: FireSystem
@@ -12874,30 +12873,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1640926075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1640926073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21135798efe08124b8cd7f8f6fe1a954, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fires:
-  - {fileID: 303365846}
-  fireStopSpeed: 0.3
-  fireGrowSpeed: 0.2
-  expandTime: 2
-  fireLight: {fileID: 1640186177}
-  overallLife: 0
-  stopper: {fileID: 1198328806}
-  fake: 1
-  startOver: 0
-  explosion: {fileID: 662623406}
-  sounds: {fileID: 2070341879}
 --- !u!4 &1640926076
 Transform:
   m_ObjectHideFlags: 0
@@ -12913,6 +12888,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1640926077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640926073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4ccad8152ee5097a7c0809aae04d66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainFire:
+  - {fileID: 303365846}
+  fireStopSpeed: 0.3
+  fireGrowSpeed: 0.2
+  expandTime: 2
+  fireLight: {fileID: 1640186177}
+  overallLife: 0
+  stopper: {fileID: 1198328806}
+  fake: 0
+  startOver: 0
+  explosion: {fileID: 662623406}
+  sounds: {fileID: 2070341879}
 --- !u!1 &1642931804
 GameObject:
   m_ObjectHideFlags: 0
@@ -15943,9 +15942,9 @@ SceneRoots:
   - {fileID: 2114204735}
   - {fileID: 561611687}
   - {fileID: 1640926076}
+  - {fileID: 936226744}
   - {fileID: 1719992699}
   - {fileID: 2070341882}
   - {fileID: 665911314}
   - {fileID: 1039518637}
   - {fileID: 1036032330}
-  - {fileID: 936226744}

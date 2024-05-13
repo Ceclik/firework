@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using FireSeekingScripts;
 using Scenes;
 using Settings;
 using Tracking;
@@ -18,6 +19,8 @@ public class GameManager : Singleton<GameManager>
     private GameSettings _settings;
 
     private FireSystem _fireSystem;
+    private SeekingFireSystemHandler _seekingFireHandler;
+
     private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
     public Timer Timer { get; set; }
     private int _currentLevel;
@@ -47,7 +50,7 @@ public class GameManager : Singleton<GameManager>
     public void SaveSettings()
     {
         _settings.SaveSettings();
-    }    
+    }
 
     public void UpdateLevelSettings(int levelIndex, LevelSettings settings)
     {
@@ -104,14 +107,15 @@ public class GameManager : Singleton<GameManager>
         MyInput.Instance.gameObject.SetActive(false);
         SceneManager.LoadScene("Settings");
     }
-    
+
     void Start()
     {
         MyInput.Instance.Init();
-        if (_currentLevel==0)
+        if (_currentLevel == 0)
         {
             Cursor.visible = false;
         }
+
         comPort = PlayerPrefs.GetString("COM");
         Debug.Log("Com port settings:" + comPort);
         if (string.IsNullOrEmpty(comPort))
@@ -131,7 +135,7 @@ public class GameManager : Singleton<GameManager>
         MyInput.Instance.Init();
         Cursor.visible = false;
     }
-    
+
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -142,10 +146,14 @@ public class GameManager : Singleton<GameManager>
 
     private void FindFireSystems()
     {
-        _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
+        if(FireSeekGameMode)
+            _seekingFireHandler = GameObject.Find("FireSystem").GetComponent<SeekingFireSystemHandler>();
+        if(FireAimGameMode)
+            _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
+        
         _afterLevelMenuDisplayer = FindFirstObjectByType<AfterLevelMenuDisplayer>();
         _afterLevelMenuDisplayer.gameObject.SetActive(false);
-        
+
         Timer.gameObject.SetActive(false);
     }
 
@@ -164,11 +172,14 @@ public class GameManager : Singleton<GameManager>
         {
             Cursor.visible = false;
         }
+
         switch (scene.name)
         {
-            case "SceneOne":_currentLevel = 0;
+            case "SceneOne":
+                _currentLevel = 0;
                 break;
-            case "SceneOnePartTwo":_currentLevel = 1;
+            case "SceneOnePartTwo":
+                _currentLevel = 1;
                 break;
             case "SceneTwo":
                 _currentLevel = 2;
@@ -179,6 +190,7 @@ public class GameManager : Singleton<GameManager>
             default:
                 break;
         }
+
         MyInput.Instance.Init();
     }
 
@@ -190,14 +202,30 @@ public class GameManager : Singleton<GameManager>
 
     public void FireStart()
     {
-        if (_fireSystem == null)
+        if (FireAimGameMode)
         {
-            FindFireSystems();
+            if (_fireSystem == null)
+                FindFireSystems();
+            
+            _fireSystem.StartFire();
         }
-        Debug.Log("Manager starting fire");
-        _fireSystem.StartFire();
-        Timer.gameObject.SetActive(true);
+
+        if (FireSeekGameMode)
+        {
+            if (_seekingFireHandler == null)
+            {   
+                FindFireSystems();
+            }
+                
+            
+            _seekingFireHandler.StartFire();
+        }
         
+        Debug.Log("Manager starting fire");
+
+        
+        Timer.gameObject.SetActive(true);
+
         foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
         {
             trigger.GetComponent<Animator>().SetTrigger("Fire");
@@ -207,12 +235,15 @@ public class GameManager : Singleton<GameManager>
     }
 
     public void EndScene()
-    {        
-            Debug.Log(_afterLevelMenuDisplayer);
-            _afterLevelMenuDisplayer.gameObject.SetActive(true);
-            Debug.Log("timer" + Timer);
-            _afterLevelMenuDisplayer.Show(Timer.Stars());
-            Timer.gameObject.SetActive(false);          
+    {
+        Debug.Log(_afterLevelMenuDisplayer);
+        _afterLevelMenuDisplayer.gameObject.SetActive(true);
+        Debug.Log("timer" + Timer);
+        _afterLevelMenuDisplayer.Show(Timer.Stars());
+        Timer.gameObject.SetActive(false);
+        if(FireAimGameMode)
             _fireSystem.gameObject.SetActive(false);
+        if(FireSeekGameMode)
+            _seekingFireHandler.gameObject.SetActive(false);
     }
 }

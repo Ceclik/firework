@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace FireSeekingScripts
@@ -10,6 +9,8 @@ namespace FireSeekingScripts
 
         private Transform[] _points;
         private int _index;
+        
+        public bool IsRoundPassed { get; private set; }
 
         private void Start()
         {
@@ -21,7 +22,7 @@ namespace FireSeekingScripts
 
         private void Update()
         {
-            if (GameManager.Instance.IsFireStarted)
+            if (GameManager.Instance.IsFireStarted && _index < _points.Length)
             {
                 Vector3 direction = (_points[_index].position - transform.position).normalized;
                 Debug.LogError($"Target position: {direction}\nindex: {_index}");
@@ -30,10 +31,11 @@ namespace FireSeekingScripts
                 transform.Translate(movement);
             }
 
-            if (Vector3.Distance(transform.position, _points[_index].position) < 0.1f)
-            {
+            if (_index < _points.Length && Vector3.Distance(transform.position, _points[_index].position) < 0.1f)
                 _index++;
-            }
+
+            if (_index == _points.Length && !IsRoundPassed)
+                IsRoundPassed = true;
         }
     }
 }

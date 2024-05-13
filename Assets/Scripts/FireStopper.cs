@@ -1,10 +1,6 @@
-﻿using Assets.Scripts.Tracking;
-using DigitalRuby.ThunderAndLightning;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Tracking;
 using UnityEngine;
-using UnityEngine.UI;
 
 //This script handled extinguisher. Activate and deactivate (when not interacting with fire) extinguisher particles
 //effect and play sound effect. Also activates lightning.
@@ -12,37 +8,37 @@ using UnityEngine.UI;
 public class FireStopper : MonoBehaviour
 {
 
-    public AudioSource[] soundStarts;
-    public AudioSource[] soundLoops;
-    public AudioSource[] soundEnds;
-    public float fadeTime = 0.07f;    
-    public float lightFade = 0.5f;
-    public float lightFadeTime = 0.5f;
-    public GameObject lightning;
-    public GameObject danger;
+    [SerializeField] private AudioSource[] soundStarts;
+    [SerializeField] private AudioSource[] soundLoops;
+    [SerializeField] private AudioSource[] soundEnds;
+    [SerializeField] private float fadeTime = 0.07f;    
+    [SerializeField] private float lightFade = 0.5f;
+    [SerializeField] private float lightFadeTime = 0.5f;
+    [SerializeField] private GameObject lightning;
+    [SerializeField] private GameObject danger;
 
-    private ParticleSystem pSystem;
-    private bool soundPlaying;
-    private float fadingColor;
-    private float startLight;
-    private float fadingTime;
+    private ParticleSystem _pSystem;
+    private bool _soundPlaying;
+    private float _fadingColor;
+    private float _startLight;
+    private float _fadingTime;
 
     private MyInput _input;
 
     public void Orient(Vector3 point)
     {
-        pSystem.transform.LookAt(point);        
+        _pSystem.transform.LookAt(point);        
     }
 
     public void StartFireStopping(int fireIndex,bool fake, bool startOver)
     {     
-        if (!pSystem.isEmitting)
+        if (!_pSystem.isEmitting)
         {
-            fadingColor = lightFade;
-            fadingTime = 0;
-            pSystem.Play();            
+            _fadingColor = lightFade;
+            _fadingTime = 0;
+            _pSystem.Play();            
         }
-        if (!soundPlaying) StartCoroutine(StartAudio());
+        if (!_soundPlaying) StartCoroutine(StartAudio());
         if (lightning!=null && !lightning.activeSelf && fireIndex==0 && (fake))
         {
             lightning.SetActive(true);
@@ -62,7 +58,7 @@ public class FireStopper : MonoBehaviour
 
     public void Hide()
     {        
-        pSystem.Stop();
+        _pSystem.Stop();
         if (lightning!=null)
         {
             lightning.SetActive(false);            
@@ -75,11 +71,11 @@ public class FireStopper : MonoBehaviour
 
     public void StopFireStopping()
     {
-        if (pSystem.isEmitting)
+        if (_pSystem.isEmitting)
         {
-            fadingColor = startLight;
-            fadingTime = 0;
-            pSystem.Stop();
+            _fadingColor = _startLight;
+            _fadingTime = 0;
+            _pSystem.Stop();
         }
         if (lightning != null && lightning.activeSelf)
         {
@@ -93,9 +89,9 @@ public class FireStopper : MonoBehaviour
 
     private IEnumerator StartAudio()
     {
-        if (soundPlaying) yield break;
+        if (_soundPlaying) yield break;
 
-        soundPlaying = true;
+        _soundPlaying = true;
 
         Debug.Log("startsound");
         var startSound = soundStarts[Random.Range(0, soundStarts.Length)];
@@ -106,9 +102,9 @@ public class FireStopper : MonoBehaviour
 
         int n = Random.Range(0, soundLoops.Length);
 
-        while (pSystem.isEmitting)
+        while (_pSystem.isEmitting)
         {
-            Debug.Log("loopsound"+pSystem.isPlaying+":"+pSystem.isEmitting);
+            Debug.Log("loopsound"+_pSystem.isPlaying+":"+_pSystem.isEmitting);
             var loopSound = soundLoops[n];
             StartCoroutine(AudioFade.FadeOut(previousSound, fadeTime));
             StartCoroutine(AudioFade.FadeIn(loopSound, fadeTime));
@@ -126,29 +122,16 @@ public class FireStopper : MonoBehaviour
         yield return new WaitForSeconds(endSound.clip.length - fadeTime);
         StartCoroutine(AudioFade.FadeOut(endSound, fadeTime));
 
-        soundPlaying = false;
+        _soundPlaying = false;
     }
 
 
     private void Awake()
     {
-        pSystem = GetComponent<ParticleSystem>();        
-        fadingTime = 0;
-        fadingColor = startLight;
+        _pSystem = GetComponent<ParticleSystem>();        
+        _fadingTime = 0;
+        _fadingColor = _startLight;
         _input = MyInput.Instance;
-    }
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Vector3 mouseScreenPosition = Input.mousePosition;
-        //mouseScreenPosition.z = 4.0f;
-        //Vector3 mouseWorldSpace = Camera.main.ScreenToWorldPoint(mouseScreenPosition);     
     }
 }
 
