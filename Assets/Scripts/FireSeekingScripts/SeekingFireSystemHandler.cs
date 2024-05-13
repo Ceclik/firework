@@ -17,7 +17,9 @@ namespace FireSeekingScripts
         [SerializeField] private bool fake = false;
         [SerializeField] private bool startOver = false;
         [SerializeField] private GameObject explosion;
-        [SerializeField] private GameObject sounds;    
+        [SerializeField] private GameObject sounds;
+
+        [Space(20)] [SerializeField] private NewFireSpawner fireSpawner;
 
         private float[] _firesLife;
         private float[] _expandTimers;
@@ -89,6 +91,9 @@ namespace FireSeekingScripts
                 {
                     if (fireCollider.Raycast(ray, out hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor)
                     {
+                        if(!_mainFireRoundMover.IsMoving) _mainFireRoundMover.IsMoving = true;
+                        if(fireSpawner.IsSpawned) fireSpawner.IsSpawned = false;
+                        
                         stopper.Orient(hit.point);
 
                         if (_mainFireRoundMover.IsRoundPassed)
@@ -120,12 +125,18 @@ namespace FireSeekingScripts
                                     ExpandFire();
                                     _expandTimers = new float[mainFire.Length];
                                 }
-
                             }
                         }
                     }
                     else
-                    {                    
+                    {      
+                        if(_mainFireRoundMover.IsMoving)
+                            _mainFireRoundMover.IsMoving = false;
+                        
+                        if(!fireSpawner.IsSpawned)
+                            fireSpawner.SpawnNewFireComplex();
+                        
+                        ////////////???//////////////////////////////////////
                         if (particle.multiplier < 1f && mainFire[i].activeSelf)
                         {
                             particle.multiplier += (fireGrowSpeed * Time.deltaTime);

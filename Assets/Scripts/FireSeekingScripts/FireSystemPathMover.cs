@@ -11,6 +11,7 @@ namespace FireSeekingScripts
         private int _index;
         
         public bool IsRoundPassed { get; private set; }
+        public bool IsMoving { get; set; }
 
         private void Start()
         {
@@ -22,10 +23,10 @@ namespace FireSeekingScripts
 
         private void Update()
         {
-            if (GameManager.Instance.IsFireStarted && _index < _points.Length)
+            if (GameManager.Instance.IsFireStarted &&  IsMoving && _index < _points.Length)
             {
                 Vector3 direction = (_points[_index].position - transform.position).normalized;
-                Debug.LogError($"Target position: {direction}\nindex: {_index}");
+                //Debug.LogError($"Target position: {direction}\nindex: {_index}");
                 Vector3 movement = direction * movingSpeed * Time.deltaTime;
                 
                 transform.Translate(movement);
