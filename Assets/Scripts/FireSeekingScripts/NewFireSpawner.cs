@@ -1,6 +1,5 @@
 using Standard_Assets.ParticleSystems.Scripts;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace FireSeekingScripts
 {
@@ -12,16 +11,19 @@ namespace FireSeekingScripts
 
         public bool IsSpawned { get; set; }
         
-        public void SpawnNewFireComplex()
+        public GameObject SpawnNewFireComplex()
         {
+            GameObject newFireComplex = null;
             if (!IsSpawned)
             {
-                var newFireComplex = Instantiate(fireComplexPrefab, mainFire.transform.position, Quaternion.identity,
+                newFireComplex = Instantiate(fireComplexPrefab, mainFire.transform.position, Quaternion.identity,
                     fireComplexParent);
                 var particle = newFireComplex.GetComponent<ParticleSystemMultiplier>();
                 particle.multiplier = 0.4f;
                 IsSpawned = true;
+                
             }
+            return newFireComplex;
         }
         
     }

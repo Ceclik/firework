@@ -1,18 +1,17 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FadeInFadeOut : MonoBehaviour {
 
-    CanvasGroup group;    
+    private CanvasGroup _group;    
 
-    public float fadeInTime;
-    public float enabledTime;
-    public float disabledTime;
+    [SerializeField] private float fadeInTime;
+    [SerializeField] private float enabledTime;
+    [SerializeField] private float disabledTime;
 
     private void OnEnable()
     {
-        group = GetComponent<CanvasGroup>();
+        _group = GetComponent<CanvasGroup>();
         StartCoroutine(FadeIn());
     }
 
@@ -26,7 +25,7 @@ public class FadeInFadeOut : MonoBehaviour {
         float timer = 0;
         while (timer < fadeInTime)
         {
-            group.alpha = timer / fadeInTime;
+            _group.alpha = timer / fadeInTime;
             timer = timer + Time.deltaTime;
             yield return null;
         }
@@ -39,21 +38,12 @@ public class FadeInFadeOut : MonoBehaviour {
         float timer = 0;
         while (timer < fadeInTime)
         {
-            group.alpha = 1 - (timer / fadeInTime);
+            _group.alpha = 1 - (timer / fadeInTime);
             timer = timer + Time.deltaTime;
             yield return null;
         }
         yield return new WaitForSeconds(disabledTime);
         StartCoroutine(FadeIn());
     }
-
-    // Use this for initialization
-    void Start () {
-
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    
 }
