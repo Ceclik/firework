@@ -16,8 +16,8 @@ namespace FireSeekingScripts
         [SerializeField] private GameObject explosion;
         [SerializeField] private GameObject sounds;
 
-        public bool fake { get; set; }
-        public bool startOver { get; set; }
+        public bool fake;
+        public bool startOver;
         
         private float[] _firesLife;
         private float _startFireIntensity;
@@ -110,7 +110,7 @@ namespace FireSeekingScripts
         
         private void Update()
         {
-            Debug.LogError($"Amount of active fires: {_amountOfActiveFires}");
+            //Debug.LogError($"Amount of active fires: {_amountOfActiveFires}");
             if (_started && _amountOfActiveFires == 0 && !_ended)
             {
                 _ended = true;

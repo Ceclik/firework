@@ -4,6 +4,7 @@ namespace FireSeekingScripts
 {
     public class FireSystemPathMover : MonoBehaviour
     {
+        [SerializeField] private SeekingFireSystemHandler seekingFireSystem;
         [SerializeField] private Transform movingPathParent;
         [Space(10)] [SerializeField] private float movingSpeed;
 
@@ -23,7 +24,7 @@ namespace FireSeekingScripts
 
         private void Update()
         {
-            if (GameManager.Instance.IsFireStarted &&  IsMoving && _index < _points.Length)
+            if (GameManager.Instance.IsFireStarted && IsMoving && _index < _points.Length && !seekingFireSystem.fake)
             {
                 Vector3 direction = (_points[_index].position - transform.position).normalized;
                 //Debug.LogError($"Target position: {direction}\nindex: {_index}");
