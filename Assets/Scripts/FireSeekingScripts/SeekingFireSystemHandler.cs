@@ -30,6 +30,7 @@ namespace FireSeekingScripts
         private FireSystemPathMover _mainFireRoundMover;
 
         private bool _isNewFireSpawned = true;
+        private bool _isFirstDisabled = false;
         private int _newFireIndex = 1;
         private int _amountOfActiveFires = 1;
         
@@ -65,8 +66,7 @@ namespace FireSeekingScripts
 
         private void HandleMainFireMovement(Ray ray)
         {
-            RaycastHit hitMain;
-            if (fires[0].GetComponent<Collider>().Raycast(ray, out hitMain, Mathf.Infinity) &&
+            if (fires[0].GetComponent<Collider>().Raycast(ray, out var hitMain, Mathf.Infinity) &&
                 MyInput.Instance.IsTrackedCursor)
             {
                 stopper.Orient(hitMain.point);
@@ -92,6 +92,21 @@ namespace FireSeekingScripts
             _newFireIndex++;
             _amountOfActiveFires++;
         }
+
+        private void DisableFire(int i)
+        {
+            if (i == 0 && !_isFirstDisabled)
+            {
+                _isFirstDisabled = true;
+                _amountOfActiveFires--;
+            }
+
+            if (i != 0)
+            {
+                fires[i].SetActive(false);
+                _amountOfActiveFires--;
+            }
+        }
         
         private void Update()
         {
@@ -114,11 +129,9 @@ namespace FireSeekingScripts
             {
                 
                 if (fires[i].GetComponent<ParticleSystemMultiplier>().multiplier == 0 && fires[i].activeSelf)
-                {
-                    fires[i].SetActive(false);
-                    _amountOfActiveFires--;
-                }
+                    DisableFire(i);
 
+                
                 //check mouse cursor in fire            
                 Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
                 RaycastHit hit;
@@ -152,7 +165,7 @@ namespace FireSeekingScripts
                         {
                             if (particle.multiplier < 1f && fires[i].activeSelf)
                             {
-                                particle.multiplier += (fireGrowSpeed * Time.deltaTime);
+                                particle.multiplier += fireGrowSpeed * Time.deltaTime;
                                 _firesLife[i] = particle.multiplier * 100f;
                             }
                         }
