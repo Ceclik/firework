@@ -1,14 +1,14 @@
 ﻿using System.IO.Ports;
+using FireAimScripts;
 using FireSeekingScripts;
-using Scenes;
 using UnityEngine;
 
 //This script is handling outlet object in scene. Interaction with it and its behaviour.
 
-public class Outlet : MonoBehaviour
+public class DangerObjectHandler : MonoBehaviour
 {
 
-    [SerializeField] private FireSystem fireSystem;
+    [SerializeField] private AimFireSystemHandler aimFireSystem;
     [SerializeField] private SeekingFireSystemHandler seekingFireSystem;
     [SerializeField] private bool keyControlled;
     [SerializeField] private ParticleSystem gas;
@@ -85,8 +85,8 @@ public class Outlet : MonoBehaviour
 
         if (GameManager.Instance.FireAimGameMode)
         {
-            fireSystem.fake = false;
-            fireSystem.startOver = false;
+            aimFireSystem.fake = false;
+            aimFireSystem.startOver = false;
         }
         else if (GameManager.Instance.FireSeekGameMode)
         {

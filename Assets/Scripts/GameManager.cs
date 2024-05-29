@@ -1,11 +1,11 @@
 ﻿using System.Collections;
+using FireAimScripts;
 using FireSeekingScripts;
 using Scenes;
 using Settings;
 using Tracking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 //Script in which all main game actions are implemented like changing scenes, finding fire systems in scenes etc. 
 //Using game manager is bad practice. All actions should be in separate scripts.
@@ -18,7 +18,8 @@ public class GameManager : Singleton<GameManager>
     public string comPort;
     private GameSettings _settings;
 
-    private FireSystem _fireSystem;
+    //private FireSystem _fireSystem;
+    private AimFireSystemHandler _aimFireHandler;
     private SeekingFireSystemHandler _seekingFireHandler;
 
     private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
@@ -149,7 +150,7 @@ public class GameManager : Singleton<GameManager>
         if(FireSeekGameMode)
             _seekingFireHandler = GameObject.Find("FireSystem").GetComponent<SeekingFireSystemHandler>();
         if(FireAimGameMode)
-            _fireSystem = GameObject.Find("FireSystem").GetComponent<FireSystem>();
+            _aimFireHandler = GameObject.Find("FireSystem").GetComponent<AimFireSystemHandler>();
         
         _afterLevelMenuDisplayer = FindFirstObjectByType<AfterLevelMenuDisplayer>();
         _afterLevelMenuDisplayer.gameObject.SetActive(false);
@@ -204,10 +205,10 @@ public class GameManager : Singleton<GameManager>
     {
         if (FireAimGameMode)
         {
-            if (_fireSystem == null)
+            if (_aimFireHandler == null)
                 FindFireSystems();
             
-            _fireSystem.StartFire();
+            _aimFireHandler.StartFire();
         }
 
         if (FireSeekGameMode)
@@ -216,7 +217,6 @@ public class GameManager : Singleton<GameManager>
             {   
                 FindFireSystems();
             }
-                
             
             _seekingFireHandler.StartFire();
         }
@@ -242,7 +242,7 @@ public class GameManager : Singleton<GameManager>
         _afterLevelMenuDisplayer.Show(Timer.Stars());
         Timer.gameObject.SetActive(false);
         if(FireAimGameMode)
-            _fireSystem.gameObject.SetActive(false);
+            _aimFireHandler.gameObject.SetActive(false);
         if(FireSeekGameMode)
             _seekingFireHandler.gameObject.SetActive(false);
     }
