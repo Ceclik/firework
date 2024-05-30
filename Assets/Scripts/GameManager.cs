@@ -157,7 +157,8 @@ public class GameManager : Singleton<GameManager>
         _afterLevelMenuDisplayer.gameObject.SetActive(false);
 
         Timer.gameObject.SetActive(false);
-        Hearts.SetActive(false);
+        if(FireAimGameMode)
+            Hearts.SetActive(false);
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -245,9 +246,13 @@ public class GameManager : Singleton<GameManager>
         _afterLevelMenuDisplayer.Show(isWin);
         
         Timer.gameObject.SetActive(false);
-        Hearts.SetActive(false);
-        if(FireAimGameMode)
-            _aimFireHandler.gameObject.SetActive(false);
+        
+       if (FireAimGameMode)
+       { 
+           Hearts.SetActive(false); 
+           _aimFireHandler.gameObject.SetActive(false);
+       }
+            
         if(FireSeekGameMode)
             _seekingFireHandler.gameObject.SetActive(false);
     }

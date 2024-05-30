@@ -27,7 +27,6 @@ namespace FireSeekingScripts
             if (GameManager.Instance.IsFireStarted && IsMoving && _index < _points.Length && !seekingFireSystem.fake)
             {
                 Vector3 direction = (_points[_index].position - transform.position).normalized;
-                //Debug.LogError($"Target position: {direction}\nindex: {_index}");
                 Vector3 movement = direction * movingSpeed * Time.deltaTime;
                 
                 transform.Translate(movement);

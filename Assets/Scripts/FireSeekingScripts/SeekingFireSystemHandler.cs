@@ -1,6 +1,7 @@
 using Standard_Assets.ParticleSystems.Scripts;
 using Tracking;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityStandardAssets.Effects;
 
 namespace FireSeekingScripts
@@ -109,7 +110,7 @@ namespace FireSeekingScripts
             if (_started && _amountOfActiveFires == 0 && !_ended)
             {
                 _ended = true;
-                GameManager.Instance.EndScene(true);
+                StartCoroutine(GetComponent<SceneFinisher>().FinishScene());
             }
             
             Ray ray = Camera.main.ScreenPointToRay(new Vector2(MyInput.Instance.X,MyInput.Instance.Y));
