@@ -227,7 +227,8 @@ public class GameManager : Singleton<GameManager>
 
         
         Timer.gameObject.SetActive(true);
-        Hearts.SetActive(true);
+        if(FireAimGameMode)
+            Hearts.SetActive(true);
 
         foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
         {

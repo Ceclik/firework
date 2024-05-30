@@ -7,8 +7,10 @@ namespace AnimationTriggers
     public class TrashFallTrigger : StateMachineBehaviour
     {
         private LevelInstructionShower _instruction;
+        private Animator _selfAnimator;
         public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
-        { 
+        {
+            _selfAnimator = animator;
             _instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
             _instruction.OnStartButtonClicked += StartFire;
         }
@@ -17,6 +19,7 @@ namespace AnimationTriggers
         {
             var can = GameObject.Find("TrashCan");
             TrashCan trashCan = can.GetComponent<TrashCan>();
+            _selfAnimator.SetTrigger("StartFire");
             if (!trashCan.falled)
                 trashCan.TrashFall();
         }
