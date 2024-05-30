@@ -62,6 +62,11 @@ namespace FireAimScripts
             StartCoroutine(AudioFade.FadeIn(_aSoundStart, 2f));        
         }
         
+        private void DisableFire(int i)
+        {
+            fires[i].SetActive(false);
+        }
+        
         void Update()
         {
             if (_started && overallLife==0 && !_ended)
@@ -79,6 +84,10 @@ namespace FireAimScripts
             int hittedFireLastIndex = 0;
             for (int i = 0; i < fires.Length; i++)
             {
+                
+                if (fires[i].GetComponent<ParticleSystemMultiplier>().multiplier == 0 && fires[i].activeSelf)
+                    DisableFire(i);
+                
                 //check mouse cursor in fire            
                 Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
                 RaycastHit hit;

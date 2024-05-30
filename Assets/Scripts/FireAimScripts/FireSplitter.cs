@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace FireAimScripts
@@ -8,24 +9,30 @@ namespace FireAimScripts
         [SerializeField] private float timeToSplit;
         [SerializeField] private GameObject complexClone;
 
-        private float _timeSpent = 0;
+        [SerializeField] private TextMeshProUGUI timerText;
+
+        private float _timer;
+
+        private void Start()
+        {
+            _timer = timeToSplit;
+        }
 
         private void Update()
         {
-            Debug.Log($"Time spent: {_timeSpent}");
-            _timeSpent += Time.deltaTime;
+            _timer -= Time.deltaTime;
+            timerText.text = ((int)_timer).ToString();
 
-            if (_timeSpent >= timeToSplit)
+            if (_timer <= 0)
             {
+                _timer = timeToSplit;
                 SplitFire();
-                _timeSpent = 0;
             }
-                
         }
 
         private void SplitFire()
         {
-            if(!complexClone.activeSelf)
+            if(!complexClone.activeSelf && complexClone != null)
                 complexClone.SetActive(true);
         }
     }

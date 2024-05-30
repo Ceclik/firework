@@ -18,6 +18,7 @@ namespace Standard_Assets.ParticleSystems.Scripts
 
         private void Start()
         {
+            Mathf.Clamp(multiplier, 0.01f, 1.0f);
             var systems = GetComponentsInChildren<ParticleSystem>();
             foreach (ParticleSystem system in systems)
             {
