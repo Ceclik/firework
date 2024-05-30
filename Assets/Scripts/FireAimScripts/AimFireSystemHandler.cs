@@ -35,7 +35,6 @@ namespace FireAimScripts
         private void DecreaseLive()
         {
             _livesCount--;
-            Debug.LogError($"Lives count: {_livesCount}");
         }
         
         void Start()
@@ -64,9 +63,6 @@ namespace FireAimScripts
 
         private void OnDisable()
         {
-            foreach (var fire in fires)
-                fire.GetComponent<Collider>().enabled = false;
-
             foreach (var splitter in _splitters)
                 splitter.OnFireSplitted -= DecreaseLive;
             
@@ -193,10 +189,12 @@ namespace FireAimScripts
             {
                 explosion.SetActive(true);
             }
-            
-            fires[0].SetActive(true);
-            fires[2].SetActive(true);
-            fires[5].SetActive(true);
+
+            foreach (var fire in fires)
+            {
+                if(fire.CompareTag("StartingFiresInAimMode"))
+                    fire.SetActive(true);
+            }
             
             
             var particle = fires[0].GetComponent<ParticleSystemMultiplier>();

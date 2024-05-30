@@ -6,14 +6,17 @@ namespace AnimationTriggers
 	public class FireStartCam : StateMachineBehaviour {
 		
 		private LevelInstructionShower _instruction;
-		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
+		private Animator _selfAnimator;
+		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
+			_selfAnimator = animator;
 			_instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
 			_instruction.OnStartButtonClicked += StartFire;
 		}
 
 		private void StartFire()
 		{
+			_selfAnimator.SetTrigger("Start");
 			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(1f));
 		}
 		

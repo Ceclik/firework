@@ -33,17 +33,15 @@ namespace FireAimScripts
                 _isSplitted = true;
                 timerText.gameObject.SetActive(false);
                 _timer = timeToSplit;
-                SplitFire();
+                if (complexClone != null && !complexClone.activeSelf)
+                    SplitFire();
             }
         }
 
         private void SplitFire()
         {
-            if (!complexClone.activeSelf && complexClone != null)
-            {
-                OnFireSplitted?.Invoke();
-                complexClone.SetActive(true);
-            }
+            OnFireSplitted?.Invoke();
+            complexClone.SetActive(true);
         }
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - Remote
   - TV
   - LocalizationManager
+  - StartingFiresInAimMode
   layers:
   - Default
   - TransparentFX

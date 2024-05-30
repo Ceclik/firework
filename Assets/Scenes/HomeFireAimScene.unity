@@ -875,7 +875,7 @@ PrefabInstance:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.38
+      value: 1.326
       objectReference: {fileID: 0}
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -963,7 +963,7 @@ PrefabInstance:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.38
+      value: 1.326
       objectReference: {fileID: 0}
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -1024,6 +1024,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireComplexInAimMode(cupboard)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: m_TagString
+      value: StartingFiresInAimMode
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8033,7 +8038,7 @@ PrefabInstance:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.104
+      value: 1.058
       objectReference: {fileID: 0}
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -14742,7 +14747,7 @@ PrefabInstance:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.104
+      value: 1.027
       objectReference: {fileID: 0}
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -14803,6 +14808,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireComplexInAimMode(lowerCupboard)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: m_TagString
+      value: StartingFiresInAimMode
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15311,7 +15321,7 @@ PrefabInstance:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.104
+      value: 1.054
       objectReference: {fileID: 0}
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -16170,7 +16180,7 @@ PrefabInstance:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.38
+      value: 1.354
       objectReference: {fileID: 0}
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -19323,6 +19333,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireComplexInAimMode(teapot)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: m_TagString
+      value: StartingFiresInAimMode
       objectReference: {fileID: 0}
     - target: {fileID: 6185182571504335653, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
