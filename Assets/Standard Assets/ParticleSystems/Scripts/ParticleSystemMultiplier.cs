@@ -11,9 +11,9 @@ namespace Standard_Assets.ParticleSystems.Scripts
 
         public float multiplier = 1;
 
-        private List<float> startSizes = new List<float>();
-        private List<float> startSpeeds = new List<float>();
-        private List<float> startLifetimes = new List<float>();
+        private List<float> _startSizes = new List<float>();
+        private List<float> _startSpeeds = new List<float>();
+        private List<float> _startLifetimes = new List<float>();
 
 
         private void Start()
@@ -25,9 +25,9 @@ namespace Standard_Assets.ParticleSystems.Scripts
 				mainModule.startSizeMultiplier *= 1f;
                 mainModule.startSpeedMultiplier *= 1f;
                 mainModule.startLifetimeMultiplier *= Mathf.Lerp(1f, 1, 0.5f);
-                startSizes.Add(mainModule.startSizeMultiplier);
-                startSpeeds.Add(mainModule.startSpeedMultiplier);
-                startLifetimes.Add(mainModule.startLifetimeMultiplier);
+                _startSizes.Add(mainModule.startSizeMultiplier);
+                _startSpeeds.Add(mainModule.startSpeedMultiplier);
+                _startLifetimes.Add(mainModule.startLifetimeMultiplier);
                 system.Clear();
                 system.Play();
             }            
@@ -39,9 +39,9 @@ namespace Standard_Assets.ParticleSystems.Scripts
             foreach (ParticleSystem system in systems)
             {
                 ParticleSystem.MainModule mainModule = system.main;
-                mainModule.startSizeMultiplier = startSizes[i]* multiplier;
-                mainModule.startSpeedMultiplier = startSpeeds[i] * multiplier;
-                mainModule.startLifetimeMultiplier = startLifetimes[i] * Mathf.Lerp(multiplier, 1, 0.5f);
+                mainModule.startSizeMultiplier = _startSizes[i]* multiplier;
+                mainModule.startSpeedMultiplier = _startSpeeds[i] * multiplier;
+                mainModule.startLifetimeMultiplier = _startLifetimes[i] * Mathf.Lerp(multiplier, 1, 0.5f);
                 i++;
             }
             if (multiplier < 0) multiplier = 0;
