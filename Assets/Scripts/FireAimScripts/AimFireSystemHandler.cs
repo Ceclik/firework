@@ -170,7 +170,12 @@ namespace FireAimScripts
             {
                 explosion.SetActive(true);
             }
+            
             fires[0].SetActive(true);
+            fires[2].SetActive(true);
+            fires[5].SetActive(true);
+            
+            
             var particle = fires[0].GetComponent<ParticleSystemMultiplier>();
             particle.multiplier = 0.8f;
             _started = true;

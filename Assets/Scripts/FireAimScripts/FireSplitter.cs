@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -11,11 +10,15 @@ namespace FireAimScripts
 
         [SerializeField] private TextMeshProUGUI timerText;
 
+        private bool _isSplitted;
+
         private float _timer;
 
         private void Start()
         {
             _timer = timeToSplit;
+            if(complexClone == null)
+                timerText.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -23,8 +26,10 @@ namespace FireAimScripts
             _timer -= Time.deltaTime;
             timerText.text = ((int)_timer).ToString();
 
-            if (_timer <= 0)
+            if (_timer <= 0 && !_isSplitted)
             {
+                _isSplitted = true;
+                timerText.gameObject.SetActive(false);
                 _timer = timeToSplit;
                 SplitFire();
             }
