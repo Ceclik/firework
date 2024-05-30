@@ -64,7 +64,7 @@ namespace Scenes
             if (_started && overallLife==0 && !_ended)
             {
                 _ended = true;
-                GameManager.Instance.EndScene();
+                GameManager.Instance.EndScene(true);
             }
         
 

@@ -36,11 +36,11 @@ public class Timer : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         timer -= Time.deltaTime;
-        text.text = FormatTime(timer);
+        text.text = FormatTime(timer);  
         if (timer<=0)
         {
             timer = 0;
-            GameManager.Instance.EndScene();
+            GameManager.Instance.EndScene(false);
         }
 	}
 

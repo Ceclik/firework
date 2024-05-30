@@ -11,8 +11,10 @@ namespace FireAimScripts
         [SerializeField] private TextMeshProUGUI timerText;
 
         private bool _isSplitted;
-
         private float _timer;
+        
+        public delegate void DecreaseLives();
+        public event DecreaseLives OnFireSplitted;
 
         private void Start()
         {
@@ -37,8 +39,11 @@ namespace FireAimScripts
 
         private void SplitFire()
         {
-            if(!complexClone.activeSelf && complexClone != null)
+            if (!complexClone.activeSelf && complexClone != null)
+            {
+                OnFireSplitted?.Invoke();
                 complexClone.SetActive(true);
+            }
         }
     }
 }

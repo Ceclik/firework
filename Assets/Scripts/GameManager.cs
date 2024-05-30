@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
 
     private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
     public Timer Timer { get; set; }
+    public GameObject Hearts { get; set; }
     private int _currentLevel;
 
     public bool FireSeekGameMode { get; set; }
@@ -156,6 +157,7 @@ public class GameManager : Singleton<GameManager>
         _afterLevelMenuDisplayer.gameObject.SetActive(false);
 
         Timer.gameObject.SetActive(false);
+        Hearts.SetActive(false);
     }
 
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -225,6 +227,7 @@ public class GameManager : Singleton<GameManager>
 
         
         Timer.gameObject.SetActive(true);
+        Hearts.SetActive(true);
 
         foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
         {
@@ -234,13 +237,14 @@ public class GameManager : Singleton<GameManager>
         IsFireStarted = true;
     }
 
-    public void EndScene()
+    public void EndScene(bool isWin)
     {
-        Debug.Log(_afterLevelMenuDisplayer);
         _afterLevelMenuDisplayer.gameObject.SetActive(true);
-        Debug.Log("timer" + Timer);
-        _afterLevelMenuDisplayer.Show(Timer.Stars());
+        
+        _afterLevelMenuDisplayer.Show(isWin);
+        
         Timer.gameObject.SetActive(false);
+        Hearts.SetActive(false);
         if(FireAimGameMode)
             _aimFireHandler.gameObject.SetActive(false);
         if(FireSeekGameMode)

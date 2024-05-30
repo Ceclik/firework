@@ -106,11 +106,10 @@ namespace FireSeekingScripts
         
         private void Update()
         {
-            //Debug.LogError($"Amount of active fires: {_amountOfActiveFires}");
             if (_started && _amountOfActiveFires == 0 && !_ended)
             {
                 _ended = true;
-                GameManager.Instance.EndScene();
+                GameManager.Instance.EndScene(true);
             }
             
             Ray ray = Camera.main.ScreenPointToRay(new Vector2(MyInput.Instance.X,MyInput.Instance.Y));

@@ -15,6 +15,8 @@ namespace FireAimScripts
         [SerializeField] private FireStopper stopper;
         [SerializeField] private GameObject explosion;
         [SerializeField] private GameObject sounds;
+        
+        private FireSplitter[] _splitters;
 
         public bool fake;
         public bool startOver;   
@@ -27,12 +29,28 @@ namespace FireAimScripts
         private AudioSource _sound;
         private AudioSource _aSoundStart;
         private AudioSource _aSoundFire;
+
+        private int _livesCount = 3;
+
+        private void DecreaseLive()
+        {
+            _livesCount--;
+            Debug.LogError($"Lives count: {_livesCount}");
+        }
         
         void Start()
         {
             if (!GameManager.Instance.FireAimGameMode)
                 GameManager.Instance.FireAimGameMode = true;
-            
+
+            _splitters = new FireSplitter[fires.Length];
+            for (int i = 0; i < fires.Length; i++)
+            {
+                _splitters[i] = fires[i].GetComponent<FireSplitter>();
+                _splitters[i].OnFireSplitted += DecreaseLive;
+            }
+
+
             _firesLife = new float[fires.Length];
             _expandTimers = new float[fires.Length];
             for (int i = 0; i < _firesLife.Length; i++)
@@ -46,10 +64,12 @@ namespace FireAimScripts
 
         private void OnDisable()
         {
-            for (int i = 0; i < fires.Length; i++)
-            {
-                fires[i].GetComponent<Collider>().enabled = false;
-            }
+            foreach (var fire in fires)
+                fire.GetComponent<Collider>().enabled = false;
+
+            foreach (var splitter in _splitters)
+                splitter.OnFireSplitted -= DecreaseLive;
+            
             stopper.Hide();
         }
 
@@ -69,10 +89,13 @@ namespace FireAimScripts
         
         void Update()
         {
-            if (_started && overallLife==0 && !_ended)
+            if ((_started && overallLife==0 && !_ended) || _livesCount <= 0)
             {
                 _ended = true;
-                GameManager.Instance.EndScene();
+                if(_livesCount <= 0)
+                    GameManager.Instance.EndScene(false);
+                else 
+                    GameManager.Instance.EndScene(true);
             }
         
 
