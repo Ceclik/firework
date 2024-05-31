@@ -8,27 +8,11 @@ public class Timer : MonoBehaviour {
     public float startTime;
     public float timer;
     public Text text;
-
-    public float star1Time = 1f;
-    public float star2Time = 3f;    
     
-	void Start () {        
-        Debug.Log("getted start timer for level:"+startTime);
-        star1Time = GameManager.Instance.GetLevelSettings().star1Time / 60f;
-        star2Time = GameManager.Instance.GetLevelSettings().star2Time / 60f;
-    }
-
-    public int Stars()
-    {
-        if (timer / 60f <= 0) return 0;
-        if (timer/60f < star1Time) return 1;
-        if (timer/60f < star2Time) return 2;
-        return 3;
-    }
 
     private void OnEnable()
     {
-        startTime = GameManager.Instance.GetLevelSettings().deadTimer / 60f;
+        //startTime = GameManager.Instance.GetLevelSettings().deadTimer / 60f;
         timer = startTime * 60f;
         Debug.Log("level timer:" + timer);
     }

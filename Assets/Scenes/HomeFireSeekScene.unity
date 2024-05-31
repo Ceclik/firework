@@ -13778,6 +13778,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3024375382603442984, guid: b4f1938bc2da09f41934623cffe624e6,
+        type: 3}
+      propertyPath: startTime
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18861,6 +18866,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3727515607991349720, guid: 56a7168595c920d47a664c183f6a766a,
         type: 3}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 662623406}
+    - target: {fileID: 3727515607991349720, guid: 56a7168595c920d47a664c183f6a766a,
+        type: 3}
       propertyPath: movingPathParent
       value: 
       objectReference: {fileID: 1036032330}
@@ -18869,6 +18879,11 @@ PrefabInstance:
       propertyPath: seekingFireSystem
       value: 
       objectReference: {fileID: 1640926077}
+    - target: {fileID: 3727515607991349720, guid: 56a7168595c920d47a664c183f6a766a,
+        type: 3}
+      propertyPath: startMainFireVelocity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5883319028804015665, guid: 56a7168595c920d47a664c183f6a766a,
         type: 3}
       propertyPath: m_Name

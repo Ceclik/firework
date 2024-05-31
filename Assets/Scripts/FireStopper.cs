@@ -18,7 +18,7 @@ public class FireStopper : MonoBehaviour
     [SerializeField] private GameObject danger;
 
     private ParticleSystem _pSystem;
-    private bool _soundPlaying;
+    public bool SoundPlaying { get; private set; }
     private float _fadingColor;
     private float _startLight;
     private float _fadingTime;
@@ -38,7 +38,7 @@ public class FireStopper : MonoBehaviour
             _fadingTime = 0;
             _pSystem.Play();            
         }
-        if (!_soundPlaying) StartCoroutine(StartAudio());
+        if (!SoundPlaying) StartCoroutine(StartAudio());
         if (lightning!=null && !lightning.activeSelf && fireIndex==0 && (fake))
         {
             lightning.SetActive(true);
@@ -89,9 +89,9 @@ public class FireStopper : MonoBehaviour
 
     private IEnumerator StartAudio()
     {
-        if (_soundPlaying) yield break;
+        if (SoundPlaying) yield break;
 
-        _soundPlaying = true;
+        SoundPlaying = true;
 
         Debug.Log("startsound");
         var startSound = soundStarts[Random.Range(0, soundStarts.Length)];
@@ -122,7 +122,7 @@ public class FireStopper : MonoBehaviour
         yield return new WaitForSeconds(endSound.clip.length - fadeTime);
         StartCoroutine(AudioFade.FadeOut(endSound, fadeTime));
 
-        _soundPlaying = false;
+        SoundPlaying = false;
     }
 
 

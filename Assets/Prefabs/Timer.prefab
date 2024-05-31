@@ -214,11 +214,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f0993ab99e4204881f444a0164fe73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTime: 3
+  startTime: 2
   timer: 0
   text: {fileID: 3023689929448903592}
-  star1Time: 1
-  star2Time: 2
 --- !u!114 &8450394223303949831
 MonoBehaviour:
   m_ObjectHideFlags: 0
