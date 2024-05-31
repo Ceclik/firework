@@ -1074,7 +1074,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0420\u0435\u0436\u0438\u043C \u0442\u0443\u0448\u0435\u043D\u0438\u044F"
+  m_Text: "\u041E\u0433\u043D\u0435\u043D\u043D\u044B\u0439 \u0434\u0430\u0440\u0442\u0441"
 --- !u!222 &594938356
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1286,8 +1286,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0420\u0435\u0436\u0438\u043C \u0441\u043B\u0435\u0436\u0435\u043D\u0438\u044F
-    \u0437\u0430 \u043E\u0433\u043E\u043D\u044C\u043A\u043E\u043C\n"
+  m_Text: "\u0420\u0438\u0441\u0443\u043D\u043A\u0438 \u0438\u0437 \u043F\u0435\u043D\u044B"
 --- !u!222 &839112809
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1825,7 +1824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1160963680
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2237,7 +2236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1257257104
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3512,9 +3511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568b7a048819dd34482cab6d5dab776b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FirstRun: 1
-  FireStarted: 0
-  ComPort: 
+  firstRun: 1
+  comPort: 
 --- !u!4 &1935478957
 Transform:
   m_ObjectHideFlags: 0

@@ -6,11 +6,9 @@ namespace FireAimScripts
     public class FireSplitter : MonoBehaviour
     {
         [SerializeField] private float timeToSplit;
-        [SerializeField] private GameObject complexClone;
 
         [SerializeField] private TextMeshProUGUI timerText;
-
-        private bool _isSplitted;
+        
         private float _timer;
         
         public delegate void DecreaseLives();
@@ -19,8 +17,6 @@ namespace FireAimScripts
         private void Start()
         {
             _timer = timeToSplit;
-            if(complexClone == null)
-                timerText.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -28,20 +24,16 @@ namespace FireAimScripts
             _timer -= Time.deltaTime;
             timerText.text = ((int)_timer).ToString();
 
-            if (_timer <= 0 && !_isSplitted)
+            if (_timer <= 0)
             {
-                _isSplitted = true;
-                timerText.gameObject.SetActive(false);
                 _timer = timeToSplit;
-                if (complexClone != null && !complexClone.activeSelf)
-                    SplitFire();
+                SplitFire();
             }
         }
 
         private void SplitFire()
         {
             OnFireSplitted?.Invoke();
-            complexClone.SetActive(true);
         }
     }
 }

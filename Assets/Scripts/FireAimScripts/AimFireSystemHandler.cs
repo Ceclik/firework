@@ -32,6 +32,8 @@ namespace FireAimScripts
 
         private int _livesCount = 3;
 
+        public int AmountOfActiveFires { get; set; } = 1;
+
         private void DecreaseLive()
         {
             _livesCount--;
@@ -80,18 +82,24 @@ namespace FireAimScripts
         
         private void DisableFire(int i)
         {
+            AmountOfActiveFires--;
             fires[i].SetActive(false);
         }
         
         void Update()
         {
-            if ((_started && overallLife==0 && !_ended) || _livesCount <= 0)
+            if ((_started && AmountOfActiveFires == 0 && !_ended) || _livesCount <= 0)
+            /*if ((_started && overallLife==0 && !_ended))*/
             {
+                Debug.LogError("In end");
                 _ended = true;
                 if(_livesCount <= 0)
                     GameManager.Instance.EndScene(false);
-                else 
+                else
+                {
+                    Debug.LogError("in true");
                     GameManager.Instance.EndScene(true);
+                }
             }
         
 
@@ -189,12 +197,16 @@ namespace FireAimScripts
             {
                 explosion.SetActive(true);
             }
-
+            
             foreach (var fire in fires)
             {
-                if(fire.CompareTag("StartingFiresInAimMode"))
+                if (fire.CompareTag("StartingFiresInAimMode"))
+                {
                     fire.SetActive(true);
+                    AmountOfActiveFires++;
+                }
             }
+            fires[0].SetActive(true);
             
             
             var particle = fires[0].GetComponent<ParticleSystemMultiplier>();
