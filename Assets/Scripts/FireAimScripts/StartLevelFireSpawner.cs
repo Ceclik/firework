@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,7 +11,6 @@ namespace FireAimScripts
 
         private Transform[] _fireLocations;
         private GameObject[] _fires;
-        private int _indexOfFire;
         private AimFireSystemHandler _fireSystemHandler;
 
         private void Start()
@@ -29,32 +29,17 @@ namespace FireAimScripts
 
         public void StartRandomFires()
         {
-            int[] pickedIndexes = new int[amountOfFiresToSpawn];
-            
-            for (int i = 0; i < amountOfFiresToSpawn; i++)
-                pickedIndexes[i] = -1;
-            
-            int indexOfPickedFireLocation = 0;
-            bool wrongPick = false;
-            while (indexOfPickedFireLocation < amountOfFiresToSpawn - 1)
-            {
-                int indexOfFireLocation = Random.Range(0, fireLocationsParent.childCount);
-                foreach(var index in pickedIndexes)
-                    if (indexOfFireLocation == index)
-                        wrongPick = true;
-                
-                if(wrongPick) continue;
-                
-                pickedIndexes[indexOfPickedFireLocation] = indexOfFireLocation;
-                indexOfPickedFireLocation++;
-            }
-
             for (int i = 0; i < amountOfFiresToSpawn; i++)
             {
+                int indexOfLocation = Random.Range(0, _fireLocations.Length);
+                while (_fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
+                    indexOfLocation = Random.Range(0, _fireLocations.Length);
+                
                 _fires[i].SetActive(true);
                 _fireSystemHandler.AmountOfActiveFires++;
-                if(i != 0)
-                    _fires[i].transform.position = _fireLocations[pickedIndexes[i]].position;
+                _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
+                if (i != 0)
+                    _fires[i].transform.position = _fireLocations[indexOfLocation].transform.position;
             }
         }
     }

@@ -82,7 +82,8 @@ namespace FireAimScripts
         
         private void DisableFire(int i)
         {
-            AmountOfActiveFires--;
+            AmountOfActiveFires--; //Если что то тут надо добавить снятие занятой локации огня 
+            fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
             fires[i].SetActive(false);
         }
         
@@ -91,15 +92,11 @@ namespace FireAimScripts
             if ((_started && AmountOfActiveFires == 0 && !_ended) || _livesCount <= 0)
             /*if ((_started && overallLife==0 && !_ended))*/
             {
-                Debug.LogError("In end");
                 _ended = true;
                 if(_livesCount <= 0)
                     GameManager.Instance.EndScene(false);
                 else
-                {
-                    Debug.LogError("in true");
                     GameManager.Instance.EndScene(true);
-                }
             }
         
 

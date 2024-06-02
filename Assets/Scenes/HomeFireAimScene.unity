@@ -10397,6 +10397,7 @@ GameObject:
   - component: {fileID: 1036378421}
   - component: {fileID: 1036378422}
   - component: {fileID: 1036378423}
+  - component: {fileID: 1036378424}
   m_Layer: 0
   m_Name: Fires
   m_TagString: Untagged
@@ -10464,6 +10465,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amountOfFiresToSpawn: 2
+  fireLocationsParent: {fileID: 1800369741}
+--- !u!114 &1036378424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036378420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6c7bfa1425b0542b5264109a4aba20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   fireLocationsParent: {fileID: 1800369741}
 --- !u!1 &1036946181
 GameObject:

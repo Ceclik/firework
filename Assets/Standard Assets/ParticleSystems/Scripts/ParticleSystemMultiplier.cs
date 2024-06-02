@@ -15,6 +15,8 @@ namespace Standard_Assets.ParticleSystems.Scripts
         private List<float> _startSpeeds = new List<float>();
         private List<float> _startLifetimes = new List<float>();
 
+        public bool IsFinished { get; set; }
+
 
         private void Start()
         {
