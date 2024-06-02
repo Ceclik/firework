@@ -268,6 +268,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -1131,6 +1141,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -1915,6 +1935,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -2248,6 +2278,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -2374,6 +2414,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -2648,6 +2698,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -2931,6 +2991,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -8281,6 +8351,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -8869,6 +8949,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -9099,6 +9189,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -9225,6 +9325,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -10479,6 +10589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireLocationsParent: {fileID: 1800369741}
+  amountOfFireToAdditionalSpawn: 2
 --- !u!1 &1036946181
 GameObject:
   m_ObjectHideFlags: 0
@@ -16112,21 +16223,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.0666094
-      objectReference: {fileID: 0}
-    - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.0666094
-      objectReference: {fileID: 0}
-    - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.0666094
-      objectReference: {fileID: 0}
-    - target: {fileID: 1746211769391405319, guid: 08cfb41bfd66b1449a404f0907cc33e3,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.203
       objectReference: {fileID: 0}
@@ -16177,28 +16273,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
-      propertyPath: timeToSplit
-      value: 20
+      propertyPath: maxTimeToSplit
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
-      propertyPath: complexClone
-      value: 
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
       value: FireComplexInAimMode(teapot)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
-        type: 3}
-      propertyPath: m_TagString
-      value: Fire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16929,6 +17015,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -17198,6 +17294,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -17324,6 +17430,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -17975,6 +18091,16 @@ PrefabInstance:
       propertyPath: complexClone
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
       propertyPath: m_Name
@@ -18241,6 +18367,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -19574,6 +19710,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}
@@ -21414,6 +21560,16 @@ PrefabInstance:
         type: 3}
       propertyPath: complexClone
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: maxTimeToSplit
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2519204807445080475, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: minTimeToSplit
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}

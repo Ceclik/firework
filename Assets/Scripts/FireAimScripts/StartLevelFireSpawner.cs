@@ -37,9 +37,12 @@ namespace FireAimScripts
                 
                 _fires[i].SetActive(true);
                 _fireSystemHandler.AmountOfActiveFires++;
-                _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
+                
                 if (i != 0)
+                {
                     _fires[i].transform.position = _fireLocations[indexOfLocation].transform.position;
+                    _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
+                }
             }
         }
     }

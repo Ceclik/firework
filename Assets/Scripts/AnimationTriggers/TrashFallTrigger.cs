@@ -1,4 +1,5 @@
-﻿using Instructions;
+﻿using FireAimScripts;
+using Instructions;
 using Scenes;
 using UnityEngine;
 
@@ -8,11 +9,13 @@ namespace AnimationTriggers
     {
         private LevelInstructionShower _instruction;
         private Animator _selfAnimator;
+        private StartLevelFireSpawner _startFireSpawner;
         public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
             _selfAnimator = animator;
             _instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
             _instruction.OnStartButtonClicked += StartFire;
+            _startFireSpawner = GameObject.Find("Fires").GetComponent<StartLevelFireSpawner>();
         }
 
         private void StartFire()
@@ -20,8 +23,11 @@ namespace AnimationTriggers
             var can = GameObject.Find("TrashCan");
             TrashCan trashCan = can.GetComponent<TrashCan>();
             _selfAnimator.SetTrigger("StartFire");
+            
             if (!trashCan.falled)
                 trashCan.TrashFall();
+            
+            _startFireSpawner.StartRandomFires();
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)

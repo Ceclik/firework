@@ -19625,6 +19625,7 @@ GameObject:
   - component: {fileID: 5922709094053611543}
   - component: {fileID: 2519204807445080475}
   - component: {fileID: 5370732314408843999}
+  - component: {fileID: 6893913228566519483}
   m_Layer: 9
   m_Name: FireComplexInAimMode
   m_TagString: Fire
@@ -19642,7 +19643,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 1.3942, y: 1.1031, z: 0.3186}
-  m_LocalScale: {x: 0.51321244, y: 0.51321244, z: 0.51321244}
+  m_LocalScale: {x: 1.0666094, y: 1.0666094, z: 1.0666094}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4771784999527453761}
@@ -19788,8 +19789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58cb1a5e8e24851479eff681b8130771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToSplit: 3
-  complexClone: {fileID: 0}
+  timeToSplit: 20
   timerText: {fileID: 4565500080340797519}
 --- !u!114 &5370732314408843999
 MonoBehaviour:
@@ -19804,6 +19804,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetimage: {fileID: 4943570626881657873}
+--- !u!114 &6893913228566519483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4926793131823706693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91950536d9d099e4e9f008f716907701, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6997150063324321093
 GameObject:
   m_ObjectHideFlags: 0

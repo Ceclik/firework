@@ -5,7 +5,8 @@ namespace FireAimScripts
 {
     public class FireSplitter : MonoBehaviour
     {
-        [SerializeField] private float timeToSplit;
+        [SerializeField] private float minTimeToSplit;
+        [SerializeField] private float maxTimeToSplit;
 
         [SerializeField] private TextMeshProUGUI timerText;
         
@@ -16,7 +17,7 @@ namespace FireAimScripts
 
         private void Start()
         {
-            _timer = timeToSplit;
+            _timer = Random.Range(minTimeToSplit, maxTimeToSplit + 1.0f);
         }
 
         private void Update()
@@ -26,7 +27,7 @@ namespace FireAimScripts
 
             if (_timer <= 0)
             {
-                _timer = timeToSplit;
+                _timer = minTimeToSplit;
                 SplitFire();
             }
         }

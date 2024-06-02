@@ -1,3 +1,4 @@
+using Standard_Assets.ParticleSystems.Scripts;
 using UnityEngine;
 
 namespace FireAimScripts
@@ -8,8 +9,6 @@ namespace FireAimScripts
         private Transform[] _spawnPoints;
         private FireSplitter[] _fires;
         private AimFireSystemHandler _aimFireSystemHandler;
-
-        private int _newFireIndex = 3;
 
         private void Start()
         {
@@ -29,31 +28,23 @@ namespace FireAimScripts
 
         private void SpawnNewFire()
         {
-            bool notFree = true;
-            int index = 0;
-            bool hasFree = false;
-            foreach (var point in _spawnPoints)
-            {
-                if (!point.GetComponent<SpawnPoint>().IsUsing)
-                    hasFree = true;
-            }
+            int indexOfLocation = Random.Range(0, _spawnPoints.Length);
+            while (_spawnPoints[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
+                indexOfLocation = Random.Range(0, _spawnPoints.Length);
             
-            if(!hasFree) return;
-            
-            while (notFree)
-            {
-                index = Random.Range(0, _spawnPoints.Length);
-                if (!_spawnPoints[index].GetComponent<SpawnPoint>().IsUsing)
+            int indexOfFire = -1;
+            for (int i = 0; i < _fires.Length; i++)
+                if (_fires[i].GetComponent<ParticleSystemMultiplier>().multiplier <= 0.01f &&  !_fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished)
                 {
-                    _spawnPoints[index].GetComponent<SpawnPoint>().IsUsing = true;
-                    notFree = false;
+                    indexOfFire = i;
+                    break;
                 }
-            }
             
-            _fires[_newFireIndex].gameObject.SetActive(true);
+            _fires[indexOfFire].gameObject.SetActive(true);
+            _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
             _aimFireSystemHandler.AmountOfActiveFires++;
-            _fires[_newFireIndex].transform.position = _spawnPoints[index].position;
-            _newFireIndex++;
+            _fires[indexOfFire].transform.position = _spawnPoints[indexOfLocation].position;
+            _spawnPoints[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
         }
 
         private void OnDisable()

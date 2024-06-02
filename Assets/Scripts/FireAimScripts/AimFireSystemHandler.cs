@@ -1,3 +1,4 @@
+using FireSeekingScripts;
 using Standard_Assets.ParticleSystems.Scripts;
 using Tracking;
 using UnityEngine;
@@ -85,13 +86,28 @@ namespace FireAimScripts
             AmountOfActiveFires--; //Если что то тут надо добавить снятие занятой локации огня 
             fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
             fires[i].SetActive(false);
+            Debug.LogError($"Amount of active fires: {AmountOfActiveFires}");
+        }
+        
+        private void CountComplexParameters(int index)
+        {
+            FireComplexParametersCounter paramsCounter = fires[index].GetComponent<FireComplexParametersCounter>();
+            if (!paramsCounter.IsExtinguishing)
+            {
+                paramsCounter.IsExtinguishing = true;
+                paramsCounter.ExtinguishAttempts++;
+            }
+
+            if (paramsCounter.IsExtinguishing)
+                paramsCounter.TimeOfExtinguishing += Time.deltaTime;
         }
         
         void Update()
         {
             if ((_started && AmountOfActiveFires == 0 && !_ended) || _livesCount <= 0)
-            /*if ((_started && overallLife==0 && !_ended))*/
+            /*if ((_started && AmountOfActiveFires == 0 && !_ended))*/
             {
+                
                 _ended = true;
                 if(_livesCount <= 0)
                     GameManager.Instance.EndScene(false);
@@ -116,8 +132,13 @@ namespace FireAimScripts
                 Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
                 RaycastHit hit;
                 var particle = fires[i].GetComponent<ParticleSystemMultiplier>();
-                var fireCollider = fires[i].GetComponent<Collider>();            
+                var fireCollider = fires[i].GetComponent<Collider>();
 
+                float particleGrowSpeedValue = fireGrowSpeed;
+                
+                if (fires[i].GetComponent<FireComplexParametersCounter>().ExtinguishAttempts < 1)
+                    particleGrowSpeedValue = 1;
+                
                 if (particle.multiplier > 0 && fires[i].activeSelf)
                 {
                     if (fireCollider.Raycast(ray, out hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor)
@@ -126,6 +147,12 @@ namespace FireAimScripts
                                
                         if (!(fake && i==0) && !(startOver && i==0)) particle.multiplier -= (fireStopSpeed * Time.deltaTime);
                         if (startOver && particle.multiplier>=0.1f && i==0) particle.multiplier -= (fireStopSpeed * Time.deltaTime);
+
+                        CountComplexParameters(i);
+                        
+                        if (fires[i].GetComponent<FireComplexParametersCounter>().ExtinguishAttempts < 1)
+                            particleGrowSpeedValue = 1f;
+                        
                         _firesLife[i] = particle.multiplier * 100f;
                         hittedFire++;
                         hittedFireLastIndex = i;
@@ -138,7 +165,7 @@ namespace FireAimScripts
                         {
                             if (particle.multiplier < 1f && fires[i].activeSelf)
                             {
-                                particle.multiplier += (fireGrowSpeed * Time.deltaTime);
+                                particle.multiplier += (particleGrowSpeedValue * Time.deltaTime);
                                 _firesLife[i] = particle.multiplier * 100f;
                             }
                             if (particle.multiplier >= 1f && fires[i].activeSelf)
@@ -151,7 +178,7 @@ namespace FireAimScripts
                     {                    
                         if (particle.multiplier < 1f && fires[i].activeSelf)
                         {
-                            particle.multiplier += (fireGrowSpeed * Time.deltaTime);
+                            particle.multiplier += (particleGrowSpeedValue * Time.deltaTime);
                             _firesLife[i] = particle.multiplier * 100f;
                         }
                         if (particle.multiplier>=1f && fires[i].activeSelf)
