@@ -32,7 +32,7 @@ namespace FireAimScripts
 
         private int _livesCount = 3;
 
-        public int AmountOfActiveFires { get; set; } = 1;
+        public int AmountOfActiveFires { get; set; }
 
         private void DecreaseLive()
         {
@@ -190,24 +190,13 @@ namespace FireAimScripts
                 stopper.StopFireStopping();
             }
         }
-
+        
         public void StartFire()
         {
             if (explosion!=null)
             {
                 explosion.SetActive(true);
             }
-            
-            foreach (var fire in fires)
-            {
-                if (fire.CompareTag("StartingFiresInAimMode"))
-                {
-                    fire.SetActive(true);
-                    AmountOfActiveFires++;
-                }
-            }
-            fires[0].SetActive(true);
-            
             
             var particle = fires[0].GetComponent<ParticleSystemMultiplier>();
             particle.multiplier = 0.8f;

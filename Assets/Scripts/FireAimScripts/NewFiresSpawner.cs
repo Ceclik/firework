@@ -1,4 +1,3 @@
-using FireSeekingScripts;
 using UnityEngine;
 
 namespace FireAimScripts

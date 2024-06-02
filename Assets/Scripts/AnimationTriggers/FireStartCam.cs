@@ -1,4 +1,5 @@
-﻿using Instructions;
+﻿using FireAimScripts;
+using Instructions;
 using UnityEngine;
 
 namespace AnimationTriggers
@@ -7,17 +8,20 @@ namespace AnimationTriggers
 		
 		private LevelInstructionShower _instruction;
 		private Animator _selfAnimator;
+		private StartLevelFireSpawner _fireSpawner;
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			_selfAnimator = animator;
 			_instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
 			_instruction.OnStartButtonClicked += StartFire;
+			_fireSpawner = GameObject.Find("Fires").GetComponent<StartLevelFireSpawner>();
 		}
 
 		private void StartFire()
 		{
 			_selfAnimator.SetTrigger("Start");
 			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(1f));
+			_fireSpawner.StartRandomFires();
 		}
 		
 		public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
