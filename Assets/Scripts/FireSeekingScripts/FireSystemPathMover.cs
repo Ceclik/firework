@@ -6,13 +6,15 @@ namespace FireSeekingScripts
     public class FireSystemPathMover : MonoBehaviour
     {
         [SerializeField] private SeekingFireSystemHandler seekingFireSystem;
-        [SerializeField] private Transform movingPathParent;
+        [SerializeField] private Transform[] movingPathParents;
         [Space(10)] [SerializeField] private float startMainFireVelocity;
 
         [Space(10)] [SerializeField] private GameObject explosion;
+        
 
         private Transform[] _points;
-        private int _index;
+        private int _movingIndex;
+        private int _pathIndex;
 
         private float _mainFireVelocity;
         
@@ -22,10 +24,12 @@ namespace FireSeekingScripts
 
         private void Start()
         {
-            _points = new Transform[movingPathParent.childCount];
+            _pathIndex = Random.Range(0, movingPathParents.Length);
+            
+            _points = new Transform[movingPathParents[_pathIndex].childCount];
             for (int i = 0; i < _points.Length; i++)
-                _points[i] = movingPathParent.GetChild(i);
-            _index = 0;
+                _points[i] = movingPathParents[_pathIndex].GetChild(i);
+            _movingIndex = 0;
         }
 
         private void CountMainFireVelocity()
@@ -52,22 +56,22 @@ namespace FireSeekingScripts
         {
             CountMainFireVelocity();
             
-            if (GameManager.Instance.IsFireStarted && IsMoving && _index < _points.Length && !seekingFireSystem.fake)
+            if (GameManager.Instance.IsFireStarted && IsMoving && _movingIndex < _points.Length && !seekingFireSystem.fake)
             {
                 if (SlowMoving) _mainFireVelocity /= 2;
-                Vector3 direction = (_points[_index].position - transform.position).normalized;
+                Vector3 direction = (_points[_movingIndex].position - transform.position).normalized;
                 Vector3 movement = direction * _mainFireVelocity * Time.deltaTime;
                 
-                Debug.LogError($"main fire velocity: {_mainFireVelocity}");
                 transform.Translate(movement);
             }
 
-            if (_index < _points.Length && Vector3.Distance(transform.position, _points[_index].position) < 0.1f)
-                _index++;
+            if (_movingIndex < _points.Length && Vector3.Distance(transform.position, _points[_movingIndex].position) < 0.1f)
+                _movingIndex++;
 
-            if (_index == _points.Length && !IsRoundPassed)
+            if (_movingIndex == _points.Length && !IsRoundPassed)
             {
                 IsRoundPassed = true;
+                explosion.transform.position = _points[_movingIndex - 1].position;
                 explosion.SetActive(true);
             }
         }

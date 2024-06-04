@@ -21,6 +21,10 @@ namespace FireSeekingScripts
         public bool fake;
         public bool startOver;
         
+        /*[Space(20)][Header("Backpack objects")] [SerializeField] private Transform backpack;
+        [SerializeField] private Transform backpackNewPoint;
+        [SerializeField] private bool backpackToPoint;*/
+        
         private float[] _firesLife;
         private float _startFireIntensity;
         private bool _started;
@@ -54,7 +58,15 @@ namespace FireSeekingScripts
                 _firesLife[i] = 100f;
                 fires[i].SetActive(false);            
             }
-            _startFireIntensity = fireLight.intensity;        
+            _startFireIntensity = fireLight.intensity;   
+            
+            
+            /*if (backpackToPoint)
+            {
+                backpack.position = backpackNewPoint.position;
+                Debug.LogError("in teleport");
+                transform.position = backpack.position;
+            }*/
         }
 
         private void OnEnable()

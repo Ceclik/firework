@@ -14,6 +14,10 @@ public class DangerObjectHandler : MonoBehaviour
     [SerializeField] private ParticleSystem gas;
     [SerializeField] private AudioSource kettleSound;
 
+    [Space(20)] [Header("For seeking level")] [SerializeField]
+    private GameObject human;
+    [SerializeField] private Animator cameraAnimator;
+
     private Collider _collider;
     private Animator _anim;
     private bool _falled;
@@ -97,6 +101,11 @@ public class DangerObjectHandler : MonoBehaviour
         _anim.SetTrigger("Fall");
         _falled = true;
         if (gas != null) { gas.Stop(); }
+
+        if (human != null)
+            human.SetActive(false);
+        if(cameraAnimator != null)
+            cameraAnimator.SetTrigger("Unpluged");
     }
     private void OnDisable()
     {
