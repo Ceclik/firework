@@ -137,20 +137,23 @@ namespace FireAimScripts
                 float particleGrowSpeedValue = fireGrowSpeed;
                 
                 if (!fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
-                    particleGrowSpeedValue = 3f;
+                    particleGrowSpeedValue = 2f;
                 
                 
                 if (particle.multiplier > 0 && fires[i].activeSelf)
                 {
-                    if (fireCollider.Raycast(ray, out hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor)
+                    if (fireCollider.Raycast(ray, out hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor &&
+                        fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
                     {
-                        stopper.Orient(hit.point);                    
-                               
-                        if (!(fake && i==0) && !(startOver && i==0)) particle.multiplier -= (fireStopSpeed * Time.deltaTime);
-                        if (startOver && particle.multiplier>=0.1f && i==0) particle.multiplier -= (fireStopSpeed * Time.deltaTime);
+                        stopper.Orient(hit.point);
+
+                        if (!(fake && i == 0) && !(startOver && i == 0))
+                            particle.multiplier -= (fireStopSpeed * Time.deltaTime);
+                        if (startOver && particle.multiplier >= 0.1f && i == 0)
+                            particle.multiplier -= (fireStopSpeed * Time.deltaTime);
 
                         CountComplexParameters(i);
-                        
+
                         _firesLife[i] = particle.multiplier * 100f;
                         hittedFire++;
                         hittedFireLastIndex = i;
@@ -158,14 +161,16 @@ namespace FireAimScripts
                         {
                             particle.Stop();
                             _expandTimers = new float[fires.Length];
-                        }         
-                        if (fake && i==0)
+                        }
+
+                        if (fake && i == 0)
                         {
                             if (particle.multiplier < 1f && fires[i].activeSelf)
                             {
                                 particle.multiplier += (particleGrowSpeedValue * Time.deltaTime);
                                 _firesLife[i] = particle.multiplier * 100f;
                             }
+
                             if (particle.multiplier >= 1f && fires[i].activeSelf)
                             {
                                 _expandTimers[i] = _expandTimers[i] + Time.deltaTime;

@@ -867,6 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29538580ed690e945ad6c1cf26c0f397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyControlled: 1
 --- !u!114 &548874162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1527,7 +1528,7 @@ MonoBehaviour:
   - {fileID: 1658963390}
   - {fileID: 548874161}
   switchDelay: 1
-  startAfterNotActiveTime: 3
+  startAfterNotActiveTime: 60
   mainMenu: {fileID: 1257257103}
 --- !u!1 &940324452
 GameObject:
@@ -3078,6 +3079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29538580ed690e945ad6c1cf26c0f397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyControlled: 1
 --- !u!1 &1718378707
 GameObject:
   m_ObjectHideFlags: 0

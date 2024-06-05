@@ -41,7 +41,7 @@ namespace Standard_Assets.ParticleSystems.Scripts
         {
             if (!IsGrown)
             {
-                if (multiplier == 1)
+                if (multiplier >= 1)
                     IsGrown = true;
             }
             var systems = GetComponentsInChildren<ParticleSystem>();
