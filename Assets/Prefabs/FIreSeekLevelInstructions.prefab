@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1240687507043049808
 RectTransform:
   m_ObjectHideFlags: 0
@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 5576943939389294562}
   - component: {fileID: 5560533081881104399}
   - component: {fileID: 7246593491486156549}
+  - component: {fileID: 604257643517445199}
   m_Layer: 5
   m_Name: Text (Legacy)
   m_TagString: Untagged
@@ -234,6 +235,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u041D\u0430\u0447\u0430\u0442\u044C"
+--- !u!114 &604257643517445199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2151284100749742680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac73492b10de76840bc548c4821e6fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: start
 --- !u!1 &2290936994047178539
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +550,7 @@ GameObject:
   - component: {fileID: 5107714244656056284}
   - component: {fileID: 7371291671950931112}
   - component: {fileID: 6711305217724659542}
+  - component: {fileID: 7174360414931941126}
   m_Layer: 5
   m_Name: HintText
   m_TagString: Untagged
@@ -592,7 +607,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 43
+    m_FontSize: 62
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -605,3 +620,16 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "\u041D\u0435 \u0434\u0430\u0439 \u043F\u043B\u0430\u043C\u0435\u043D\u0438
     \u0440\u0430\u0437\u0433\u043E\u0440\u0435\u0442\u044C\u0441\u044F!"
+--- !u!114 &7174360414931941126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6954997653214804137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac73492b10de76840bc548c4821e6fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: seek_instruction

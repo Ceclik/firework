@@ -15,7 +15,9 @@ namespace Standard_Assets.ParticleSystems.Scripts
         private List<float> _startSpeeds = new List<float>();
         private List<float> _startLifetimes = new List<float>();
 
-        public bool IsFinished;
+        public bool IsFinished { get; set; }
+        
+        public bool IsGrown { get; private set; }
 
 
         private void Start()
@@ -37,6 +39,11 @@ namespace Standard_Assets.ParticleSystems.Scripts
         }
         private void Update()
         {
+            if (!IsGrown)
+            {
+                if (multiplier == 1)
+                    IsGrown = true;
+            }
             var systems = GetComponentsInChildren<ParticleSystem>();
             int i = 0;
             foreach (ParticleSystem system in systems)

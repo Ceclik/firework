@@ -17,22 +17,6 @@
       "value": "Отмена"
     },
     {
-      "key": "school_level_1",
-      "value": "Школа, уровень 1"
-    },
-    {
-      "key": "school_level_2",
-      "value": "Школа, уровень 1"
-    },
-    {
-      "key": "home_level_1",
-      "value": "Дом, уровень 1"
-    },
-    {
-      "key": "home_level_2",
-      "value": "Дом, уровень 2"
-    },
-    {
       "key": "pick_scenario",
       "value": "Выберите сценарий:"
     },
@@ -45,24 +29,48 @@
       "value": "Пожар дома"
     },
     {
-      "key": "level_1",
-      "value": "Уровень 1"
+      "key": "pick_game_mode",
+      "value": "Выберите режим игры:"
     },
     {
-      "key": "next",
-      "value": "Далее"
+      "key": "foam_images",
+      "value": "Рисунки из пены"
     },
     {
-      "key": "level_2",
-      "value": "Уровень 2"
+      "key": "fire_darts",
+      "value": "Огненный дартс"
     },
     {
-      "key": "repeat",
-      "value": "Повторить"
+      "key": "aim_instruction",
+      "value": "Успей потушить разбушевавшеся пламя!\nПопади прямо в цель!"
     },
     {
-      "key": "reminder",
-      "value": "МЧС НАПОМИНАЕТ: ЕСЛИ НЕ ПОЛУЧАЕТСЯ СПРАВИТЬСЯ С ОГНЕМ - БЕГИТЕ"
+      "key": "start",
+      "value": "Начать"
+    },
+    {
+      "key": "defeat",
+      "value": "Поражение"
+    },
+    {
+      "key": "lose_text",
+      "value": "Ты не успел потушить пожар вовремя."
+    },
+    {
+      "key": "victory",
+      "value": "Победа"
+    },
+    {
+      "key": "win_text",
+      "value": "Ты смог самостоятельно справиться с пожаром! \nТак держать!"
+    },
+    {
+      "key": "seek_instruction",
+      "value": "Не дай пламени разгореться!"
+    },
+    {
+      "key": "to_menu",
+      "value": "В меню"
     }
   ]
 }

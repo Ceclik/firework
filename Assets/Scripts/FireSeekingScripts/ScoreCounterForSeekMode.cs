@@ -15,6 +15,7 @@ namespace FireSeekingScripts
         {
             Debug.LogError($"level time: {_levelTime / 60}\nmistakes amount: {MistakesAmount}");
             float score = streakTimeMax / (_levelTime / 60 * MistakesAmount);
+            score *= 100;
             scoreText.text = $"Количество очков: {(int)score}\nРекорд: {PlayerPrefs.GetInt(SceneManager.GetActiveScene().name + "Higscore")}";
             if(score > PlayerPrefs.GetInt(SceneManager.GetActiveScene().name+"Higscore"))
                 PlayerPrefs.SetInt(SceneManager.GetActiveScene().name+"Higscore", (int)score);

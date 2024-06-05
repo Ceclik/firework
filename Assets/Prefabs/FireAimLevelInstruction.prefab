@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1469140836430234111}
   - component: {fileID: 7223085406628202929}
   - component: {fileID: 7778780801945279828}
+  - component: {fileID: 5434498306694134870}
   m_Layer: 5
   m_Name: Text (Legacy)
   m_TagString: Untagged
@@ -79,6 +80,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u041D\u0430\u0447\u0430\u0442\u044C"
+--- !u!114 &5434498306694134870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886961735711999178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac73492b10de76840bc548c4821e6fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: start
 --- !u!1 &1928503102712962745
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +104,7 @@ GameObject:
   - component: {fileID: 7821900603309113656}
   - component: {fileID: 1278848355212255573}
   - component: {fileID: 2722997738228556548}
+  - component: {fileID: 2100207179139929857}
   m_Layer: 5
   m_Name: InstructionText
   m_TagString: Untagged
@@ -161,6 +176,19 @@ MonoBehaviour:
     \u0440\u0430\u0437\u0431\u0443\u0448\u0435\u0432\u0430\u0432\u0448\u0435\u0441\u044F
     \u043F\u043B\u0430\u043C\u044F!\n\u041F\u043E\u043F\u0430\u0434\u0438 \u043F\u0440\u044F\u043C\u043E
     \u0432 \u0446\u0435\u043B\u044C!"
+--- !u!114 &2100207179139929857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928503102712962745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac73492b10de76840bc548c4821e6fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: aim_instruction
 --- !u!1 &2411826324479787355
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +349,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fa6a624540d85f0419cf0b835ff72b42, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f70bb990468a1274eb12e7516a6468f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

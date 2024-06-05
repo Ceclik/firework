@@ -22,6 +22,7 @@ namespace FireAimScripts
             _accuracy = (float)Random.Range(40, 91);
             //Debug.LogError($"Accuracy: {_accuracy}\nScene name: {SceneManager.GetActiveScene().name}");
             float score = _accuracy * 10000 / (_levelTime + GetComponent<AimFireSystemHandler>().LivesCount * 10000);
+            score *= 100;
             scoreText.text =
                 $"Количество очков: {(int)score}\nРекорд: {PlayerPrefs.GetInt(SceneManager.GetActiveScene().name + "Higscore")}";
             if(score > PlayerPrefs.GetInt(SceneManager.GetActiveScene().name+"Higscore"))

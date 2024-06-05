@@ -21,6 +21,7 @@ namespace Utils
 
         public void OnMenuButtonClick()
         {
+            Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu");
         }
     }

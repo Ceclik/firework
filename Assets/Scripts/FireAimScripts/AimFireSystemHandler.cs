@@ -97,9 +97,6 @@ namespace FireAimScripts
                 paramsCounter.IsExtinguishing = true;
                 paramsCounter.ExtinguishAttempts++;
             }
-
-            if (paramsCounter.IsExtinguishing)
-                paramsCounter.TimeOfExtinguishing += Time.deltaTime;
         }
         
         void Update()
@@ -139,8 +136,9 @@ namespace FireAimScripts
 
                 float particleGrowSpeedValue = fireGrowSpeed;
                 
-                if (fires[i].GetComponent<FireComplexParametersCounter>().ExtinguishAttempts < 1)
-                    particleGrowSpeedValue = 1;
+                if (!fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
+                    particleGrowSpeedValue = 3f;
+                
                 
                 if (particle.multiplier > 0 && fires[i].activeSelf)
                 {
@@ -152,9 +150,6 @@ namespace FireAimScripts
                         if (startOver && particle.multiplier>=0.1f && i==0) particle.multiplier -= (fireStopSpeed * Time.deltaTime);
 
                         CountComplexParameters(i);
-                        
-                        if (fires[i].GetComponent<FireComplexParametersCounter>().ExtinguishAttempts < 1)
-                            particleGrowSpeedValue = 1f;
                         
                         _firesLife[i] = particle.multiplier * 100f;
                         hittedFire++;
