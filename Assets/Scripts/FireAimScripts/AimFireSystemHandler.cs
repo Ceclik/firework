@@ -31,13 +31,13 @@ namespace FireAimScripts
         private AudioSource _aSoundStart;
         private AudioSource _aSoundFire;
 
-        private int _livesCount = 3;
+        public int LivesCount { get; private set; } = 3;
 
         public int AmountOfActiveFires { get; set; }
 
         private void DecreaseLive()
         {
-            _livesCount--;
+            LivesCount--;
         }
         
         void Start()
@@ -104,15 +104,18 @@ namespace FireAimScripts
         
         void Update()
         {
-            if ((_started && AmountOfActiveFires == 0 && !_ended) || _livesCount <= 0)
+            if ((_started && AmountOfActiveFires == 0 && !_ended) || LivesCount <= 0)
             /*if ((_started && AmountOfActiveFires == 0 && !_ended))*/
             {
                 
                 _ended = true;
-                if(_livesCount <= 0)
+                if(LivesCount <= 0)
                     GameManager.Instance.EndScene(false);
                 else
+                {
+                    GetComponent<ScoreCounterInAimMode>().CountScore();
                     GameManager.Instance.EndScene(true);
+                }
             }
         
 

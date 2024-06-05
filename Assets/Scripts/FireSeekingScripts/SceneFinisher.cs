@@ -12,6 +12,7 @@ namespace FireSeekingScripts
         public IEnumerator FinishScene()
         {
             timer.SetActive(false);
+            GetComponent<ScoreCounterForSeekMode>().CountScore();
             cameraAnimator.SetTrigger("FinishScene");
             yield return new WaitForSeconds(sceneFinishDelay);
             GameManager.Instance.EndScene(true);

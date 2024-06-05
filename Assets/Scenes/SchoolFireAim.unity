@@ -13985,6 +13985,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e22441327962ed91f9bf71d6962b146e, type: 3}
+--- !u!114 &1173947889 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 14266376686638672, guid: e22441327962ed91f9bf71d6962b146e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1173947888}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1175385379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18066,6 +18078,7 @@ GameObject:
   - component: {fileID: 1794869226}
   - component: {fileID: 1794869227}
   - component: {fileID: 1794869228}
+  - component: {fileID: 1794869229}
   m_Layer: 0
   m_Name: FireSystem
   m_TagString: Untagged
@@ -18227,6 +18240,19 @@ MonoBehaviour:
   sounds: {fileID: 363091052}
   fake: 0
   startOver: 0
+--- !u!114 &1794869229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794869224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09e5e7e2f502de4f84b0b786e2a0307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 1173947889}
 --- !u!1001 &1799587456
 PrefabInstance:
   m_ObjectHideFlags: 0

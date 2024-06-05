@@ -21,10 +21,6 @@ namespace FireSeekingScripts
         public bool fake;
         public bool startOver;
         
-        /*[Space(20)][Header("Backpack objects")] [SerializeField] private Transform backpack;
-        [SerializeField] private Transform backpackNewPoint;
-        [SerializeField] private bool backpackToPoint;*/
-        
         private float[] _firesLife;
         private float _startFireIntensity;
         private bool _started;
@@ -59,14 +55,6 @@ namespace FireSeekingScripts
                 fires[i].SetActive(false);            
             }
             _startFireIntensity = fireLight.intensity;   
-            
-            
-            /*if (backpackToPoint)
-            {
-                backpack.position = backpackNewPoint.position;
-                Debug.LogError("in teleport");
-                transform.position = backpack.position;
-            }*/
         }
 
         private void OnEnable()
@@ -93,8 +81,11 @@ namespace FireSeekingScripts
             {
                 if(_mainFireRoundMover.IsMoving)
                     _mainFireRoundMover.SlowMoving = true;
-                if(!_isNewFireSpawned && !_mainFireRoundMover.IsRoundPassed)
+                if (!_isNewFireSpawned && !_mainFireRoundMover.IsRoundPassed)
+                {
                     SpawnNewFire();
+                    GetComponent<ScoreCounterForSeekMode>().MistakesAmount++;
+                }
             }
         }
 
@@ -193,7 +184,6 @@ namespace FireSeekingScripts
                     {
                         stopper.Orient(hit.point);
                         
-                        
                         if(i == 0 && !_mainFireRoundMover.IsRoundPassed) {}
                         else
                         {
@@ -226,8 +216,7 @@ namespace FireSeekingScripts
                         }
                     }
                     else
-                    {      
-                        
+                    {   
                         if (particle.multiplier < 1f && fires[i].activeSelf)
                         {
                             particle.multiplier += (fireGrowSpeed * Time.deltaTime);
