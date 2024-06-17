@@ -104,7 +104,7 @@ namespace FireSeekingScripts
             }
             else 
             {
-                if (!_isMovingToNextSegment)
+                if (!_isMovingToNextSegment && !seekingFireSystem.fake)
                 {
                     _isMovingToNextSegment = true;
                     StartCoroutine(MoveToNextSegment());
@@ -149,7 +149,7 @@ namespace FireSeekingScripts
             if (availableSegments.Count == 0) 
             {
                 IsRoundPassed = true;
-                explosion.transform.position = _wayPoints[_currentWaypointIndex].position;
+                explosion.transform.position = transform.position;
                 explosion.SetActive(true);
                 return -1;
             }

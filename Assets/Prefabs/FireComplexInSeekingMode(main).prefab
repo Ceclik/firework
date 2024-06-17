@@ -24089,7 +24089,7 @@ GameObject:
   - component: {fileID: 3476631423387380435}
   - component: {fileID: 8756404872871995265}
   m_Layer: 9
-  m_Name: FireComplexInSeekingMode(main) 1
+  m_Name: FireComplexInSeekingMode(main)
   m_TagString: Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
