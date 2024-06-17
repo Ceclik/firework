@@ -25,13 +25,11 @@ namespace FireAimScripts
 
         private void HandleScale()
         {
-            if (_particleMultiplier.multiplier > 0.5f)
-            {
-                outerCircle.rectTransform.localScale =
-                    new Vector3(_particleMultiplier.multiplier, _particleMultiplier.multiplier,
-                        _particleMultiplier.multiplier);
-            }
-            else if (_particleMultiplier.multiplier < 0.5f)
+            outerCircle.rectTransform.localScale =
+                new Vector3(_particleMultiplier.multiplier, _particleMultiplier.multiplier,
+                    _particleMultiplier.multiplier);
+            
+            if (_particleMultiplier.multiplier < 0.5f)
             {
                 float doubledMultiplier = _particleMultiplier.multiplier * 2;
                 middleCircle.rectTransform.localScale =
