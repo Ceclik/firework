@@ -9,6 +9,13 @@ namespace FireAimScripts
         [SerializeField] private Image outerCircle;
         [SerializeField] private Image middleCircle;
         [SerializeField] private Image innerCircle;
+        
+        [Space(20)][Header("Colors for target")]
+        [SerializeField] private Color redShade;
+        [SerializeField] private Color orangeShade;
+        [SerializeField] private Color yellowShade;
+        [SerializeField] private Color greenShade;
+        
         private ParticleSystemMultiplier _particleMultiplier;
 
         private void Start()
@@ -16,7 +23,7 @@ namespace FireAimScripts
             _particleMultiplier = GetComponent<ParticleSystemMultiplier>();
         }
 
-        private void Update()
+        private void HandleScale()
         {
             if (_particleMultiplier.multiplier > 0.5f)
             {
@@ -30,6 +37,28 @@ namespace FireAimScripts
                 middleCircle.rectTransform.localScale =
                     new Vector3(doubledMultiplier, doubledMultiplier, doubledMultiplier);
             }
+        }
+
+        private void HandleColor()
+        {
+            Color resultColor;
+            float multiplierValue = _particleMultiplier.multiplier;
+            if(multiplierValue > 0.66f)
+                resultColor = Color.Lerp(orangeShade, redShade, (multiplierValue - 0.66f)/(1f - 0.66f));
+            else if (multiplierValue > 0.33f)
+                resultColor = Color.Lerp(yellowShade, orangeShade, (multiplierValue - 0.33f) / (0.66f - 0.33f));
+            else
+                resultColor = Color.Lerp(greenShade, yellowShade, multiplierValue / 0.33f);
+
+            outerCircle.color = new Color(resultColor.r, resultColor.g, resultColor.b, 0.3f);
+            middleCircle.color = new Color(resultColor.r, resultColor.g, resultColor.b, 0.5f);
+            innerCircle.color = resultColor;
+        }
+
+        private void Update()
+        {
+            HandleScale();
+            HandleColor();
         }
     }
 }

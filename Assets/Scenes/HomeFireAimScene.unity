@@ -12052,7 +12052,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 4
+    angle: 1
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -12382,8 +12382,8 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.4970268
-          value: 0.91806173
+          time: 0.5097819
+          value: 0.39174595
           inSlope: -0.015625449
           outSlope: -0.015625449
           tangentMode: 0
@@ -12391,8 +12391,8 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.29090673
         - serializedVersion: 3
-          time: 1
-          value: 0.90234756
+          time: 0.997449
+          value: 0.3760318
           inSlope: -0.041698087
           outSlope: -0.041698087
           tangentMode: 0

@@ -19945,6 +19945,10 @@ MonoBehaviour:
   outerCircle: {fileID: 1228666491054474063}
   middleCircle: {fileID: 6098392103253999277}
   innerCircle: {fileID: 6557000197337703925}
+  redShade: {r: 0.8584906, g: 0.10933607, b: 0.10933607, a: 1}
+  orangeShade: {r: 0.9811321, g: 0.45548272, b: 0.17123532, a: 1}
+  yellowShade: {r: 1, g: 0.90936595, b: 0.13679248, a: 1}
+  greenShade: {r: 0.23111936, g: 0.8867924, b: 0.12967247, a: 1}
 --- !u!114 &6893913228566519483
 MonoBehaviour:
   m_ObjectHideFlags: 0
