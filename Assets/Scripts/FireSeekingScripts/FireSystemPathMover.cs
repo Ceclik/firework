@@ -15,6 +15,7 @@ namespace FireSeekingScripts
 
         [Space(10)] [SerializeField] private GameObject explosion;
         [SerializeField] private ParticleSystem fireStopperParticles;
+        [SerializeField] private GameObject fireParticlesParent;
         
         private List<List<Transform>> _segments = new List<List<Transform>>();
         private List<int> _visitedSegments = new List<int>();
@@ -113,7 +114,7 @@ namespace FireSeekingScripts
         
         private IEnumerator MoveToNextSegment()
         {
-            yield return new WaitForSeconds(moveToNextSegmentDelay);
+            fireParticlesParent.SetActive(false);
             if (!_visitedSegments.Contains(_currentSegment)) {
                 _visitedSegments.Add(_currentSegment);
             }
@@ -125,7 +126,9 @@ namespace FireSeekingScripts
             {
                 _currentWaypointIndex = 0;
                 transform.position = _segments[_currentSegment][0].position;
+                yield return new WaitForSeconds(moveToNextSegmentDelay);
                 _isMovingToNextSegment = false;
+                fireParticlesParent.SetActive(true);
             }
         }
 

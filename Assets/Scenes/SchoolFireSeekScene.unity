@@ -6172,6 +6172,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.3156128
       objectReference: {fileID: 0}
+    - target: {fileID: 4684982144806375307, guid: 4001ff6ce9782f9b394f253d3eb981bd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.2619629
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6588,6 +6593,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: bf495eacf58e31146ab012aa89ac68da,
     type: 3}
   m_PrefabInstance: {fileID: 1881863688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &838551823 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2400522141528285733, guid: 5aa97498a52471c4d9d57897e6600c1c,
+    type: 3}
+  m_PrefabInstance: {fileID: 6613211517511463324}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &846148727 stripped
 Transform:
@@ -27590,6 +27601,11 @@ PrefabInstance:
       propertyPath: seekingFireSystem
       value: 
       objectReference: {fileID: 1794869228}
+    - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
+        type: 3}
+      propertyPath: fireParticlesParent
+      value: 
+      objectReference: {fileID: 838551823}
     - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: fireStopperParticles
