@@ -24,7 +24,7 @@ namespace FireSeekingScripts
         private Transform[] _wayPoints;
         private int _currentWaypointIndex = 0;
         private int _pathIndex;
-        private bool _isMovingToNextSegment;
+        public bool IsMovingToNextSegment { get; private set; }
 
         private float _mainFireVelocity;
         
@@ -91,7 +91,7 @@ namespace FireSeekingScripts
             if (GameManager.Instance.IsFireStarted &&
                 _currentWaypointIndex < _segments[_currentSegment].Count && !seekingFireSystem.fake)
             {
-                if (IsMoving)
+                if (IsMoving && !IsMovingToNextSegment)
                 {
                     if (SlowMoving) _mainFireVelocity /= 2;
                     Transform targetWaypoint = _segments[_currentSegment][_currentWaypointIndex];
@@ -105,9 +105,9 @@ namespace FireSeekingScripts
             }
             else 
             {
-                if (!_isMovingToNextSegment && !seekingFireSystem.fake)
+                if (!IsMovingToNextSegment && !seekingFireSystem.fake)
                 {
-                    _isMovingToNextSegment = true;
+                    IsMovingToNextSegment = true;
                     StartCoroutine(MoveToNextSegment());
                 }
             }
@@ -122,14 +122,14 @@ namespace FireSeekingScripts
 
             _currentSegment = GetNextSegmentIndex();
             if (_currentSegment == -1) 
-                _isMovingToNextSegment = false; 
+                IsMovingToNextSegment = false; 
             else
             {
                 _currentWaypointIndex = 0;
                 transform.position = _segments[_currentSegment][0].position;
-                yield return new WaitForSeconds(moveToNextSegmentDelay);
-                _isMovingToNextSegment = false;
                 fireParticlesParent.SetActive(true);
+                yield return new WaitForSeconds(moveToNextSegmentDelay);
+                IsMovingToNextSegment = false;
             }
         }
 

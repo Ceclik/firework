@@ -81,7 +81,7 @@ namespace FireSeekingScripts
             {
                 if(_mainFireRoundMover.IsMoving)
                     _mainFireRoundMover.SlowMoving = true;
-                if (!_isNewFireSpawned && !_mainFireRoundMover.IsRoundPassed)
+                if (!_isNewFireSpawned && !_mainFireRoundMover.IsRoundPassed && !_mainFireRoundMover.IsMovingToNextSegment)
                 {
                     SpawnNewFire();
                     GetComponent<ScoreCounterForSeekMode>().MistakesAmount++;
@@ -146,7 +146,6 @@ namespace FireSeekingScripts
                 _isExploded = true;
                 SpawnNewFire();
                 fires[0].GetComponent<ParticleSystemMultiplier>().multiplier = 0.01f;
-                //fires[0].SetActive(false);
             }
 
             if (_started && AmountOfActiveFires == 0 && !_ended)
@@ -232,7 +231,6 @@ namespace FireSeekingScripts
             }
             if (fires.Length > 0)
             {
-                //Debug.LogError($"overallLife: {overallLife} = allLightsMult: {allLightsMult} / lenghth: {fires.Length}");
                 overallLife = allLightsMult / fires.Length;
             }
             else
