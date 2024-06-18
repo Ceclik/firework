@@ -1922,6 +1922,7 @@ MonoBehaviour:
   - {fileID: 947015284}
   - {fileID: 89297327}
   switchDelay: 1
+  forMainMenu: 1
   startAfterNotActiveTime: 60
   mainMenu: {fileID: 1257257103}
   logosShower: {fileID: 1160963681}

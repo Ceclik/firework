@@ -11,9 +11,11 @@ namespace Instructions
         [SerializeField] private ActionCompleteHandler[] completeHandlers;
 
         [Space(10)] [SerializeField] private float switchDelay;
-        [SerializeField] private float startAfterNotActiveTime;
+        
 
-        [Space(20)] [SerializeField] private GameObject mainMenu;
+        [Space(20)] [SerializeField] private bool forMainMenu;
+        [SerializeField] private float startAfterNotActiveTime;
+        [SerializeField] private GameObject mainMenu;
         [SerializeField] private SplashingImagesAfterStartShower logosShower;
 
         private int _index = 0;
@@ -29,7 +31,8 @@ namespace Instructions
             foreach (var handler in completeHandlers)
                 handler.OnActionComplete += SwitchSlide;
 
-            logosShower.OnLogosFinish += StartShowingSlides;
+            if(forMainMenu)
+                logosShower.OnLogosFinish += StartShowingSlides;
         }
 
         private void OnDestroy()
@@ -37,7 +40,8 @@ namespace Instructions
             foreach (var handler in completeHandlers)
                 handler.OnActionComplete -= SwitchSlide;
             
-            logosShower.OnLogosFinish -= StartShowingSlides;
+            if(forMainMenu)
+                logosShower.OnLogosFinish -= StartShowingSlides;
         }
 
         private void SwitchSlide()
@@ -51,7 +55,7 @@ namespace Instructions
             yield return new WaitForSeconds(switchDelay);
             instructionSlides[_index].SetActive(false);
             _index++;
-            if (_index == instructionSlides.Length)
+            if (_index == instructionSlides.Length && forMainMenu)
             {
                 _isShowingSlides = false;
                 _index = 0;
@@ -63,11 +67,15 @@ namespace Instructions
 
         private void Update()
         {
-            if(mainMenu.activeSelf && _currentPointerPosition != MyInput.Instance.CursorImage.transform.position){
+            if (forMainMenu && mainMenu.activeSelf &&
+                _currentPointerPosition != MyInput.Instance.CursorImage.transform.position)
+            {
                 _currentPointerPosition = MyInput.Instance.CursorImage.transform.position;
                 _waitingTime = 0;
             }
-            if (mainMenu.activeSelf && _currentPointerPosition == MyInput.Instance.CursorImage.transform.position)
+
+            if (forMainMenu && mainMenu.activeSelf &&
+                _currentPointerPosition == MyInput.Instance.CursorImage.transform.position)
             {
                 _waitingTime += Time.deltaTime;
             }
@@ -80,8 +88,9 @@ namespace Instructions
 
         private void StartShowingSlides()
         {
+            if(forMainMenu)
+                mainMenu.SetActive(false);
             _isShowingSlides = true;
-            mainMenu.SetActive(false);
             instructionSlides[_index].SetActive(true);
         }
     }
