@@ -25,7 +25,6 @@ namespace FireSeekingScripts
         private int _currentWaypointIndex = 0;
         private int _pathIndex;
         private bool _isMovingToNextSegment;
-        private bool _isOnThePath;
 
         private float _mainFireVelocity;
         
@@ -56,7 +55,7 @@ namespace FireSeekingScripts
             }
 
             _currentSegment = GetNextSegmentIndex();
-            //transform.position = _segments[_currentSegment][0].position;
+            transform.position = _segments[_currentSegment][0].position;
         }
 
         private void MakePointsArray()
@@ -100,14 +99,7 @@ namespace FireSeekingScripts
                         _mainFireVelocity * Time.deltaTime);
 
                     if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.1f)
-                    {
-                        if (!_isOnThePath)
-                        {
-                            _isOnThePath = true;
-                            fireStopperParticles.Play();
-                        }
                         _currentWaypointIndex++;
-                    }
                         
                 }
             }

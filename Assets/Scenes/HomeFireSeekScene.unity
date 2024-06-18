@@ -3495,16 +3495,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2028985537}
     m_Modifications:
-    - target: {fileID: 1300191220950393275, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2073405140754872626, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5550304044488784434, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3555,11 +3545,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6511109425492856786, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8524317780863604924, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: m_Name
@@ -3575,26 +3560,6 @@ PrefabInstance:
       propertyPath: seekingFireSystem
       value: 
       objectReference: {fileID: 1640926077}
-    - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: fireParticlesParent
-      value: 
-      objectReference: {fileID: 2035433024}
-    - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: fireStopperParticles
-      value: 
-      objectReference: {fileID: 1192278467}
-    - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: moveToNextSegmentDelay
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
-        type: 3}
-      propertyPath: movingPathParents.Array.size
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: 'movingPathParents.Array.data[0]'
@@ -8526,12 +8491,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!198 &1192278467 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6511109425492856786, guid: 5aa97498a52471c4d9d57897e6600c1c,
-    type: 3}
-  m_PrefabInstance: {fileID: 424598448}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1195514801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: bf495eacf58e31146ab012aa89ac68da,
@@ -30305,12 +30264,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!1 &2035433024 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2400522141528285733, guid: 5aa97498a52471c4d9d57897e6600c1c,
-    type: 3}
-  m_PrefabInstance: {fileID: 424598448}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2038864533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4662817043146792, guid: ffccce3dd313e3e48b0ae98d6bd1244e,
