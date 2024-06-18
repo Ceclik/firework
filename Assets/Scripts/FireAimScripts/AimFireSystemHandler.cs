@@ -89,7 +89,7 @@ namespace FireAimScripts
             Debug.LogError($"Amount of active fires: {AmountOfActiveFires}");
         }
         
-        private void CountComplexParameters(int index)
+        private void CountFireComplexParameters(int index)
         {
             FireComplexParametersCounter paramsCounter = fires[index].GetComponent<FireComplexParametersCounter>();
             if (!paramsCounter.IsExtinguishing)
@@ -99,7 +99,7 @@ namespace FireAimScripts
             }
         }
         
-        void Update()
+        private void Update()
         {
             if ((_started && AmountOfActiveFires == 0 && !_ended) || LivesCount <= 0)
             /*if ((_started && AmountOfActiveFires == 0 && !_ended))*/
@@ -147,12 +147,14 @@ namespace FireAimScripts
                     {
                         stopper.Orient(hit.point);
 
+                        fireStopSpeed = fires[i].GetComponent<FireSplitter>().FireStopSpeed;
+                        
                         if (!(fake && i == 0) && !(startOver && i == 0))
                             particle.multiplier -= (fireStopSpeed * Time.deltaTime);
                         if (startOver && particle.multiplier >= 0.1f && i == 0)
                             particle.multiplier -= (fireStopSpeed * Time.deltaTime);
 
-                        CountComplexParameters(i);
+                        CountFireComplexParameters(i);
 
                         _firesLife[i] = particle.multiplier * 100f;
                         hittedFire++;
