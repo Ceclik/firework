@@ -90,7 +90,14 @@ public class GameManager : Singleton<GameManager>
     public void LoadHomeFireAimScene()
     {
         Cursor.visible = false;
-        SceneManager.LoadScene("HomeFireAimScene");
+        int choice = Random.Range(1, 3);
+        switch (choice)
+        {
+            case 1: SceneManager.LoadScene("HomeFireAimGasScene");
+                break;
+            case 2: SceneManager.LoadScene("HomeFireAimTVScene");
+                break;
+        }
     }
 
     public void SceneCalibrate()

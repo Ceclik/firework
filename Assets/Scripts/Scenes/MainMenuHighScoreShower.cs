@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,8 @@ namespace Scenes
     {
         [SerializeField] private Text homeSceneText;
         [SerializeField] private Text schoolSceneText;
+
+        [SerializeField] private Button homeFireButton;
 
         private void OnEnable()
         {
@@ -20,6 +23,12 @@ namespace Scenes
                 homeSceneText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimSceneHigscore")}";
                 schoolSceneText.text = $"Highscore: {PlayerPrefs.GetInt("SchoolFireAimHigscore")}";
             }
+        }
+
+        private void Start()
+        {
+            if (GameManager.Instance.FireSeekGameMode)
+                homeFireButton.interactable = false;
         }
     }
 }
