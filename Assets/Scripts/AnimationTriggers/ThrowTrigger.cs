@@ -1,4 +1,5 @@
-﻿using Instructions;
+﻿using FireAimScripts;
+using Instructions;
 using UnityEngine;
 
 namespace AnimationTriggers
@@ -7,10 +8,14 @@ namespace AnimationTriggers
 	{
 
 		private LevelInstructionShower _instructions;
+		private Animator _selfAnimator;
+		
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
+			_selfAnimator = animator;
 			_instructions = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
 			_instructions.OnStartButtonClicked += ThrowRemote;
+			
 		}
 
 		private void ThrowRemote()
@@ -18,8 +23,8 @@ namespace AnimationTriggers
 			var remote = GameObject.FindGameObjectWithTag("Remote");
 			var anim = remote.GetComponent<Animator>();
 			anim.SetTrigger("Throw");
-			var selfAnimator = GameObject.Find("teen@Sitting").GetComponent<Animator>();
-			selfAnimator.SetTrigger("TeenThrowing");
+			_selfAnimator.SetTrigger("TeenThrowing");
+			
 		}
 		
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 

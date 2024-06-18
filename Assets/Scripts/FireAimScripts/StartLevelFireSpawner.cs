@@ -1,4 +1,4 @@
-using UnityEditor;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -44,6 +44,12 @@ namespace FireAimScripts
                     _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
                 }
             }
+        }
+
+        public IEnumerator StartRandomFiresDelayed(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            StartRandomFires();
         }
     }
 }

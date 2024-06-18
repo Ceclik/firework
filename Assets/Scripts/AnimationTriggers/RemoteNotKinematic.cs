@@ -7,7 +7,7 @@ namespace AnimationTriggers
 		public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
 		{
 			var remote = GameObject.FindGameObjectWithTag("Remote");
-			remote.GetComponent<Animator>().enabled = false;
+			animator.enabled = false;
 			remote.GetComponent<Rigidbody>().isKinematic = false;
 			Camera.main.GetComponent<Animator>().SetTrigger("Throw");
 		}

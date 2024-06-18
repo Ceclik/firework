@@ -1,15 +1,22 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using FireAimScripts;
+using UnityEngine;
 
 namespace AnimationTriggers
 {
 	public class FireTrigger : StateMachineBehaviour {
-    
-
+		
+		private StartLevelFireSpawner _fireSpawner;
 		// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {        
-			GameManager.Instance.FireStart();
+		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+		{        
+			
 			FindFirstObjectByType<TvPlay>().ChangeMaterial();
+			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(2f));
+			_fireSpawner = GameObject.Find("Fires").GetComponent<StartLevelFireSpawner>();
+			_fireSpawner.StartCoroutine(_fireSpawner.StartRandomFiresDelayed(2));
 		}
+		
 
 		// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 		//override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
