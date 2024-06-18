@@ -17055,8 +17055,6 @@ MonoBehaviour:
   keyControlled: 1
   gas: {fileID: 534425555}
   kettleSound: {fileID: 904205625}
-  human: {fileID: 0}
-  cameraAnimator: {fileID: 0}
 --- !u!82 &1398283213
 AudioSource:
   m_ObjectHideFlags: 0
@@ -19366,7 +19364,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -19445,6 +19443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1980626991}
+  pauseButton: {fileID: 2113944737}
 --- !u!1 &1752556478
 GameObject:
   m_ObjectHideFlags: 0
@@ -21413,6 +21412,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 440acf63821f56f4baf67aa530e8ee04, type: 3}
+--- !u!1 &2113944737 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8990062812590520387, guid: 440acf63821f56f4baf67aa530e8ee04,
+    type: 3}
+  m_PrefabInstance: {fileID: 2113944736}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2114204731
 GameObject:
   m_ObjectHideFlags: 0

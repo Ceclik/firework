@@ -865,12 +865,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96f21e0a86876ce47a53bbe8ed5cd419, type: 3}
---- !u!1 &140974092 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100142, guid: c5f005e3430b189449f3faa881148d82,
-    type: 3}
-  m_PrefabInstance: {fileID: 312143120}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &153684841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8070,8 +8064,6 @@ MonoBehaviour:
   keyControlled: 1
   gas: {fileID: 0}
   kettleSound: {fileID: 0}
-  human: {fileID: 140974092}
-  cameraAnimator: {fileID: 2114204736}
 --- !u!82 &1170238018
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16356,6 +16348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 2138442220}
+  pauseButton: {fileID: 7796107071873255957}
 --- !u!114 &1719992701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19365,6 +19358,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 440acf63821f56f4baf67aa530e8ee04, type: 3}
+--- !u!1 &7796107071873255957 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8990062812590520387, guid: 440acf63821f56f4baf67aa530e8ee04,
+    type: 3}
+  m_PrefabInstance: {fileID: 7796107071873255956}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

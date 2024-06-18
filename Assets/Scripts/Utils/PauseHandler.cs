@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,12 @@ namespace Utils
     public class PauseHandler : MonoBehaviour
     {
         [SerializeField] private GameObject pauseMenu;
+        [SerializeField] private GameObject pauseButton;
+
+        private void Start()
+        {
+            GameManager.Instance.PauseButton = pauseButton;
+        }
 
         public void OnPauseMenuClick()
         {

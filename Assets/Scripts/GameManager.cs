@@ -23,6 +23,7 @@ public class GameManager : Singleton<GameManager>
     private SeekingFireSystemHandler _seekingFireHandler;
 
     private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
+    public GameObject PauseButton { get; set; }
     public Timer Timer { get; set; }
     public GameObject Hearts { get; set; }
     private int _currentLevel;
@@ -255,6 +256,9 @@ public class GameManager : Singleton<GameManager>
         _afterLevelMenuDisplayer.Show(isWin);
         
         Timer.gameObject.SetActive(false);
+        
+        PauseButton.SetActive(false);
+        PauseButton = null;
         
        if (FireAimGameMode)
        { 
