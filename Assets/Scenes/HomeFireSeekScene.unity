@@ -3508,17 +3508,17 @@ PrefabInstance:
     - target: {fileID: 5550304044488784434, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.5519934
+      value: -1.915
       objectReference: {fileID: 0}
     - target: {fileID: 5550304044488784434, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0.494
       objectReference: {fileID: 0}
     - target: {fileID: 5550304044488784434, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.8259988
+      value: -1.457
       objectReference: {fileID: 0}
     - target: {fileID: 5550304044488784434, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
@@ -3553,6 +3553,11 @@ PrefabInstance:
     - target: {fileID: 5550304044488784434, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6511109425492856786, guid: 5aa97498a52471c4d9d57897e6600c1c,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8524317780863604924, guid: 5aa97498a52471c4d9d57897e6600c1c,
@@ -6853,7 +6858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &993423110
 Transform:
   m_ObjectHideFlags: 0
@@ -9644,8 +9649,8 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.4970268
-          value: 0.91806173
+          time: 0.53019005
+          value: 0.510167
           inSlope: -0.015625449
           outSlope: -0.015625449
           tangentMode: 0
@@ -9654,7 +9659,7 @@ ParticleSystem:
           outWeight: 0.29090673
         - serializedVersion: 3
           time: 1
-          value: 0.90234756
+          value: 0.50761074
           inSlope: -0.041698087
           outSlope: -0.041698087
           tangentMode: 0
