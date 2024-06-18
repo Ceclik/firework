@@ -9,7 +9,7 @@ namespace Instructions
         public delegate void CompleteAction();
         public event CompleteAction OnActionComplete;
         
-        [SerializeField] private bool keyControlled;
+        [SerializeField] protected bool keyControlled;
         private SerialPort _com;
 
 
@@ -20,13 +20,18 @@ namespace Instructions
             _com.ReadTimeout = 1;
         }
 
+        protected void InvokeCompleteActionEvent()
+        {
+            OnActionComplete?.Invoke();
+        }
+
         private void Update()
         {
             if (keyControlled)
             {
                 if (Input.GetKeyDown(KeyCode.RightShift))
                 {
-                    OnActionComplete?.Invoke();
+                    InvokeCompleteActionEvent();
                     return;
                 }
             }

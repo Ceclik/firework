@@ -1,4 +1,5 @@
 using System.Collections;
+using Scenes;
 using Tracking;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace Instructions
         [SerializeField] private float startAfterNotActiveTime;
 
         [Space(20)] [SerializeField] private GameObject mainMenu;
+        [SerializeField] private SplashingImagesAfterStartShower logosShower;
 
         private int _index = 0;
         private float _waitingTime;
@@ -26,12 +28,16 @@ namespace Instructions
             _currentPointerPosition = MyInput.Instance.CursorImage.transform.position;
             foreach (var handler in completeHandlers)
                 handler.OnActionComplete += SwitchSlide;
+
+            logosShower.OnLogosFinish += StartShowingSlides;
         }
 
         private void OnDestroy()
         {
             foreach (var handler in completeHandlers)
                 handler.OnActionComplete -= SwitchSlide;
+            
+            logosShower.OnLogosFinish -= StartShowingSlides;
         }
 
         private void SwitchSlide()
@@ -68,10 +74,15 @@ namespace Instructions
 
             if (_waitingTime >= startAfterNotActiveTime && !_isShowingSlides)
             {
-                _isShowingSlides = true;
-                mainMenu.SetActive(false);
-                instructionSlides[_index].SetActive(true);
+                StartShowingSlides();
             }
+        }
+
+        private void StartShowingSlides()
+        {
+            _isShowingSlides = true;
+            mainMenu.SetActive(false);
+            instructionSlides[_index].SetActive(true);
         }
     }
 }
