@@ -14,10 +14,6 @@ public class DangerObjectHandler : MonoBehaviour
     [SerializeField] private ParticleSystem gas;
     [SerializeField] private AudioSource kettleSound;
 
-    [Space(20)] [Header("For seeking level")] [SerializeField]
-    private GameObject human;
-    [SerializeField] private Animator cameraAnimator;
-
     private Collider _collider;
     private Animator _anim;
     private bool _falled;
@@ -25,9 +21,8 @@ public class DangerObjectHandler : MonoBehaviour
     private SerialPort _com;
 
     private bool _gasCrane;
-
-    // Use this for initialization
-    void Start()
+    
+    private void Start()
     {
         _anim = GetComponent<Animator>();
         _collider = GetComponentInChildren<BoxCollider>();
@@ -37,11 +32,10 @@ public class DangerObjectHandler : MonoBehaviour
         _com.Open();
         _com.ReadTimeout = 1;
         if (_com.IsOpen) Debug.Log("COM PORT OPENED");
-        _gasCrane = gas == null ? false : true;
+        _gasCrane = gas != null;
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void Update()
     {
         if (!_falled && GameManager.Instance.IsFireStarted)
         {
@@ -56,26 +50,19 @@ public class DangerObjectHandler : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-
+                    // ignored
                 }
             }
+
             if (!keyControlled)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
 
-                if (_collider.Raycast(ray, out hit, Mathf.Infinity))
-                {
+                if (_collider.Raycast(ray, out _, Mathf.Infinity))
                     OutletFall();
-                }
             }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.Return) || fromCom == comExpected)
-                {
-                    OutletFall();
-                }
-            }
+            else if (Input.GetKeyDown(KeyCode.Return) || fromCom == comExpected)
+                OutletFall();
         }
     }
 
@@ -101,11 +88,6 @@ public class DangerObjectHandler : MonoBehaviour
         _anim.SetTrigger("Fall");
         _falled = true;
         if (gas != null) { gas.Stop(); }
-
-        if (human != null)
-            human.SetActive(false);
-        if(cameraAnimator != null)
-            cameraAnimator.SetTrigger("Unpluged");
     }
     private void OnDisable()
     {

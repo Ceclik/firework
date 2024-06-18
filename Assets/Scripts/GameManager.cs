@@ -30,7 +30,7 @@ public class GameManager : Singleton<GameManager>
     public bool FireSeekGameMode { get; set; }
     public bool FireAimGameMode { get; set; }
 
-    void OnEnable()
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnLevelFinishedLoading;
         _settings = new GameSettings();
@@ -44,7 +44,7 @@ public class GameManager : Singleton<GameManager>
         _settings.LoadSettings();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
@@ -117,7 +117,7 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene("Settings");
     }
 
-    void Start()
+    private void Start()
     {
         MyInput.Instance.Init();
         if (_currentLevel == 0)
@@ -145,7 +145,7 @@ public class GameManager : Singleton<GameManager>
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
@@ -248,6 +248,8 @@ public class GameManager : Singleton<GameManager>
 
     public void EndScene(bool isWin)
     {
+        IsFireStarted = false;
+        
         _afterLevelMenuDisplayer.gameObject.SetActive(true);
         
         _afterLevelMenuDisplayer.Show(isWin);

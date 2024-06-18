@@ -40,7 +40,7 @@ namespace FireAimScripts
             LivesCount--;
         }
         
-        void Start()
+        private void Start()
         {
             if (!GameManager.Instance.FireAimGameMode)
                 GameManager.Instance.FireAimGameMode = true;
