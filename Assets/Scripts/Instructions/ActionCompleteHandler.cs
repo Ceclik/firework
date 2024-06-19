@@ -8,7 +8,7 @@ namespace Instructions
         public event CompleteAction OnActionComplete;
         
         [SerializeField] protected bool keyControlled;
-        private bool _isKeyPressed;
+        protected bool IsKeyPressed;
         //private SerialPort _com;
 
 
@@ -30,9 +30,9 @@ namespace Instructions
         {
             if (keyControlled)
             {
-                if (Input.GetKeyDown(KeyCode.RightShift)  && !_isKeyPressed)
+                if (Input.GetKeyDown(KeyCode.RightShift)  && !IsKeyPressed)
                 {
-                    _isKeyPressed = true;
+                    IsKeyPressed = true;
                     InvokeCompleteActionEvent();
                 }
             }

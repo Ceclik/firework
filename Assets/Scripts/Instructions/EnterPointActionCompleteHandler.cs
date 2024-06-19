@@ -11,6 +11,11 @@ namespace Instructions
             
         }
 
+        private void Start()
+        {
+            IsKeyPressed = true;
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (keyControlled)

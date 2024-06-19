@@ -9837,7 +9837,7 @@ RectTransform:
   m_GameObject: {fileID: 1706935962830162743}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2947274, y: 0.2947274, z: 0.2947274}
+  m_LocalScale: {x: 0.47969833, y: 0.47969833, z: 0.47969833}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3685418998548298079}
@@ -19656,7 +19656,7 @@ GameObject:
   - component: {fileID: 4637418696008211014}
   - component: {fileID: 7410101592136820113}
   m_Layer: 9
-  m_Name: ComplexCanvas
+  m_Name: FireComplexCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19930,6 +19930,8 @@ MonoBehaviour:
   minTimeToSplit: 8
   maxTimeToSplit: 14
   timerText: {fileID: 4565500080340797519}
+  timerIncreasingTime: 3
+  timerStartIncreasingValue: 4
 --- !u!114 &5370732314408843999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19988,7 +19990,7 @@ RectTransform:
   m_GameObject: {fileID: 6193212907214554301}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1679, y: 1.1679, z: 1.1679}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3685418998548298079}

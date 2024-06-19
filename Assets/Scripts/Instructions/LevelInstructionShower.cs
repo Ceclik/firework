@@ -7,7 +7,10 @@ namespace Instructions
     {
         [SerializeField] private GameObject levelInstruction;
         [SerializeField] private Button startButton;
+        [Space(10)][Header("For aim level")]
         [SerializeField] private bool isForAimLevel;
+        [SerializeField] private GameObject buttonSlide;
+        
 
         public delegate void StartFire();
         public event StartFire OnStartButtonClicked;
@@ -24,8 +27,11 @@ namespace Instructions
 
         public void OnStartButtonClick()
         {
-            if(!isForAimLevel)
+            if (!isForAimLevel)
+            {
                 levelInstruction.SetActive(false);
+            }
+            else buttonSlide.SetActive(false);
             OnStartButtonClicked?.Invoke();
         }
     }

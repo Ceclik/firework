@@ -15,12 +15,18 @@ namespace FireAimScripts
         [SerializeField] private Color orangeShade;
         [SerializeField] private Color yellowShade;
         [SerializeField] private Color greenShade;
+
+        [Space(20)] [Header("For Scaling")] [SerializeField]
+        private Transform camera;
         
         private ParticleSystemMultiplier _particleMultiplier;
 
         private void Start()
         {
             _particleMultiplier = GetComponent<ParticleSystemMultiplier>();
+
+            if (Vector3.Distance(transform.position, camera.position) >= 3.0f)
+                transform.localScale *= 1.5f;
         }
 
         private void HandleScale()

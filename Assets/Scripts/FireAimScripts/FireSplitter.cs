@@ -8,12 +8,15 @@ namespace FireAimScripts
         [SerializeField] private float minTimeToSplit;
         [SerializeField] private float maxTimeToSplit;
 
+        [Space(10)][Header("Timer parameters")]
         [SerializeField] private TextMeshProUGUI timerText;
+        [SerializeField] private float timerIncreasingTime;
+        [SerializeField] private float timerStartIncreasingValue;
 
         private float _timer;
-        private bool _isTimerIncreased;
         private Vector3 _startLocalScale;
         private Vector3 _endLocalScale;
+        private float _scaleTimer;
         
         public float FireStopSpeed { get; private set; }
         
@@ -45,15 +48,17 @@ namespace FireAimScripts
             _timer -= Time.deltaTime;
             timerText.text = ((int)_timer).ToString();
 
-            if (_timer < 3.0f && !_isTimerIncreased)
+            if (_timer <= timerStartIncreasingValue)
             {
-                timerText.rectTransform.localScale = Vector3.Lerp(_startLocalScale, _endLocalScale, 2.0f);
-                _isTimerIncreased = true;
+                _scaleTimer += Time.deltaTime;
+                timerText.rectTransform.localScale =
+                    Vector3.Lerp(_startLocalScale, _endLocalScale, _scaleTimer / timerIncreasingTime);
             }
 
             if (_timer <= 0)
             {
                 _timer = minTimeToSplit;
+                _scaleTimer = 0;
                 SplitFire();
             }
         }
@@ -61,7 +66,6 @@ namespace FireAimScripts
         private void SplitFire()
         {
             timerText.rectTransform.localScale = _startLocalScale;
-            _isTimerIncreased = false;
             OnFireSplitted?.Invoke();
         }
     }
