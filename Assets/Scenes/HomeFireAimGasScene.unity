@@ -9721,6 +9721,11 @@ PrefabInstance:
       objectReference: {fileID: 395109261}
     - target: {fileID: 33273136221871259, guid: 658b00d8fda979544b9670014f614cbe,
         type: 3}
+      propertyPath: isForAimLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 33273136221871259, guid: 658b00d8fda979544b9670014f614cbe,
+        type: 3}
       propertyPath: levelInstruction
       value: 
       objectReference: {fileID: 395109262}

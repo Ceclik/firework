@@ -1,4 +1,6 @@
-﻿using FireAimScripts;
+﻿using System.Collections;
+using System.Collections.Generic;
+using FireAimScripts;
 using Instructions;
 using UnityEngine;
 
@@ -9,6 +11,7 @@ namespace AnimationTriggers
 		private LevelInstructionShower _instruction;
 		private Animator _selfAnimator;
 		private StartLevelFireSpawner _fireSpawner;
+		[SerializeField] private float fireStartDelay;
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
 			_selfAnimator = animator;
@@ -20,8 +23,8 @@ namespace AnimationTriggers
 		private void StartFire()
 		{
 			_selfAnimator.SetTrigger("Start");
-			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(1f));
-			_fireSpawner.StartRandomFires();
+			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(fireStartDelay));
+			_fireSpawner.StartCoroutine(_fireSpawner.StartRandomFiresDelayed(fireStartDelay));
 		}
 		
 		public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
