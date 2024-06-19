@@ -7,6 +7,7 @@ namespace Instructions
     {
         [SerializeField] private GameObject levelInstruction;
         [SerializeField] private Button startButton;
+        [SerializeField] private bool isForAimLevel;
 
         public delegate void StartFire();
         public event StartFire OnStartButtonClicked;
@@ -23,8 +24,8 @@ namespace Instructions
 
         public void OnStartButtonClick()
         {
-            Debug.LogError("in button click");
-            levelInstruction.SetActive(false);
+            if(!isForAimLevel)
+                levelInstruction.SetActive(false);
             OnStartButtonClicked?.Invoke();
         }
     }

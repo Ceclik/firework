@@ -1,5 +1,3 @@
-using System;
-using System.IO.Ports;
 using UnityEngine;
 
 namespace Instructions
@@ -10,29 +8,32 @@ namespace Instructions
         public event CompleteAction OnActionComplete;
         
         [SerializeField] protected bool keyControlled;
+        private bool _isKeyPressed;
         //private SerialPort _com;
 
 
-        /*private void Start()
+        private void Start()
         {
-            _com = new SerialPort(GameManager.Instance.comPort, 9600);
+            /*_com = new SerialPort(GameManager.Instance.comPort, 9600);
             _com.Open();
-            _com.ReadTimeout = 1;
-        }*/
+            _com.ReadTimeout = 1;*/
+            
+        }
 
         protected void InvokeCompleteActionEvent()
         {
             OnActionComplete?.Invoke();
         }
+        
 
         private void Update()
         {
             if (keyControlled)
             {
-                if (Input.GetKeyDown(KeyCode.RightShift))
+                if (Input.GetKeyDown(KeyCode.RightShift)  && !_isKeyPressed)
                 {
+                    _isKeyPressed = true;
                     InvokeCompleteActionEvent();
-                    return;
                 }
             }
             
