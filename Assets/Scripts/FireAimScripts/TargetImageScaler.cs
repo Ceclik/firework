@@ -35,9 +35,10 @@ namespace FireAimScripts
                 new Vector3(_particleMultiplier.multiplier, _particleMultiplier.multiplier,
                     _particleMultiplier.multiplier);
             
-            if (_particleMultiplier.multiplier < 0.5f)
+            //if (_particleMultiplier.multiplier < 0.5f)
+            if(outerCircle.rectTransform.localScale.x <= 0.75f)
             {
-                float doubledMultiplier = _particleMultiplier.multiplier * 2;
+                float doubledMultiplier = _particleMultiplier.multiplier * 1.2f;
                 middleCircle.rectTransform.localScale =
                     new Vector3(doubledMultiplier, doubledMultiplier, doubledMultiplier);
             }

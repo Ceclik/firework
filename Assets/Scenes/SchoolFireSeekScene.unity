@@ -27554,12 +27554,12 @@ PrefabInstance:
         type: 3}
       propertyPath: 'movingPathParents.Array.data[0]'
       value: 
-      objectReference: {fileID: 848322671}
+      objectReference: {fileID: 1190833631}
     - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: 'movingPathParents.Array.data[1]'
       value: 
-      objectReference: {fileID: 1190833631}
+      objectReference: {fileID: 848322671}
     - target: {fileID: 8756404872871995265, guid: 5aa97498a52471c4d9d57897e6600c1c,
         type: 3}
       propertyPath: 'movingPathParents.Array.data[2]'
@@ -27593,10 +27593,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingPathes
       objectReference: {fileID: 0}
-    - target: {fileID: 5344931395081849343, guid: ce042d254090990449f83d0b17d5bf01,
+    - target: {fileID: 7124003809755569863, guid: ce042d254090990449f83d0b17d5bf01,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7442423784602299664, guid: ce042d254090990449f83d0b17d5bf01,
         type: 3}
