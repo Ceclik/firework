@@ -10697,7 +10697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa5980f1d86ffbf4bbb1e32876f8220a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountOfFiresToSpawn: 2
+  amountOfFiresToSpawn: 3
   fireLocationsParent: {fileID: 1800369741}
 --- !u!114 &1036378424
 MonoBehaviour:

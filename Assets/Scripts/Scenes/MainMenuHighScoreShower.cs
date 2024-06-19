@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,9 @@ namespace Scenes
         [SerializeField] private Text homeSceneText;
         [SerializeField] private Text schoolSceneText;
 
-        [SerializeField] private Button homeFireButton;
+        [SerializeField] private Button homeFireAimTVButton;
+        [SerializeField] private Button homeFireAimGasButton;
+        [SerializeField] private Button schoolFireButton;
 
         private void OnEnable()
         {
@@ -28,7 +29,17 @@ namespace Scenes
         private void Start()
         {
             if (GameManager.Instance.FireSeekGameMode)
-                homeFireButton.interactable = false;
+            {
+                schoolFireButton.gameObject.SetActive(true);
+                schoolFireButton.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            }
+
+            if (GameManager.Instance.FireAimGameMode)
+            {
+                schoolFireButton.gameObject.SetActive(false);
+                homeFireAimGasButton.gameObject.SetActive(true);
+                homeFireAimTVButton.gameObject.SetActive(true);
+            }
         }
     }
 }

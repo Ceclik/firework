@@ -17,21 +17,20 @@ public class MenuButtonsHandler : MonoBehaviour
     {
         Application.Quit();
     }
-    
-    public void OnSchoolSceneButtonClick()
+
+    public void OnSchoolLocationButtonClick()
     {
-        if (_gameManager.FireSeekGameMode)
-            _gameManager.LoadSchoolFireSeekScene();
-        else
-            _gameManager.LoadSchoolFireAimScene(); 
+        FindFirstObjectByType<GameManager>().LoadSchoolFireSeekScene();
     }
 
-    public void OnHomeSceneButtonClick()
+    public void OnHomeTVSceneButtonClick()
     {
-        if(_gameManager.FireSeekGameMode)
-            _gameManager.LoadHomeFireSeekScene();
-        else
-            _gameManager.LoadHomeFireAimScene();
+        FindFirstObjectByType<GameManager>().LoadHomeFireAimTVScene();
+    }
+
+    public void OnHomeGasSceneButtonClick()
+    {
+        FindFirstObjectByType<GameManager>().LoadHomeFireAimGasScene();
     }
 
     public void OnSettingsSceneButtonClick()

@@ -82,23 +82,17 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene("SchoolFireSeekScene");
     }
 
-    public void LoadHomeFireSeekScene()
+
+    public void LoadHomeFireAimTVScene()
     {
         Cursor.visible = false;
-        SceneManager.LoadScene("HomeFireSeekScene");
+        SceneManager.LoadScene("HomeFireAimTVScene");
     }
 
-    public void LoadHomeFireAimScene()
+    public void LoadHomeFireAimGasScene()
     {
         Cursor.visible = false;
-        int choice = Random.Range(1, 3);
-        switch (choice)
-        {
-            case 1: SceneManager.LoadScene("HomeFireAimGasScene");
-                break;
-            case 2: SceneManager.LoadScene("HomeFireAimTVScene");
-                break;
-        }
+        SceneManager.LoadScene("HomeFireAimGasScene");
     }
 
     public void SceneCalibrate()
