@@ -42,6 +42,7 @@ namespace FireAimScripts
                 middleCircle.rectTransform.localScale =
                     new Vector3(doubledMultiplier, doubledMultiplier, doubledMultiplier);
             }
+            Debug.LogError($"middle scale: {middleCircle.rectTransform.localScale.x}");
         }
 
         private void HandleColor()

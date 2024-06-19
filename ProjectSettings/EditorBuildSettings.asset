@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 5145160629119734f83fcd598e585867
   - enabled: 1
-    path: Assets/Scenes/SchoolFireAim.unity
+    path: Assets/Scenes/SchoolFireSeekSecond.unity
     guid: 3a0f2fd6a5de56c40b02af11463c9c7d
   - enabled: 1
     path: Assets/Scenes/SchoolFireSeekScene.unity
