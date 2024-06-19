@@ -21,8 +21,9 @@ namespace Instructions
             levelInstruction.SetActive(true);
         }
 
-        private void OnStartButtonClick()
+        public void OnStartButtonClick()
         {
+            Debug.LogError("in button click");
             levelInstruction.SetActive(false);
             OnStartButtonClicked?.Invoke();
         }

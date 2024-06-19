@@ -1,5 +1,4 @@
-﻿using FireAimScripts;
-using Instructions;
+﻿using Instructions;
 using UnityEngine;
 
 namespace AnimationTriggers

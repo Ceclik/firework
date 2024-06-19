@@ -2557,6 +2557,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5383496808889251134, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 586577406}
+    - target: {fileID: 5383496808889251134, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnStartButtonClick
+      objectReference: {fileID: 0}
     - target: {fileID: 6755939327733720157, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
         type: 3}
       propertyPath: m_Name
@@ -8260,6 +8270,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.015918091, y: 0.2790215, z: 0.39489242}
   m_Center: {x: 0, y: -0.000000007450581, z: 2.646978e-23}
+--- !u!114 &586577406 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 33273136221871259, guid: 658b00d8fda979544b9670014f614cbe,
+    type: 3}
+  m_PrefabInstance: {fileID: 888242663}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e160852095eb53a4ea20a9d87aac5447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &592185770
 PrefabInstance:
   m_ObjectHideFlags: 0

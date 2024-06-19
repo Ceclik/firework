@@ -10,15 +10,15 @@ namespace Instructions
         public event CompleteAction OnActionComplete;
         
         [SerializeField] protected bool keyControlled;
-        private SerialPort _com;
+        //private SerialPort _com;
 
 
-        private void Start()
+        /*private void Start()
         {
             _com = new SerialPort(GameManager.Instance.comPort, 9600);
             _com.Open();
             _com.ReadTimeout = 1;
-        }
+        }*/
 
         protected void InvokeCompleteActionEvent()
         {
@@ -36,7 +36,7 @@ namespace Instructions
                 }
             }
             
-            int fromCom = int.MaxValue;
+            /*int fromCom = int.MaxValue;
             int comExpected = 2;
             if (_com.IsOpen)
             {
@@ -52,14 +52,14 @@ namespace Instructions
             }
             
             if(fromCom == comExpected)
-                OnActionComplete?.Invoke();
+                OnActionComplete?.Invoke();*/
             
         }
         
-        private void OnDisable()
+        /*private void OnDisable()
         {
             _com.Close();
             _com.Dispose();
-        }
+        }*/
     }
 }
