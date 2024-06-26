@@ -1,40 +1,42 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace FireAimScripts
 {
     public class FireTypesGenerator : MonoBehaviour
     {
-        [SerializeField] private TargetType[] _targetTypes = new TargetType[3];
+        [SerializeField] private TargetType[] targetTypes = new TargetType[3];
         
+        [System.Serializable]
         private struct TargetType
         {
-            public float MinExtinguishingTime;
-            public float MaxExtinguishingTime;
-            [Space(7)] public float MinTimerTime;
-            public float MaxTimerTime;
+            public float minExtinguishingTime;
+            public float maxExtinguishingTime;
+            [Space(7)] public float minTimerTime;
+            public float maxTimerTime;
         }
 
         public Target GenerateTypeATarget()
         {
             float extinguishTime =
-                Random.Range(_targetTypes[0].MinExtinguishingTime, _targetTypes[0].MaxExtinguishingTime);
-            float timerTime = Random.Range(_targetTypes[0].MinTimerTime, _targetTypes[0].MaxTimerTime);
+                Random.Range(targetTypes[0].minExtinguishingTime, targetTypes[0].maxExtinguishingTime);
+            float timerTime = Random.Range(targetTypes[0].minTimerTime, targetTypes[0].maxTimerTime);
             return new Target(extinguishTime, timerTime);
         }
         
         public Target GenerateTypeBTarget()
         {
             float extinguishTime =
-                Random.Range(_targetTypes[1].MinExtinguishingTime, _targetTypes[1].MaxExtinguishingTime);
-            float timerTime = Random.Range(_targetTypes[1].MinTimerTime, _targetTypes[1].MaxTimerTime);
+                Random.Range(targetTypes[1].minExtinguishingTime, targetTypes[1].maxExtinguishingTime);
+            float timerTime = Random.Range(targetTypes[1].minTimerTime, targetTypes[1].maxTimerTime);
             return new Target(extinguishTime, timerTime);
         }
         
         public Target GenerateTypeCTarget()
         {
             float extinguishTime =
-                Random.Range(_targetTypes[2].MinExtinguishingTime, _targetTypes[2].MaxExtinguishingTime);
-            float timerTime = Random.Range(_targetTypes[2].MinTimerTime, _targetTypes[2].MaxTimerTime);
+                Random.Range(targetTypes[2].minExtinguishingTime, targetTypes[2].maxExtinguishingTime);
+            float timerTime = Random.Range(targetTypes[2].minTimerTime, targetTypes[2].maxTimerTime);
             return new Target(extinguishTime, timerTime);
         }
 
