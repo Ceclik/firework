@@ -12,7 +12,7 @@ namespace AnimationTriggers
 		{        
 			
 			FindFirstObjectByType<TvPlay>().ChangeMaterial();
-			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(delayTime));
+			GameManager.Instance.StartCoroutine(GameManager.Instance.StartFireWithDelay(delayTime));
 			_fireSpawner = GameObject.Find("Fires").GetComponent<StartLevelFireSpawner>();
 			_fireSpawner.StartCoroutine(_fireSpawner.StartRandomFiresDelayed(delayTime));
 		}

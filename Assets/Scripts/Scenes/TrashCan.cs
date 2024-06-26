@@ -29,7 +29,7 @@ namespace Scenes
             //multiplier = fire.GetComponent<ParticleSystemMultiplier>();
             //multiplier.multiplier = 0;
             falling = true;        
-            GameManager.Instance.FireStart();
+            GameManager.Instance.StartFire();
         }
 
         private void Update()

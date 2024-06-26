@@ -23,7 +23,7 @@ namespace AnimationTriggers
 		private void StartFire()
 		{
 			_selfAnimator.SetTrigger("Start");
-			GameManager.Instance.StartCoroutine(GameManager.Instance.FireStartDelayed(fireStartDelay));
+			GameManager.Instance.StartCoroutine(GameManager.Instance.StartFireWithDelay(fireStartDelay));
 			_fireSpawner.StartCoroutine(_fireSpawner.StartRandomFiresDelayed(fireStartDelay));
 		}
 		

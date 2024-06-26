@@ -13239,21 +13239,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2913674118878981036, guid: b4f1938bc2da09f41934623cffe624e6,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5216749
-      objectReference: {fileID: 0}
-    - target: {fileID: 2913674118878981036, guid: b4f1938bc2da09f41934623cffe624e6,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5216743
-      objectReference: {fileID: 0}
-    - target: {fileID: 2913674118878981036, guid: b4f1938bc2da09f41934623cffe624e6,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5216743
-      objectReference: {fileID: 0}
-    - target: {fileID: 2913674118878981036, guid: b4f1938bc2da09f41934623cffe624e6,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: -59
       objectReference: {fileID: 0}
@@ -13301,11 +13286,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3024375382603442984, guid: b4f1938bc2da09f41934623cffe624e6,
-        type: 3}
-      propertyPath: startTime
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16027,7 +16007,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

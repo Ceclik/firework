@@ -8,7 +8,7 @@ namespace AnimationTriggers
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
 		{
 			
-			GameManager.Instance.FireStart();
+			GameManager.Instance.StartFire();
 		}
 
 		// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

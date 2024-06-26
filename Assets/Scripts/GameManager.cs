@@ -200,13 +200,13 @@ public class GameManager : Singleton<GameManager>
         MyInput.Instance.Init();
     }
 
-    public IEnumerator FireStartDelayed(float time)
+    public IEnumerator StartFireWithDelay(float time)
     {
         yield return new WaitForSeconds(time);
-        FireStart();
+        StartFire();
     }
 
-    public void FireStart()
+    public void StartFire()
     {
         if (FireAimGameMode)
         {
