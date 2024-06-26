@@ -5,7 +5,8 @@ namespace Scenes
 {
     public class MainMenuHighScoreShower : MonoBehaviour
     {
-        [SerializeField] private Text homeSceneText;
+        [SerializeField] private Text homeTVText;
+        [SerializeField] private Text homeGasText;
         [SerializeField] private Text schoolSceneText;
 
         [SerializeField] private Button homeFireAimTVButton;
@@ -16,13 +17,12 @@ namespace Scenes
         {
             if (GameManager.Instance.FireSeekGameMode)
             {
-                homeSceneText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireSeekSceneHigscore")}";
                 schoolSceneText.text = $"Highscore: {PlayerPrefs.GetInt("SchoolFireSeekSceneHigscore")}";
             }
             else
             {
-                homeSceneText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimSceneHigscore")}";
-                schoolSceneText.text = $"Highscore: {PlayerPrefs.GetInt("SchoolFireAimHigscore")}";
+                homeTVText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimTVSceneHigscore")}";
+                homeGasText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimGasSceneHigscore")}";
             }
         }
 

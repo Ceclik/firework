@@ -2072,7 +2072,7 @@ GameObject:
   - component: {fileID: 940324454}
   - component: {fileID: 940324453}
   m_Layer: 5
-  m_Name: HomeText
+  m_Name: HomeGasSceneText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2571,7 +2571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e19627e78657f84c91a92319246a614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  homeSceneText: {fileID: 940324453}
+  homeTVText: {fileID: 2070959908}
+  homeGasText: {fileID: 940324453}
   schoolSceneText: {fileID: 1653563316}
   homeFireAimTVButton: {fileID: 1327477577}
   homeFireAimGasButton: {fileID: 518394011}
@@ -3506,7 +3507,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0420\u0430\u0437\u0431\u0438\u0442\u044B\u0439 \u0442\u0435\u043B\u0435\u0432\u0438\u0437\u043E\u0440"
+  m_Text: "\u0417\u0430\u043B\n"
 --- !u!222 &1632834863
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3836,8 +3837,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0417\u0430\u0431\u044B\u0442\u044B\u0439 \u043D\u0430 \u043F\u043B\u0438\u0442\u0435
-    \u0447\u0430\u0439\u043D\u0438\u043A"
+  m_Text: "\u041A\u0443\u0445\u043D\u044F\n"
 --- !u!222 &1728499386
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4292,7 +4292,7 @@ GameObject:
   - component: {fileID: 2070959909}
   - component: {fileID: 2070959908}
   m_Layer: 5
-  m_Name: SchoolText
+  m_Name: HomeTVSceneText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

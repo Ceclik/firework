@@ -39,7 +39,7 @@ namespace FireAimScripts
             if (_fireSystemHandler.AmountOfActiveFires == 1)
                 foreach (var fire in _fires)
                     if (fire.activeSelf)
-                        if(fire.GetComponent<ParticleSystemMultiplier>().multiplier < 0.3f)
+                        if(fire.GetComponent<ParticleSystemMultiplier>().multiplier < 0.4f)
                             SpawnNewFire();
             
             if(_timer.timer <= 30)
