@@ -6,15 +6,19 @@ namespace FireAimScripts
 {
     public class StartLevelFireSpawner : MonoBehaviour
     {
+        [SerializeField] private int amountOfFiresOfTypeA;
+        [SerializeField] private int amountOfFiresOfTypeB;
         [SerializeField] private int amountOfFiresToSpawn;
         [SerializeField] private Transform fireLocationsParent;
 
         private Transform[] _fireLocations;
         private GameObject[] _fires;
         private AimFireSystemHandler _fireSystemHandler;
+        private FireTypesGenerator _firesGenerator;
 
         private void Start()
         {
+            _firesGenerator = fireLocationsParent.GetComponent<FireTypesGenerator>();
             _fireSystemHandler = GameObject.Find("FireSystem").GetComponent<AimFireSystemHandler>();
             _fires = new GameObject[transform.childCount];
             _fireLocations = new Transform[fireLocationsParent.childCount];
@@ -35,6 +39,8 @@ namespace FireAimScripts
                 while (_fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
                     indexOfLocation = Random.Range(0, _fireLocations.Length);
                 
+                
+                
                 _fires[i].SetActive(true);
                 _fireSystemHandler.AmountOfActiveFires++;
                 
@@ -44,6 +50,23 @@ namespace FireAimScripts
                     _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
                 }
             }
+        }
+
+        private void SetFireSystem(int i, int type)
+        {
+            FireSplitter splitter = _fires[i].GetComponent<FireSplitter>();
+            Target target = null;
+
+            switch (type)
+            {
+                case 0:
+                    target = _firesGenerator.GenerateTypeATarget();
+                    splitter.Timer = target.TimerTime;
+                    
+                    break;
+            }
+            
+            //splitter.Timer = 
         }
 
         public IEnumerator StartRandomFiresDelayed(float delay)
