@@ -10,12 +10,17 @@ namespace FireAimScripts
         [SerializeField] private float timerIncreasingTime;
         [SerializeField] private float timerStartIncreasingValue;
 
-        public float Timer { get; set; }
+        public float StartTimerValue { get; set; }
+        private float _timer;
         private Vector3 _startLocalScale;
         private Vector3 _endLocalScale;
         private float _scaleTimer;
         
+        public bool IsExtinguishing { get; set; } //TODO delete
+        private float _extinguishingTime;
+        
         public float FireStopSpeed { get; private set; }
+        public float FireStopTime { get; set; }
         
         public delegate void DecreaseLives();
         public event DecreaseLives OnFireSplitted;
@@ -27,35 +32,41 @@ namespace FireAimScripts
             FireStopSpeed = CountFireStopSpeed();
         }
         
-        private float CountFireStopSpeed()  //this counting must be remade in universal 
+        private float CountFireStopSpeed()
         {
-            if (Timer is >= 8.0f and < 9.0f) return 0.55f;
-            if (Timer is >= 9.0f and < 10.0f) return 0.5f;
-            if (Timer is >= 10.0f and < 11.0f) return 0.4f;
-            if (Timer is >= 11.0f and < 12.0f) return 0.35f;
-            if (Timer is >= 12.0f and < 13.0f) return 0.25f;
-            if (Timer is >= 13.0f and < 14.0f) return 0.2f;
-            if (Timer >= 14.0f) return 0.2f;
-            return 0.2f;
+            return 0.5f * 1.26f / FireStopTime;
+        }
+
+        public void OnEndExtinguishing()
+        {
+            IsExtinguishing = false;
+            Debug.LogError($"Extinguishing time: {_extinguishingTime}");
         }
 
         private void Update()
         {
-            Timer -= Time.deltaTime;
-            timerText.text = ((int)Timer).ToString();
+            if (IsExtinguishing)
+            {
+                _extinguishingTime += Time.deltaTime;
+            }
+            
+            if(!IsExtinguishing)
+                _timer -= Time.deltaTime;
+            
+            timerText.text = ((int)_timer).ToString();
 
-            if (Timer <= timerStartIncreasingValue)
+            if (_timer <= timerStartIncreasingValue)
             {
                 _scaleTimer += Time.deltaTime;
                 timerText.rectTransform.localScale =
                     Vector3.Lerp(_startLocalScale, _endLocalScale, _scaleTimer / timerIncreasingTime);
             }
 
-            if (Timer <= 0)
+            if (_timer <= 0)
             {
-                //Timer = MinTimeToSplit;
+                _timer = StartTimerValue;
                 _scaleTimer = 0;
-                SplitFire();
+                //SplitFire();
             }
         }
 

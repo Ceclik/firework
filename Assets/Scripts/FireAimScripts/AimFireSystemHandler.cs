@@ -83,8 +83,9 @@ namespace FireAimScripts
         
         private void DisableFire(int i)
         {
-            AmountOfActiveFires--; //Если что то тут надо добавить снятие занятой локации огня 
+            AmountOfActiveFires--; 
             fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
+            fires[i].GetComponent<FireSplitter>().OnEndExtinguishing(); //TODO delete
             fires[i].SetActive(false);
             Debug.LogError($"Amount of active fires: {AmountOfActiveFires}");
         }
@@ -145,6 +146,9 @@ namespace FireAimScripts
                     if (fireCollider.Raycast(ray, out hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor &&
                         fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
                     {
+                        if (!fires[i].GetComponent<FireSplitter>().IsExtinguishing)
+                            fires[i].GetComponent<FireSplitter>().IsExtinguishing = true;
+                        
                         stopper.Orient(hit.point);
 
                         fireStopSpeed = fires[i].GetComponent<FireSplitter>().FireStopSpeed;
@@ -180,7 +184,10 @@ namespace FireAimScripts
                         }
                     }
                     else
-                    {                    
+                    {      
+                        if (fires[i].GetComponent<FireSplitter>().IsExtinguishing)
+                            fires[i].GetComponent<FireSplitter>().IsExtinguishing = false;
+                        
                         if (particle.multiplier < 1f && fires[i].activeSelf)
                         {
                             particle.multiplier += (particleGrowSpeedValue * Time.deltaTime);

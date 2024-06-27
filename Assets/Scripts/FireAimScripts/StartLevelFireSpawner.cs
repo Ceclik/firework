@@ -8,7 +8,6 @@ namespace FireAimScripts
     {
         [SerializeField] private int amountOfFiresOfTypeA;
         [SerializeField] private int amountOfFiresOfTypeB;
-        [SerializeField] private int amountOfFiresToSpawn;
         [SerializeField] private Transform fireLocationsParent;
 
         private Transform[] _fireLocations;
@@ -18,7 +17,7 @@ namespace FireAimScripts
 
         private void Start()
         {
-            _firesGenerator = fireLocationsParent.GetComponent<FireTypesGenerator>();
+            _firesGenerator = GetComponent<FireTypesGenerator>();
             _fireSystemHandler = GameObject.Find("FireSystem").GetComponent<AimFireSystemHandler>();
             _fires = new GameObject[transform.childCount];
             _fireLocations = new Transform[fireLocationsParent.childCount];
@@ -33,14 +32,23 @@ namespace FireAimScripts
 
         public void StartRandomFires()
         {
-            for (int i = 0; i < amountOfFiresToSpawn; i++)
+            int indexOfFireType = 1;
+            
+            for (int i = 0; i < amountOfFiresOfTypeA + amountOfFiresOfTypeB; i++)
             {
                 int indexOfLocation = Random.Range(0, _fireLocations.Length);
                 while (_fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
                     indexOfLocation = Random.Range(0, _fireLocations.Length);
-                
-                
-                
+
+                if (indexOfFireType <= amountOfFiresOfTypeA)
+                    SetFireSystem(i, 0);
+                 
+                else if (indexOfFireType > amountOfFiresOfTypeA &&
+                         indexOfFireType <= amountOfFiresOfTypeA + amountOfFiresOfTypeB)
+                    SetFireSystem(i, 1);
+
+                indexOfFireType++;
+
                 _fires[i].SetActive(true);
                 _fireSystemHandler.AmountOfActiveFires++;
                 
@@ -55,18 +63,17 @@ namespace FireAimScripts
         private void SetFireSystem(int i, int type)
         {
             FireSplitter splitter = _fires[i].GetComponent<FireSplitter>();
-            Target target = null;
 
-            switch (type)
+            Target target = type switch
             {
-                case 0:
-                    target = _firesGenerator.GenerateTypeATarget();
-                    splitter.Timer = target.TimerTime;
-                    
-                    break;
-            }
+                0 => _firesGenerator.GenerateTypeATarget(),
+                1 => _firesGenerator.GenerateTypeBTarget(),
+                2 => _firesGenerator.GenerateTypeCTarget(),
+                _ => null
+            };
             
-            //splitter.Timer = 
+            splitter.StartTimerValue = target!.TimerTime;
+            splitter.FireStopTime = target!.ExtinguishingTime;
         }
 
         public IEnumerator StartRandomFiresDelayed(float delay)

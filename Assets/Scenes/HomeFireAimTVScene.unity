@@ -16206,11 +16206,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1469140836430234111, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000015258789
+      objectReference: {fileID: 0}
     - target: {fileID: 3778034263019360791, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1037454759}
+    - target: {fileID: 4019766745211429550, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2.343872
+      objectReference: {fileID: 0}
     - target: {fileID: 5383496808889251134, guid: 09d2e92d9eb5bad49b87e44f2fc99b6e,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -17821,7 +17831,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028985536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e6c7bfa1425b0542b5264109a4aba20, type: 3}
   m_Name: 
@@ -17840,7 +17850,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa5980f1d86ffbf4bbb1e32876f8220a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountOfFiresToSpawn: 3
+  amountOfFiresOfTypeA: 2
+  amountOfFiresOfTypeB: 1
   fireLocationsParent: {fileID: 571625351}
 --- !u!114 &2028985540
 MonoBehaviour:
@@ -17849,7 +17860,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028985536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edacf1e037e531340bb5a53588468adb, type: 3}
   m_Name: 
