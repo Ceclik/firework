@@ -85,7 +85,7 @@ namespace FireAimScripts
         {
             AmountOfActiveFires--; 
             fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
-            fires[i].GetComponent<FireSplitter>().OnEndExtinguishing(); //TODO delete
+            fires[i].GetComponent<FireSplitter>().OnEndExtinguishing();
             fires[i].SetActive(false);
             Debug.LogError($"Amount of active fires: {AmountOfActiveFires}");
         }
@@ -178,9 +178,7 @@ namespace FireAimScripts
                             }
 
                             if (particle.multiplier >= 1f && fires[i].activeSelf)
-                            {
                                 _expandTimers[i] = _expandTimers[i] + Time.deltaTime;
-                            }
                         }
                     }
                     else
@@ -193,10 +191,9 @@ namespace FireAimScripts
                             particle.multiplier += (particleGrowSpeedValue * Time.deltaTime);
                             _firesLife[i] = particle.multiplier * 100f;
                         }
-                        if (particle.multiplier>=1f && fires[i].activeSelf)
-                        {
+
+                        if (particle.multiplier >= 1f && fires[i].activeSelf)
                             _expandTimers[i] = _expandTimers[i] + Time.deltaTime;
-                        }
                     }
                 }
 

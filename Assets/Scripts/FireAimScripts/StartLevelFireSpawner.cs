@@ -36,10 +36,6 @@ namespace FireAimScripts
             
             for (int i = 0; i < amountOfFiresOfTypeA + amountOfFiresOfTypeB; i++)
             {
-                int indexOfLocation = Random.Range(0, _fireLocations.Length);
-                while (_fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
-                    indexOfLocation = Random.Range(0, _fireLocations.Length);
-
                 if (indexOfFireType <= amountOfFiresOfTypeA)
                     SetFireSystem(i, 0);
                  
@@ -54,6 +50,9 @@ namespace FireAimScripts
                 
                 if (i != 0)
                 {
+                    int indexOfLocation = Random.Range(0, _fireLocations.Length);
+                    while (_fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
+                        indexOfLocation = Random.Range(0, _fireLocations.Length);
                     _fires[i].transform.position = _fireLocations[indexOfLocation].transform.position;
                     _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
                 }

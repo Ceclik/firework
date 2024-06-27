@@ -16,7 +16,7 @@ namespace FireAimScripts
         private Vector3 _endLocalScale;
         private float _scaleTimer;
         
-        public bool IsExtinguishing { get; set; } //TODO delete
+        public bool IsExtinguishing { get; set; }
         private float _extinguishingTime;
         
         public float FireStopSpeed { get; private set; }
