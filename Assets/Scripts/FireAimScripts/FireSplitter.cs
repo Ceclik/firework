@@ -1,3 +1,4 @@
+using Standard_Assets.ParticleSystems.Scripts;
 using TMPro;
 using UnityEngine;
 
@@ -76,6 +77,7 @@ namespace FireAimScripts
             timerText.rectTransform.localScale = _startLocalScale;
             Debug.LogError("In split fire");
             OnFireSplitted?.Invoke();
+            GetComponent<ParticleSystemMultiplier>().multiplier = 0;
         }
     }
 }

@@ -91,7 +91,7 @@ namespace FireAimScripts
             fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
             fires[i].GetComponent<FireSplitter>().OnEndExtinguishing();
             fires[i].SetActive(false);
-            Debug.LogError($"Amount of active fires: {AmountOfActiveFires}");
+            Debug.LogError($"Amount of active fires: {AmountOfActiveFires}\ndisabled fire index: {i}");
         }
         
         private void CountFireComplexParameters(int index)

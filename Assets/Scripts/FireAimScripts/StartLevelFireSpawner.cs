@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,8 +33,9 @@ namespace FireAimScripts
 
         public void StartRandomFires()
         {
-            int indexOfFireType = 1;
-            
+            int indexOfFireType = 1; 
+            List<GameObject> spawnedFires = new List<GameObject>();
+            float time = 0;
             for (int i = 0; i < amountOfFiresOfTypeA + amountOfFiresOfTypeB; i++)
             {
                 if (indexOfFireType <= amountOfFiresOfTypeA)
@@ -44,10 +46,23 @@ namespace FireAimScripts
                     SetFireSystem(i, 1);
 
                 indexOfFireType++;
+                
+                spawnedFires.Add(_fires[i]);
+                
+            }
+            
+            foreach (var fire in spawnedFires)
+                time += fire.GetComponent<FireSplitter>().FireStopTime;
 
+            if (time > 19)
+                spawnedFires[^1].GetComponent<FireSplitter>().FireStopTime =
+                    19 - (time - spawnedFires[^1].GetComponent<FireSplitter>().FireStopTime);
+
+            for (int i = 0; i < spawnedFires.Count; i++)
+            {
                 _fires[i].SetActive(true);
                 _fireSystemHandler.AmountOfActiveFires++;
-                
+
                 if (i != 0)
                 {
                     int indexOfLocation = Random.Range(0, _fireLocations.Length);
@@ -70,6 +85,9 @@ namespace FireAimScripts
                 2 => _firesGenerator.GenerateTypeCTarget(),
                 _ => null
             };
+            
+            
+            
             
             splitter.StartTimerValue = target!.TimerTime;
             splitter.FireStopTime = target!.ExtinguishingTime;

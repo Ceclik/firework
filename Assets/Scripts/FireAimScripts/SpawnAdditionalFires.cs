@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Standard_Assets.ParticleSystems.Scripts;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,7 +14,7 @@ namespace FireAimScripts
         public bool IsNewSpawned { get; set; }
         private GameObject[] _fires;
         private FireTypesGenerator _firesGenerator;
-        
+
         [SerializeField] private Transform fireLocationsParent;
         [SerializeField] private int amountOfFireToAdditionalSpawn;
         private SpawnPoint[] _fireLocations;
@@ -52,30 +53,30 @@ namespace FireAimScripts
 
         private void SpawnNewFire()
         {
-            if (!IsNewSpawned)
+            if (!IsNewSpawned && _timer.startTime * 60 - _timer.value < 40)
             {
                 if (!_isSecondStageSpawned && !_isThirdStageSpawned)
                 {
-                    if (_timer.value < 25)
+                    if (_timer.startTime * 60 - _timer.value < 40)
                         SpawnAPlusBVariants();
-                    else if (_timer.value < 35)
+                    else if (_timer.startTime * 60 - _timer.value < 35)
                         SpawnBVariant();
-                    else if (_timer.value < 40)
+                    else if (_timer.startTime * 60 - _timer.value < 25)
                         SpawnCVariant(2);
                 }
 
                 else if (!_isThirdStageSpawned && !_isCVariantPassed)
                 {
-                    if (_timer.value < 35)
+                    if (_timer.startTime - _timer.value < 40)
                         SpawnAVariant();
-                    else if (_timer.value < 40)
+                    else if (_timer.startTime - _timer.value < 35)
                         SpawnCVariant(3);
                 }
 
                 IsNewSpawned = true;
             }
         }
-        
+
         private void SetFireSystem(int indexOfIre, int type)
         {
             FireSplitter splitter = _fires[indexOfIre].GetComponent<FireSplitter>();
@@ -87,13 +88,14 @@ namespace FireAimScripts
                 2 => _firesGenerator.GenerateTypeCTarget(),
                 _ => null
             };
-            
+
             splitter.StartTimerValue = target!.TimerTime;
             splitter.FireStopTime = target!.ExtinguishingTime;
         }
 
         private void SpawnBVariant()
         {
+            Debug.LogError($"Spawn B variant\ntime left {_timer.startTime * 60- _timer.value}");
             int indexOfLocation = Random.Range(0, _fireLocations.Length);
             while (_fireLocations[indexOfLocation].IsUsing)
                 indexOfLocation = Random.Range(0, _fireLocations.Length);
@@ -106,8 +108,9 @@ namespace FireAimScripts
                     indexOfFire = i;
                     break;
                 }
+
             SetFireSystem(indexOfFire, 1);
-            
+
             _fires[indexOfFire].SetActive(true);
             _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
             _fireLocations[indexOfLocation].IsUsing = true;
@@ -117,6 +120,7 @@ namespace FireAimScripts
 
         private void SpawnAVariant()
         {
+            Debug.LogError($"Spawn A variant\ntime left {_timer.startTime * 60 - _timer.value}");
             int indexOfLocation = Random.Range(0, _fireLocations.Length);
             while (_fireLocations[indexOfLocation].IsUsing)
                 indexOfLocation = Random.Range(0, _fireLocations.Length);
@@ -129,8 +133,9 @@ namespace FireAimScripts
                     indexOfFire = i;
                     break;
                 }
+
             SetFireSystem(indexOfFire, 0);
-            
+
             _fires[indexOfFire].SetActive(true);
             _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
             _fireLocations[indexOfLocation].IsUsing = true;
@@ -142,6 +147,7 @@ namespace FireAimScripts
 
         private void SpawnCVariant(int stage)
         {
+            Debug.LogError($"Spawn C variant\ntime left {_timer.startTime * 60- _timer.value}");
             int indexOfLocation = Random.Range(0, _fireLocations.Length);
             while (_fireLocations[indexOfLocation].IsUsing)
                 indexOfLocation = Random.Range(0, _fireLocations.Length);
@@ -154,8 +160,9 @@ namespace FireAimScripts
                     indexOfFire = i;
                     break;
                 }
+
             SetFireSystem(indexOfFire, 2);
-            
+
             _fires[indexOfFire].SetActive(true);
             _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
             _fireLocations[indexOfLocation].IsUsing = true;
@@ -175,44 +182,47 @@ namespace FireAimScripts
             _isCVariantPassed = true;
         }
 
-        private void SpawnAPlusBVariants( )
+        private void SpawnAPlusBVariants()
         {
-            if (!_isSecondStageSpawned)
+            Debug.LogError($"Spawn A+B variant\ntime left {_timer.startTime * 60 - _timer.value}");
+            for (int j = 0; j < 2; j++)
             {
-                for (int j = 0; j < 2; j++)
-                {
-                    int indexOfLocation = Random.Range(0, _fireLocations.Length);
-                    while (_fireLocations[indexOfLocation].IsUsing)
-                        indexOfLocation = Random.Range(0, _fireLocations.Length);
-
-                    int indexOfFire = -1;
-                    for (int i = 0; i < _fires.Length; i++)
-                        if (!_fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished &&
-                            _fires[i].GetComponent<ParticleSystemMultiplier>().multiplier <= 0.01f)
-                        {
-                            indexOfFire = i;
-                            break;
-                        }
-
-                    switch (j)
+                int indexOfLocation = Random.Range(0, _fireLocations.Length);
+                while (_fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
+                    indexOfLocation = Random.Range(0, _fireLocations.Length);
+                
+                int indexOfFire = -1;
+                for (int i = 0; i < _fires.Length; i++)
+                    if (!_fires[i].activeSelf && !_fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished &&
+                        _fires[i].GetComponent<ParticleSystemMultiplier>().multiplier <= 0.01f)
                     {
-                        case 0:
-                            SetFireSystem(indexOfFire, 0);
-                            break;
-                        case 1:
-                            SetFireSystem(indexOfFire, 1);
-                            break;
+                        indexOfFire = i;
+                        break;
                     }
 
-                    _fires[indexOfFire].SetActive(true);
-                    _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
-                    _fireLocations[indexOfLocation].IsUsing = true;
-                    _fireSystemHandler.AmountOfActiveFires++;
-                    _fires[indexOfFire].transform.position = _fireLocations[indexOfLocation].transform.position;
+                switch (j)
+                {
+                    case 0:
+                        SetFireSystem(indexOfFire, 0);
+                        break;
+                    case 1:
+                        SetFireSystem(indexOfFire, 1);
+                        break;
                 }
-
-                _isSecondStageSpawned = true;
+                
+                Debug.LogError($"spawn\n index of fire: {indexOfFire}");
+                _fires[indexOfFire].SetActive(true);
+                _fireSystemHandler.AmountOfActiveFires++;
+                
+                
+                
+                _fires[indexOfFire].transform.position = _fireLocations[indexOfLocation].transform.position;
+                _fireLocations[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
             }
+            
+                
+            _isSecondStageSpawned = true;
+
         }
     }
 }
