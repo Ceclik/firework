@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Standard_Assets.ParticleSystems.Scripts;
 using UnityEngine;
 
@@ -6,12 +7,15 @@ namespace FireAimScripts
     public class NewFiresSpawner : MonoBehaviour
     {
         [SerializeField] private Transform fireAvailableLocations;
+        [SerializeField] private int amountOfFiresToSpawn;
         private Transform[] _spawnPoints;
         private FireSplitter[] _fires;
         private AimFireSystemHandler _aimFireSystemHandler;
+        private FireTypesGenerator _firesGenerator;
 
         private void Start()
         {
+            _firesGenerator = GetComponent<FireTypesGenerator>();
             _aimFireSystemHandler = GameObject.Find("FireSystem").GetComponent<AimFireSystemHandler>();
             _spawnPoints = new Transform[fireAvailableLocations.childCount];
             _fires = new FireSplitter[transform.childCount];
@@ -28,23 +32,42 @@ namespace FireAimScripts
 
         private void SpawnNewFire()
         {
-            int indexOfLocation = Random.Range(0, _spawnPoints.Length);
-            while (_spawnPoints[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
-                indexOfLocation = Random.Range(0, _spawnPoints.Length);
+            for (int j = 0; j < amountOfFiresToSpawn; j++)
+            {
+                int indexOfLocation = Random.Range(0, _spawnPoints.Length);
+                while (_spawnPoints[indexOfLocation].GetComponent<SpawnPoint>().IsUsing)
+                    indexOfLocation = Random.Range(0, _spawnPoints.Length);
+
+                int indexOfFire = -1;
+                for (int i = 0; i < _fires.Length; i++)
+                    if (_fires[i].GetComponent<ParticleSystemMultiplier>().multiplier <= 0.01f &&
+                        !_fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished)
+                    {
+                        indexOfFire = i;
+                        break;
+                    }
+
+                SetFireSystem(indexOfFire, j == 1);
+
+                _fires[indexOfFire].gameObject.SetActive(true);
+                _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
+                _aimFireSystemHandler.AmountOfActiveFires++;
+                _fires[indexOfFire].transform.position = _spawnPoints[indexOfLocation].position;
+                _spawnPoints[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
+            }
+        }
+        
+        private void SetFireSystem(int indexOfIre, bool isSecondFire)
+        {
+            FireSplitter splitter = _fires[indexOfIre].GetComponent<FireSplitter>();
+            bool isCorrectTime = false;
+
+            Target target = _firesGenerator.GenerateTypeCTarget();
             
-            int indexOfFire = -1;
-            for (int i = 0; i < _fires.Length; i++)
-                if (_fires[i].GetComponent<ParticleSystemMultiplier>().multiplier <= 0.01f &&  !_fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished)
-                {
-                    indexOfFire = i;
-                    break;
-                }
-            
-            _fires[indexOfFire].gameObject.SetActive(true);
-            _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
-            _aimFireSystemHandler.AmountOfActiveFires++;
-            _fires[indexOfFire].transform.position = _spawnPoints[indexOfLocation].position;
-            _spawnPoints[indexOfLocation].GetComponent<SpawnPoint>().IsUsing = true;
+            splitter.StartTimerValue = target!.TimerTime;
+            if (isSecondFire)
+                splitter.FireStopTime = 5 - _fires[indexOfIre - 1].GetComponent<FireSplitter>().FireStopTime;
+            splitter.FireStopTime = target!.ExtinguishingTime;
         }
 
         private void OnDisable()

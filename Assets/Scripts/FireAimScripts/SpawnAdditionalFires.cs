@@ -43,7 +43,6 @@ namespace FireAimScripts
         {
             if (_fireSystemHandler.AmountOfActiveFires == 1)
             {
-                Debug.LogWarning($"AmountOfActiveFires: {_fireSystemHandler.AmountOfActiveFires}");
                 foreach (var fire in _fires)
                     if (fire.activeSelf)
                         if (fire.GetComponent<ParticleSystemMultiplier>().multiplier < 0.4f)
@@ -53,7 +52,6 @@ namespace FireAimScripts
 
         private void SpawnNewFire()
         {
-            Debug.LogError("In spawn new fire");
             if (!IsNewSpawned)
             {
                 if (!_isSecondStageSpawned && !_isThirdStageSpawned)
@@ -96,7 +94,6 @@ namespace FireAimScripts
 
         private void SpawnBVariant()
         {
-            Debug.LogError("Spawn B variant");
             int indexOfLocation = Random.Range(0, _fireLocations.Length);
             while (_fireLocations[indexOfLocation].IsUsing)
                 indexOfLocation = Random.Range(0, _fireLocations.Length);
@@ -138,7 +135,6 @@ namespace FireAimScripts
             _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
             _fireLocations[indexOfLocation].IsUsing = true;
             _fireSystemHandler.AmountOfActiveFires++;
-            Debug.LogError("Spawn A variant");
             _fires[indexOfFire].transform.position = _fireLocations[indexOfLocation].transform.position;
 
             _isThirdStageSpawned = true;
@@ -164,7 +160,6 @@ namespace FireAimScripts
             _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
             _fireLocations[indexOfLocation].IsUsing = true;
             _fireSystemHandler.AmountOfActiveFires++;
-            Debug.LogError("Spawn C variant");
             _fires[indexOfFire].transform.position = _fireLocations[indexOfLocation].transform.position;
 
             switch (stage)
@@ -213,7 +208,6 @@ namespace FireAimScripts
                     _fires[indexOfFire].GetComponent<ParticleSystemMultiplier>().multiplier = 0.05f;
                     _fireLocations[indexOfLocation].IsUsing = true;
                     _fireSystemHandler.AmountOfActiveFires++;
-                    Debug.LogError("Spawn A+B variant");
                     _fires[indexOfFire].transform.position = _fireLocations[indexOfLocation].transform.position;
                 }
 

@@ -10631,6 +10631,7 @@ GameObject:
   - component: {fileID: 1036378422}
   - component: {fileID: 1036378423}
   - component: {fileID: 1036378424}
+  - component: {fileID: 1036378425}
   m_Layer: 0
   m_Name: Fires
   m_TagString: Untagged
@@ -10685,6 +10686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireAvailableLocations: {fileID: 1800369741}
+  amountOfFiresToSpawn: 2
 --- !u!114 &1036378423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10697,7 +10699,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa5980f1d86ffbf4bbb1e32876f8220a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountOfFiresToSpawn: 3
+  amountOfFiresOfTypeA: 2
+  amountOfFiresOfTypeB: 1
   fireLocationsParent: {fileID: 1800369741}
 --- !u!114 &1036378424
 MonoBehaviour:
@@ -10713,6 +10716,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireLocationsParent: {fileID: 1800369741}
   amountOfFireToAdditionalSpawn: 2
+--- !u!114 &1036378425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036378420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b77abd464846074b80f118afad4b269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTypes:
+  - minExtinguishingTime: 6
+    maxExtinguishingTime: 9
+    minTimerTime: 15
+    maxTimerTime: 20
+  - minExtinguishingTime: 4
+    maxExtinguishingTime: 6
+    minTimerTime: 8
+    maxTimerTime: 15
+  - minExtinguishingTime: 1
+    maxExtinguishingTime: 4
+    minTimerTime: 20
+    maxTimerTime: 23
 --- !u!1 &1036946181
 GameObject:
   m_ObjectHideFlags: 0
@@ -16319,6 +16347,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireComplexInAimMode(teapot)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5370732314408843999, guid: 08cfb41bfd66b1449a404f0907cc33e3,
         type: 3}

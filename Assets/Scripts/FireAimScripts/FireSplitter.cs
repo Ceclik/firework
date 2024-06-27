@@ -27,6 +27,7 @@ namespace FireAimScripts
 
         private void Start()
         {
+            _timer = StartTimerValue;
             _startLocalScale = new Vector3(1.0f, 1.0f, 1.0f);
             _endLocalScale = new Vector3(3.0f, 3.0f, 3.0f);
             FireStopSpeed = CountFireStopSpeed();
@@ -66,13 +67,14 @@ namespace FireAimScripts
             {
                 _timer = StartTimerValue;
                 _scaleTimer = 0;
-                //SplitFire();
+                SplitFire();
             }
         }
 
         private void SplitFire()
         {
             timerText.rectTransform.localScale = _startLocalScale;
+            Debug.LogError("In split fire");
             OnFireSplitted?.Invoke();
         }
     }
