@@ -30,6 +30,7 @@ namespace FireAimScripts
         private AudioSource _sound;
         private AudioSource _aSoundStart;
         private AudioSource _aSoundFire;
+        private SpawnAdditionalFires _spawnAdditionalFires;
 
         public int LivesCount { get; private set; } = 3;
 
@@ -42,6 +43,7 @@ namespace FireAimScripts
         
         private void Start()
         {
+            _spawnAdditionalFires = GameObject.Find("Fires").GetComponent<SpawnAdditionalFires>();
             if (!GameManager.Instance.FireAimGameMode)
                 GameManager.Instance.FireAimGameMode = true;
 
@@ -83,6 +85,8 @@ namespace FireAimScripts
         
         private void DisableFire(int i)
         {
+            if (_spawnAdditionalFires.IsNewSpawned)
+                _spawnAdditionalFires.IsNewSpawned = false;
             AmountOfActiveFires--; 
             fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
             fires[i].GetComponent<FireSplitter>().OnEndExtinguishing();

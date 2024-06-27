@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //This script is using for handling timer in UI. Counting time down and formatting it into minutes and seconds
@@ -6,24 +7,24 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour {
 
     public float startTime;
-    public float timer;
+    public float value;
     public Text text;
     
 
     private void OnEnable()
     {
         //startTime = GameManager.Instance.GetLevelSettings().deadTimer / 60f;
-        timer = startTime * 60f;
-        Debug.Log("level timer:" + timer);
+        value = startTime * 60f;
+        Debug.Log("level timer:" + value);
     }
 
     // Update is called once per frame
     void Update () {
-        timer -= Time.deltaTime;
-        text.text = FormatTime(timer);  
-        if (timer<=0)
+        value -= Time.deltaTime;
+        text.text = FormatTime(value);  
+        if (value<=0)
         {
-            timer = 0;
+            value = 0;
             GameManager.Instance.EndScene(false);
         }
 	}

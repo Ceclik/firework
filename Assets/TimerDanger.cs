@@ -16,11 +16,11 @@ public class TimerDanger : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (_timer.timer < 15)
+        if (_timer.value < 15)
         {
             danger.SetActive(true);
         }
-        if (_timer.timer<=0 || !_timer.gameObject.activeSelf)
+        if (_timer.value<=0 || !_timer.gameObject.activeSelf)
         {
             danger.SetActive(false);
         }

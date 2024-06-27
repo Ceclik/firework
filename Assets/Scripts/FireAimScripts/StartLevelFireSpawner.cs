@@ -59,9 +59,9 @@ namespace FireAimScripts
             }
         }
 
-        private void SetFireSystem(int i, int type)
+        private void SetFireSystem(int indexOfIre, int type)
         {
-            FireSplitter splitter = _fires[i].GetComponent<FireSplitter>();
+            FireSplitter splitter = _fires[indexOfIre].GetComponent<FireSplitter>();
 
             Target target = type switch
             {
