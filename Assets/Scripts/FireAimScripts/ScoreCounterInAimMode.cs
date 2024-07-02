@@ -6,28 +6,23 @@ namespace FireAimScripts
 {
     public class ScoreCounterInAimMode : MonoBehaviour
     {
-
-        private float _levelTime;
+        
         [SerializeField] private Text scoreText;
-        private float _accuracy;
+        public int AmountOfA { get; set; }
+        public int AmountOfB { get; set; }
+        public int AmountOfC { get; set; }
+        
 
-        private void Update()
+        public void CountScore()
         {
-            if (GameManager.Instance.IsFireStarted)
-                _levelTime += Time.deltaTime;
-        }
-
-        public float CountScore()
-        {
-            _accuracy = (float)Random.Range(40, 91);
-            //Debug.LogError($"Accuracy: {_accuracy}\nScene name: {SceneManager.GetActiveScene().name}");
-            float score = _accuracy * 10000 / (_levelTime + GetComponent<AimFireSystemHandler>().LivesCount * 10000);
-            score *= 100;
+            float accuracy = Random.Range(0.01f, 1.0f);
+            Debug.LogError($"A: {AmountOfA} + B: {AmountOfB} + C: {AmountOfC}");
+            float score = AmountOfA * accuracy * Mathf.Pow(10, 4) + AmountOfB * accuracy * Mathf.Pow(10, 3) +
+                          AmountOfC * accuracy * 100;
             scoreText.text =
                 $"Количество очков: {(int)score}\nРекорд: {PlayerPrefs.GetInt(SceneManager.GetActiveScene().name + "Higscore")}";
             if(score > PlayerPrefs.GetInt(SceneManager.GetActiveScene().name+"Higscore"))
                 PlayerPrefs.SetInt(SceneManager.GetActiveScene().name+"Higscore", (int)score);
-            return score;
         }
     }
 }

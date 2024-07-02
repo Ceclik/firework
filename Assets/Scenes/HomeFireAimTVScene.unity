@@ -6150,6 +6150,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58cb1a5e8e24851479eff681b8130771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &927676954 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3024375382603442984, guid: b4f1938bc2da09f41934623cffe624e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1235956852}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f0993ab99e4204881f444a0164fe73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &928928186
 GameObject:
   m_ObjectHideFlags: 0
@@ -13147,6 +13159,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3024375382603442984, guid: b4f1938bc2da09f41934623cffe624e6,
+        type: 3}
+      propertyPath: startTime
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14658,7 +14675,6 @@ GameObject:
   - component: {fileID: 1640926076}
   - component: {fileID: 1640926074}
   - component: {fileID: 1640926078}
-  - component: {fileID: 1640926077}
   m_Layer: 0
   m_Name: FireSystem
   m_TagString: Untagged
@@ -14778,19 +14794,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1640926077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1640926073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f09e5e7e2f502de4f84b0b786e2a0307, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 1499729642}
 --- !u!114 &1640926078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17597,6 +17600,7 @@ GameObject:
   - component: {fileID: 2028985539}
   - component: {fileID: 2028985538}
   - component: {fileID: 2028985541}
+  - component: {fileID: 2028985542}
   m_Layer: 0
   m_Name: Fires
   m_TagString: Untagged
@@ -17692,6 +17696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireAvailableLocations: {fileID: 571625351}
   amountOfFiresToSpawn: 2
+  timer: {fileID: 927676954}
 --- !u!114 &2028985541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17717,6 +17722,19 @@ MonoBehaviour:
     maxExtinguishingTime: 4
     minTimerTime: 20
     maxTimerTime: 23
+--- !u!114 &2028985542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028985536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09e5e7e2f502de4f84b0b786e2a0307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 1499729642}
 --- !u!4 &2038864533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4662817043146792, guid: ffccce3dd313e3e48b0ae98d6bd1244e,

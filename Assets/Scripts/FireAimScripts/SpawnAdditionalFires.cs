@@ -53,26 +53,43 @@ namespace FireAimScripts
 
         private void SpawnNewFire()
         {
+            ScoreCounterInAimMode _scoreCounter = GetComponent<ScoreCounterInAimMode>();
             if (!IsNewSpawned && _timer.startTime * 60 - _timer.value < 40)
             {
                 if (!_isSecondStageSpawned && !_isThirdStageSpawned)
                 {
                     if (_timer.startTime * 60 - _timer.value < 40)
+                    {
                         SpawnAPlusBVariants();
+                        _scoreCounter.AmountOfA++;
+                        _scoreCounter.AmountOfB++;
+                    }
                     else if (_timer.startTime * 60 - _timer.value < 35)
+                    {
                         SpawnBVariant();
+                        _scoreCounter.AmountOfB++;
+                    }
                     else if (_timer.startTime * 60 - _timer.value < 25)
+                    {
                         SpawnCVariant(2);
+                        _scoreCounter.AmountOfC++;
+                    }
                 }
 
                 else if (!_isThirdStageSpawned && !_isCVariantPassed)
                 {
                     if (_timer.startTime - _timer.value < 40)
+                    {
                         SpawnAVariant();
+                        _scoreCounter.AmountOfA++;
+                    }
                     else if (_timer.startTime - _timer.value < 35)
+                    {
                         SpawnCVariant(3);
+                        _scoreCounter.AmountOfC++;
+                    }
                 }
-
+                
                 IsNewSpawned = true;
             }
         }

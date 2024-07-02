@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using Standard_Assets.ParticleSystems.Scripts;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace FireAimScripts
 {
@@ -12,11 +12,10 @@ namespace FireAimScripts
         private FireSplitter[] _fires;
         private AimFireSystemHandler _aimFireSystemHandler;
         private FireTypesGenerator _firesGenerator;
-        private Timer _timer;
+        [SerializeField ]private Timer timer;
 
         private void Start()
         {
-            _timer = GameObject.Find("Timer").GetComponent<Timer>();
             _firesGenerator = GetComponent<FireTypesGenerator>();
             _aimFireSystemHandler = GameObject.Find("FireSystem").GetComponent<AimFireSystemHandler>();
             _spawnPoints = new Transform[fireAvailableLocations.childCount];
@@ -34,7 +33,7 @@ namespace FireAimScripts
 
         private void SpawnNewFire()
         {
-            if (_timer.startTime * 60 - _timer.value < 40)
+            if (timer.startTime * 60 - timer.value < 40)
             {
                 for (int j = 0; j < amountOfFiresToSpawn; j++)
                 {
@@ -67,6 +66,7 @@ namespace FireAimScripts
             FireSplitter splitter = _fires[indexOfIre].GetComponent<FireSplitter>();
 
             Target target = _firesGenerator.GenerateTypeCTarget();
+            GetComponent<ScoreCounterInAimMode>().AmountOfC++;
             
             splitter.StartTimerValue = target!.TimerTime;
             if (isSecondFire)

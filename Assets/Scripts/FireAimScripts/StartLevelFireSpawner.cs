@@ -39,11 +39,17 @@ namespace FireAimScripts
             for (int i = 0; i < amountOfFiresOfTypeA + amountOfFiresOfTypeB; i++)
             {
                 if (indexOfFireType <= amountOfFiresOfTypeA)
+                {
                     SetFireSystem(i, 0);
-                 
+                    GetComponent<ScoreCounterInAimMode>().AmountOfA++;
+                }
+
                 else if (indexOfFireType > amountOfFiresOfTypeA &&
                          indexOfFireType <= amountOfFiresOfTypeA + amountOfFiresOfTypeB)
+                {
                     SetFireSystem(i, 1);
+                    GetComponent<ScoreCounterInAimMode>().AmountOfB++;
+                }
 
                 indexOfFireType++;
                 

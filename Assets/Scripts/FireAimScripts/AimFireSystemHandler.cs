@@ -106,6 +106,8 @@ namespace FireAimScripts
         
         private void Update()
         {
+            //Debug.LogWarning($"Amount ");
+            
             if ((_started && AmountOfActiveFires == 0 && !_ended) || LivesCount <= 0)
             /*if ((_started && AmountOfActiveFires == 0 && !_ended))*/
             {
@@ -115,7 +117,7 @@ namespace FireAimScripts
                     GameManager.Instance.EndScene(false);
                 else
                 {
-                    GetComponent<ScoreCounterInAimMode>().CountScore();
+                    GameObject.Find("Fires").GetComponent<ScoreCounterInAimMode>().CountScore();
                     GameManager.Instance.EndScene(true);
                 }
             }

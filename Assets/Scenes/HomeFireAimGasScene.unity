@@ -9172,7 +9172,7 @@ PrefabInstance:
     - target: {fileID: 3024375382603442984, guid: b4f1938bc2da09f41934623cffe624e6,
         type: 3}
       propertyPath: startTime
-      value: 0.75
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9185,6 +9185,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 778899252}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &778899254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3024375382603442984, guid: b4f1938bc2da09f41934623cffe624e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 778899252}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f0993ab99e4204881f444a0164fe73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &784094021 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4926793131823706693, guid: 08cfb41bfd66b1449a404f0907cc33e3,
@@ -10632,6 +10644,7 @@ GameObject:
   - component: {fileID: 1036378423}
   - component: {fileID: 1036378424}
   - component: {fileID: 1036378425}
+  - component: {fileID: 1036378426}
   m_Layer: 0
   m_Name: Fires
   m_TagString: Untagged
@@ -10687,6 +10700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireAvailableLocations: {fileID: 1800369741}
   amountOfFiresToSpawn: 2
+  timer: {fileID: 778899254}
 --- !u!114 &1036378423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10741,6 +10755,19 @@ MonoBehaviour:
     maxExtinguishingTime: 4
     minTimerTime: 20
     maxTimerTime: 23
+--- !u!114 &1036378426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036378420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09e5e7e2f502de4f84b0b786e2a0307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 447949452}
 --- !u!1 &1036946181
 GameObject:
   m_ObjectHideFlags: 0
@@ -18574,7 +18601,6 @@ GameObject:
   - component: {fileID: 1640926076}
   - component: {fileID: 1640926074}
   - component: {fileID: 1640926077}
-  - component: {fileID: 1640926078}
   m_Layer: 0
   m_Name: FireSystem
   m_TagString: Untagged
@@ -18735,19 +18761,6 @@ MonoBehaviour:
   sounds: {fileID: 2070341879}
   fake: 1
   startOver: 1
---- !u!114 &1640926078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1640926073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f09e5e7e2f502de4f84b0b786e2a0307, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 447949452}
 --- !u!1 &1642931804
 GameObject:
   m_ObjectHideFlags: 0
