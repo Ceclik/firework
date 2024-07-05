@@ -8,10 +8,10 @@ namespace UnityEngine.Rendering.PostProcessing
         public int size = 256;
         public float exposure = 0.12f;
 
-        ComputeBuffer m_Data;
-        int m_ThreadGroupSizeX;
-        int m_ThreadGroupSizeY;
-            
+        private ComputeBuffer m_Data;
+        private int m_ThreadGroupSizeX;
+        private int m_ThreadGroupSizeY;
+
         internal override void OnEnable()
         {
             m_ThreadGroupSizeX = 16;
@@ -38,9 +38,11 @@ namespace UnityEngine.Rendering.PostProcessing
             CheckOutput(size, size);
             exposure = Mathf.Max(0f, exposure);
 
-            int count = size * size;
+            var count = size * size;
             if (m_Data == null)
+            {
                 m_Data = new ComputeBuffer(count, sizeof(uint));
+            }
             else if (m_Data.count != count)
             {
                 m_Data.Release();
@@ -59,7 +61,7 @@ namespace UnityEngine.Rendering.PostProcessing
             );
 
             // Clear the buffer on every frame as we use it to accumulate values on every frame
-            int kernel = compute.FindKernel("KVectorscopeClear");
+            var kernel = compute.FindKernel("KVectorscopeClear");
             cmd.SetComputeBufferParam(compute, kernel, "_VectorscopeBuffer", m_Data);
             cmd.SetComputeVectorParam(compute, "_Params", parameters);
             cmd.DispatchCompute(compute, kernel,
@@ -72,7 +74,7 @@ namespace UnityEngine.Rendering.PostProcessing
             kernel = compute.FindKernel("KVectorscopeGather");
             cmd.SetComputeBufferParam(compute, kernel, "_VectorscopeBuffer", m_Data);
             cmd.SetComputeTextureParam(compute, kernel, "_Source", ShaderIDs.HalfResFinalCopy);
-            cmd.DispatchCompute(compute, kernel, 
+            cmd.DispatchCompute(compute, kernel,
                 Mathf.CeilToInt(parameters.x / m_ThreadGroupSizeX),
                 Mathf.CeilToInt(parameters.y / m_ThreadGroupSizeY),
                 1

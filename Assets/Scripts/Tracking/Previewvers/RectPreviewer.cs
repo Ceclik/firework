@@ -1,26 +1,32 @@
 ﻿using Assets.Scripts.Tracking.CamFilters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Tracking.Previewvers
 {
     public class RectPreviewer : Previewer
     {
-        DrawRect _rectFilter;
+        private DrawRect _rectFilter;
+        private Vector2Int leftBottom;
 
         private Vector2Int leftTop;
-        private Vector2Int leftBottom;
-        private Vector2Int rightTop;
         private Vector2Int rightBottom;
+        private Vector2Int rightTop;
+
+        private void Awake()
+        {
+            _rectFilter = new DrawRect();
+            _filters = new ICamFilter[]
+            {
+                new BgrToRgb(),
+                _rectFilter
+            };
+        }
 
         #region corners setup
+
         public Vector2Int LeftTop
         {
-            get { return leftTop; }
+            get => leftTop;
             set
             {
                 leftTop = value;
@@ -30,7 +36,7 @@ namespace Assets.Scripts.Tracking.Previewvers
 
         public Vector2Int LeftBottom
         {
-            get { return leftBottom; }
+            get => leftBottom;
             set
             {
                 leftBottom = value;
@@ -40,7 +46,7 @@ namespace Assets.Scripts.Tracking.Previewvers
 
         public Vector2Int RightTop
         {
-            get { return rightTop; }
+            get => rightTop;
             set
             {
                 rightTop = value;
@@ -50,7 +56,7 @@ namespace Assets.Scripts.Tracking.Previewvers
 
         public Vector2Int RightBottom
         {
-            get { return rightBottom; }
+            get => rightBottom;
             set
             {
                 rightBottom = value;
@@ -59,15 +65,5 @@ namespace Assets.Scripts.Tracking.Previewvers
         }
 
         #endregion
-
-        private void Awake()
-        {
-            _rectFilter = new DrawRect();
-            _filters = new ICamFilter[]
-                {
-                 new BgrToRgb(),
-                 _rectFilter
-                };
-        }
     }
 }

@@ -10,8 +10,8 @@
     #define HISTOGRAM_THREAD_X      16
     #define HISTOGRAM_THREAD_Y      8
 #else
-    #define HISTOGRAM_THREAD_X      16
-    #define HISTOGRAM_THREAD_Y      16
+#define HISTOGRAM_THREAD_X      16
+#define HISTOGRAM_THREAD_Y      16
 #endif
 
 float GetHistogramBinFromLuminance(float value, float2 scaleOffset)
@@ -44,7 +44,8 @@ float FindMaxHistogramValue(StructuredBuffer<uint> buffer)
     return float(maxValue);
 }
 
-void FilterLuminance(StructuredBuffer<uint> buffer, uint i, float maxHistogramValue, float2 scaleOffset, inout float4 filter)
+void FilterLuminance(StructuredBuffer<uint> buffer, uint i, float maxHistogramValue, float2 scaleOffset,
+                     inout float4 filter)
 {
     float binValue = GetBinValue(buffer, i, maxHistogramValue);
 

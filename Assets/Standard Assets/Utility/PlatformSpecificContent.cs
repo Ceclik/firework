@@ -1,4 +1,4 @@
-using System;
+using UnityEditor.Build;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Utility
 #endif
     public class PlatformSpecificContent : MonoBehaviour
 #if UNITY_EDITOR
-        , UnityEditor.Build.IActiveBuildTargetChanged
+        , IActiveBuildTargetChanged
 #endif
     {
         private enum BuildTargetGroup
@@ -32,13 +32,7 @@ namespace UnityStandardAssets.Utility
 		CheckEnableContent();
 	}
 #else
-        public int callbackOrder
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public int callbackOrder => 1;
 #endif
 
 #if UNITY_EDITOR
@@ -79,13 +73,9 @@ namespace UnityStandardAssets.Utility
 
 #if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_TIZEN)
             if (m_BuildTargetGroup == BuildTargetGroup.Mobile)
-            {
                 EnableContent(false);
-            }
             else
-            {
                 EnableContent(true);
-            }
 #endif
         }
 
@@ -93,29 +83,15 @@ namespace UnityStandardAssets.Utility
         private void EnableContent(bool enabled)
         {
             if (m_Content.Length > 0)
-            {
                 foreach (var g in m_Content)
-                {
                     if (g != null)
-                    {
                         g.SetActive(enabled);
-                    }
-                }
-            }
             if (m_ChildrenOfThisObject)
-            {
                 foreach (Transform t in transform)
-                {
                     t.gameObject.SetActive(enabled);
-                }
-            }
             if (m_MonoBehaviours.Length > 0)
-            {
                 foreach (var monoBehaviour in m_MonoBehaviours)
-                {
                     monoBehaviour.enabled = enabled;
-                }
-            }
         }
     }
 }

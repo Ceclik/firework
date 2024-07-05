@@ -9,71 +9,70 @@
 // #define ENABLE_PROFILING
 
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9
-
 #define UNITY_4
 
 #endif
 
 #if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-
 #define UNITY_PRE_5_3
 
 #endif
 
-using UnityEngine;
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     /// <summary>
-    /// Lightning bolt script
+    ///     Lightning bolt script
     /// </summary>
     public class LightningBoltScript : MonoBehaviour
     {
         #region Public variables
 
         [Header("Lightning General Properties")]
-        [Tooltip("The camera the lightning should be shown in. Defaults to the current camera, or the main camera if current camera is null. If you are using a different " +
+        [Tooltip(
+            "The camera the lightning should be shown in. Defaults to the current camera, or the main camera if current camera is null. If you are using a different " +
             "camera, you may want to put the lightning in it's own layer and cull that layer out of any other cameras.")]
         public Camera Camera;
 
-        [Tooltip("Type of camera mode. Auto detects the camera and creates appropriate lightning. Can be overriden to do something more specific regardless of camera.")]
+        [Tooltip(
+            "Type of camera mode. Auto detects the camera and creates appropriate lightning. Can be overriden to do something more specific regardless of camera.")]
         public CameraMode CameraMode = CameraMode.Auto;
+
         internal CameraMode calculatedCameraMode = CameraMode.Unknown;
 
-        [Tooltip("True if you are using world space coordinates for the lightning bolt, false if you are using coordinates relative to the parent game object.")]
+        [Tooltip(
+            "True if you are using world space coordinates for the lightning bolt, false if you are using coordinates relative to the parent game object.")]
         public bool UseWorldSpace = true;
 
-        [Tooltip("Whether to compensate for the parent transform. Default is false. If true, rotation, scale and position are altered by the parent transform. " +
+        [Tooltip(
+            "Whether to compensate for the parent transform. Default is false. If true, rotation, scale and position are altered by the parent transform. " +
             "Use this to fix scaling, rotation and other offset problems with the lightning.")]
-        public bool CompensateForParentTransform = false;
+        public bool CompensateForParentTransform;
 
-        [Tooltip("Lightning quality setting. This allows setting limits on generations, lights and shadow casting lights based on the global quality setting.")]
+        [Tooltip(
+            "Lightning quality setting. This allows setting limits on generations, lights and shadow casting lights based on the global quality setting.")]
         public LightningBoltQualitySetting QualitySetting = LightningBoltQualitySetting.UseScript;
 
-        [Tooltip("Whether to use multi-threaded generation of lightning. Lightning will be delayed by about 1 frame if this is turned on, but this can significantly improve performance. " +
+        [Tooltip(
+            "Whether to use multi-threaded generation of lightning. Lightning will be delayed by about 1 frame if this is turned on, but this can significantly improve performance. " +
             "Still experimental. Let me know if you see problems or crashes, and turn it off if you do. Changing this has no effect once Start is called.")]
         public bool MultiThreaded;
-         
-        [Tooltip("Soft particles factor. 0.01 to 3.0 are typical, 100.0 to disable.")]
-        [Range(0.01f, 100.0f)]
+
+        [Tooltip("Soft particles factor. 0.01 to 3.0 are typical, 100.0 to disable.")] [Range(0.01f, 100.0f)]
         public float SoftParticlesFactor = 3.0f;
 
-        [Header("Lightning Rendering Properties")]
-        [Tooltip("The render queue for the lightning. -1 for default.")]
+        [Header("Lightning Rendering Properties")] [Tooltip("The render queue for the lightning. -1 for default.")]
         public int RenderQueue = -1;
 
         //Edit tooltip in "LightningBoltEditor.cs" line 46
-        [HideInInspector]
-        public string SortLayerName;
+        [HideInInspector] public string SortLayerName;
 
         //Edit tooltip in "LightningBoltEditor.cs" line 50
-        [HideInInspector]
-        public int SortOrderInLayer;
+        [HideInInspector] public int SortOrderInLayer;
 
         [Tooltip("Lightning material for mesh renderer")]
         public Material LightningMaterialMesh;
@@ -87,60 +86,62 @@ namespace DigitalRuby.ThunderAndLightning
         [Tooltip("The texture to use for the lightning glow, or null for the material default texture.")]
         public Texture2D LightningGlowTexture;
 
-        [Tooltip("Particle system to play at the point of emission (start). 'Emission rate' particles will be emitted all at once.")]
+        [Tooltip(
+            "Particle system to play at the point of emission (start). 'Emission rate' particles will be emitted all at once.")]
         public ParticleSystem LightningOriginParticleSystem;
 
-        [Tooltip("Particle system to play at the point of impact (end). 'Emission rate' particles will be emitted all at once.")]
+        [Tooltip(
+            "Particle system to play at the point of impact (end). 'Emission rate' particles will be emitted all at once.")]
         public ParticleSystem LightningDestinationParticleSystem;
 
         [Tooltip("Tint color for the lightning")]
         public Color LightningTintColor = Color.white;
 
         [Tooltip("Tint color for the lightning glow")]
-        public Color GlowTintColor = new Color(0.1f, 0.2f, 1.0f, 1.0f);
+        public Color GlowTintColor = new(0.1f, 0.2f, 1.0f, 1.0f);
 
         [Tooltip("Source blend mode. Default is SrcAlpha.")]
-        public UnityEngine.Rendering.BlendMode SourceBlendMode = UnityEngine.Rendering.BlendMode.SrcAlpha;
+        public BlendMode SourceBlendMode = BlendMode.SrcAlpha;
 
-        [Tooltip("Destination blend mode. Default is One. For additive blend use One. For alpha blend use OneMinusSrcAlpha.")]
-        public UnityEngine.Rendering.BlendMode DestinationBlendMode = UnityEngine.Rendering.BlendMode.One;
+        [Tooltip(
+            "Destination blend mode. Default is One. For additive blend use One. For alpha blend use OneMinusSrcAlpha.")]
+        public BlendMode DestinationBlendMode = BlendMode.One;
 
         [Header("Lightning Movement Properties")]
-        [Tooltip("Jitter multiplier to randomize lightning size. Jitter depends on trunk width and will make the lightning move rapidly and jaggedly, " +
+        [Tooltip(
+            "Jitter multiplier to randomize lightning size. Jitter depends on trunk width and will make the lightning move rapidly and jaggedly, " +
             "giving a more lively and sometimes cartoony feel. Jitter may be shared with other bolts depending on materials. If you need different " +
             "jitters for the same material, create a second script object.")]
-        public float JitterMultiplier = 0.0f;
+        public float JitterMultiplier;
 
-        [Tooltip("Built in turbulance based on the direction of each segment. Small values usually work better, like 0.2.")]
-        public float Turbulence = 0.0f;
+        [Tooltip(
+            "Built in turbulance based on the direction of each segment. Small values usually work better, like 0.2.")]
+        public float Turbulence;
 
         [Tooltip("Global turbulence velocity for this script")]
         public Vector3 TurbulenceVelocity = Vector3.zero;
 
         /// <summary>
-        /// Fires when a light is added
+        ///     Fires when a light is added
         /// </summary>
         public Action<Light> LightAddedCallback { get; set; }
 
         /// <summary>
-        /// Fires when a light is removed
+        ///     Fires when a light is removed
         /// </summary>
         public Action<Light> LightRemovedCallback { get; set; }
 
         /// <summary>
-        /// Whether the script has active lightning bolts
+        ///     Whether the script has active lightning bolts
         /// </summary>
-        public bool HasActiveBolts
-        {
-            get { return (activeBolts.Count != 0); }
-        }
+        public bool HasActiveBolts => activeBolts.Count != 0;
 
         #endregion Public variables
 
         #region Public methods
 
         /// <summary>
-        /// Create a lightning bolt
+        ///     Create a lightning bolt
         /// </summary>
         /// <param name="p">Lightning bolt creation parameters</param>
         public virtual void CreateLightningBolt(LightningBoltParameters p)
@@ -149,14 +150,14 @@ namespace DigitalRuby.ThunderAndLightning
             {
                 UpdateTexture();
                 oneParameterArray[0] = p;
-                LightningBolt bolt = GetOrCreateLightningBolt();
-                LightningBoltDependencies dependencies = CreateLightningBoltDependencies(oneParameterArray);
+                var bolt = GetOrCreateLightningBolt();
+                var dependencies = CreateLightningBoltDependencies(oneParameterArray);
                 bolt.SetupLightningBolt(dependencies);
             }
         }
 
         /// <summary>
-        /// Create multiple lightning bolts, attempting to batch them into as few draw calls as possible
+        ///     Create multiple lightning bolts, attempting to batch them into as few draw calls as possible
         /// </summary>
         /// <param name="parameters">Lightning bolt creation parameters</param>
         public void CreateLightningBolts(ICollection<LightningBoltParameters> parameters)
@@ -164,8 +165,8 @@ namespace DigitalRuby.ThunderAndLightning
             if (parameters != null && parameters.Count != 0)
             {
                 UpdateTexture();
-                LightningBolt bolt = GetOrCreateLightningBolt();
-                LightningBoltDependencies dependencies = CreateLightningBoltDependencies(parameters);
+                var bolt = GetOrCreateLightningBolt();
+                var dependencies = CreateLightningBoltDependencies(parameters);
                 bolt.SetupLightningBolt(dependencies);
             }
         }
@@ -181,12 +182,10 @@ namespace DigitalRuby.ThunderAndLightning
 #if UNITY_EDITOR
 
             if (GetComponents<LightningBoltScript>().Length > 1)
-            {
-                Debug.LogError("Having more than one lightning script attached to one game object is not supported.");
-            }
+                UnityEngine.Debug.LogError(
+                    "Having more than one lightning script attached to one game object is not supported.");
 
 #endif
-
         }
 
         protected virtual void Start()
@@ -204,13 +203,10 @@ namespace DigitalRuby.ThunderAndLightning
 
         protected virtual void Update()
         {
-
 #if DEBUG
 
             if (LightningMaterialMesh == null || LightningMaterialMeshNoGlow == null)
-            {
-                Debug.LogError("Must assign all lightning materials");
-            }
+                UnityEngine.Debug.LogError("Must assign all lightning materials");
 
 #endif
 
@@ -230,14 +226,16 @@ namespace DigitalRuby.ThunderAndLightning
 
         protected LightningBoltParameters CreateParameters()
         {
-            LightningBoltParameters p = OnCreateParameters();
+            var p = OnCreateParameters();
             p.quality = QualitySetting;
             PopulateParameters(p);
 
             return p;
         }
 
-        protected virtual void PopulateParameters(LightningBoltParameters p) { }
+        protected virtual void PopulateParameters(LightningBoltParameters p)
+        {
+        }
 
         #endregion Protected methods
 
@@ -247,10 +245,10 @@ namespace DigitalRuby.ThunderAndLightning
         internal Material lightningMaterialMeshNoGlowInternal { get; private set; }
         private Texture2D lastLightningTexture;
         private Texture2D lastLightningGlowTexture;
-        private readonly List<LightningBolt> activeBolts = new List<LightningBolt>();
+        private readonly List<LightningBolt> activeBolts = new();
         private readonly LightningBoltParameters[] oneParameterArray = new LightningBoltParameters[1];
-        private readonly List<LightningBolt> lightningBoltCache = new List<LightningBolt>();
-        private readonly List<LightningBoltDependencies> dependenciesCache = new List<LightningBoltDependencies>();
+        private readonly List<LightningBolt> lightningBoltCache = new();
+        private readonly List<LightningBoltDependencies> dependenciesCache = new();
         private LightningThreadState threadState;
 
         // shader ids
@@ -269,7 +267,8 @@ namespace DigitalRuby.ThunderAndLightning
 
         #region Private methods
 
-        private LightningBoltDependencies CreateLightningBoltDependencies(ICollection<LightningBoltParameters> parameters)
+        private LightningBoltDependencies CreateLightningBoltDependencies(
+            ICollection<LightningBoltParameters> parameters)
         {
             LightningBoltDependencies d;
             if (dependenciesCache.Count == 0)
@@ -284,7 +283,7 @@ namespace DigitalRuby.ThunderAndLightning
             }
             else
             {
-                int i = dependenciesCache.Count - 1;
+                var i = dependenciesCache.Count - 1;
                 d = dependenciesCache[i];
                 dependenciesCache.RemoveAt(i);
             }
@@ -303,13 +302,9 @@ namespace DigitalRuby.ThunderAndLightning
 
             // clone parameters list if threading, otherwise just set it
             if (threadState == null)
-            {
                 d.Parameters = parameters;
-            }
             else
-            {
                 d.Parameters = new List<LightningBoltParameters>(parameters);
-            }
 
             return d;
         }
@@ -326,28 +321,21 @@ namespace DigitalRuby.ThunderAndLightning
 
         internal void OnLightAdded(Light l)
         {
-            if (LightAddedCallback != null)
-            {
-                LightAddedCallback(l);
-            }
+            if (LightAddedCallback != null) LightAddedCallback(l);
         }
 
         internal void OnLightRemoved(Light l)
         {
-            if (LightRemovedCallback != null)
-            {
-                LightRemovedCallback(l);
-            }
+            if (LightRemovedCallback != null) LightRemovedCallback(l);
         }
 
         internal void AddActiveBolt(LightningBolt bolt)
         {
-
 #if DEBUG
 
             if (bolt == null || activeBolts.Contains(bolt))
             {
-                Debug.LogError("Attempted to add null or duplicate active lightning bolt");
+                UnityEngine.Debug.LogError("Attempted to add null or duplicate active lightning bolt");
                 return;
             }
 
@@ -364,10 +352,7 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void UpdateShaderIds()
         {
-            if (shaderId_MainTex != int.MinValue)
-            {
-                return;
-            }
+            if (shaderId_MainTex != int.MinValue) return;
 
             shaderId_MainTex = Shader.PropertyToID("_MainTex");
             shaderId_GlowTex = Shader.PropertyToID("_GlowTex");
@@ -383,10 +368,7 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void UpdateMaterialsForLastTexture()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            if (!Application.isPlaying) return;
 
             calculatedCameraMode = CameraMode.Unknown;
             lightningMaterialMeshInternal = new Material(LightningMaterialMesh);
@@ -397,10 +379,9 @@ namespace DigitalRuby.ThunderAndLightning
                 lightningMaterialMeshInternal.SetTexture(shaderId_MainTex, LightningTexture);
                 lightningMaterialMeshNoGlowInternal.SetTexture(shaderId_MainTex, LightningTexture);
             }
+
             if (LightningGlowTexture != null)
-            {
                 lightningMaterialMeshInternal.SetTexture(shaderId_GlowTex, LightningGlowTexture);
-            }
 
             SetupMaterialCamera();
         }
@@ -412,6 +393,7 @@ namespace DigitalRuby.ThunderAndLightning
                 lastLightningTexture = LightningTexture;
                 UpdateMaterialsForLastTexture();
             }
+
             if (LightningGlowTexture != null && LightningGlowTexture != lastLightningGlowTexture)
             {
                 lastLightningGlowTexture = LightningGlowTexture;
@@ -472,13 +454,9 @@ namespace DigitalRuby.ThunderAndLightning
             if (CameraMode == CameraMode.Auto)
             {
                 if (Camera.orthographic)
-                {
                     SetMaterialOrthographicXY();
-                }
                 else
-                {
                     SetMaterialPerspective();
-                }
             }
             else if (CameraMode == CameraMode.Perspective)
             {
@@ -497,13 +475,9 @@ namespace DigitalRuby.ThunderAndLightning
         private void EnableKeyword(string keyword, bool enable, Material m)
         {
             if (enable)
-            {
                 m.EnableKeyword(keyword);
-            }
             else
-            {
                 m.DisableKeyword(keyword);
-            }
         }
 
         private void UpdateShaderParameters()
@@ -512,15 +486,18 @@ namespace DigitalRuby.ThunderAndLightning
             lightningMaterialMeshInternal.SetColor(shaderId_GlowTintColor, GlowTintColor);
             lightningMaterialMeshInternal.SetFloat(shaderId_JitterMultiplier, JitterMultiplier);
             lightningMaterialMeshInternal.SetFloat(shaderId_Turbulence, Turbulence * LightningBoltParameters.Scale);
-            lightningMaterialMeshInternal.SetVector(shaderId_TurbulenceVelocity, TurbulenceVelocity * LightningBoltParameters.Scale);
+            lightningMaterialMeshInternal.SetVector(shaderId_TurbulenceVelocity,
+                TurbulenceVelocity * LightningBoltParameters.Scale);
             lightningMaterialMeshInternal.SetInt(shaderId_SrcBlendMode, (int)SourceBlendMode);
             lightningMaterialMeshInternal.SetInt(shaderId_DstBlendMode, (int)DestinationBlendMode);
             lightningMaterialMeshInternal.renderQueue = RenderQueue;
             lightningMaterialMeshInternal.SetFloat(shaderId_InvFade, SoftParticlesFactor);
             lightningMaterialMeshNoGlowInternal.SetColor(shaderId_TintColor, LightningTintColor);
             lightningMaterialMeshNoGlowInternal.SetFloat(shaderId_JitterMultiplier, JitterMultiplier);
-            lightningMaterialMeshNoGlowInternal.SetFloat(shaderId_Turbulence, Turbulence * LightningBoltParameters.Scale);
-            lightningMaterialMeshNoGlowInternal.SetVector(shaderId_TurbulenceVelocity, TurbulenceVelocity * LightningBoltParameters.Scale);
+            lightningMaterialMeshNoGlowInternal.SetFloat(shaderId_Turbulence,
+                Turbulence * LightningBoltParameters.Scale);
+            lightningMaterialMeshNoGlowInternal.SetVector(shaderId_TurbulenceVelocity,
+                TurbulenceVelocity * LightningBoltParameters.Scale);
             lightningMaterialMeshNoGlowInternal.SetInt(shaderId_SrcBlendMode, (int)SourceBlendMode);
             lightningMaterialMeshNoGlowInternal.SetInt(shaderId_DstBlendMode, (int)DestinationBlendMode);
             lightningMaterialMeshNoGlowInternal.renderQueue = RenderQueue;
@@ -532,11 +509,12 @@ namespace DigitalRuby.ThunderAndLightning
         {
             if (CompensateForParentTransform)
             {
-                Transform p = transform.parent;
+                var p = transform.parent;
                 if (p != null)
                 {
                     transform.position = p.position;
-                    transform.localScale = new Vector3(1.0f / p.localScale.x, 1.0f / p.localScale.y, 1.0f / p.localScale.z);
+                    transform.localScale =
+                        new Vector3(1.0f / p.localScale.x, 1.0f / p.localScale.y, 1.0f / p.localScale.z);
                     transform.rotation = p.rotation;
                 }
             }
@@ -544,23 +522,22 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void UpdateCamera()
         {
-            Camera = (Camera == null ? (Camera.current == null ? Camera.main : Camera.current) : Camera);
+            Camera = Camera == null ? Camera.current == null ? Camera.main : Camera.current : Camera;
         }
 
         private LightningBolt GetOrCreateLightningBolt()
         {
             if (lightningBoltCache.Count == 0)
             {
-
 #if ENABLE_PROFILING
-
                 Debug.Log("Lightning cache miss");
 
 #endif
 
                 return new LightningBolt();
             }
-            LightningBolt b = lightningBoltCache[lightningBoltCache.Count - 1];
+
+            var b = lightningBoltCache[lightningBoltCache.Count - 1];
             lightningBoltCache.RemoveAt(lightningBoltCache.Count - 1);
 
             return b;
@@ -568,9 +545,9 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void UpdateActiveBolts()
         {
-            for (int i = activeBolts.Count - 1; i >= 0; i--)
+            for (var i = activeBolts.Count - 1; i >= 0; i--)
             {
-                LightningBolt bolt = activeBolts[i];
+                var bolt = activeBolts[i];
                 if (!bolt.Update())
                 {
                     // bolt is done, remove it and put back in cache
@@ -583,41 +560,23 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void OnApplicationQuit()
         {
-            if (threadState != null)
-            {
-                threadState.Running = false;
-            }
+            if (threadState != null) threadState.Running = false;
         }
 
         private void OnDestroy()
         {
-            if (threadState != null)
-            {
-                threadState.Running = false;
-            }
+            if (threadState != null) threadState.Running = false;
 
             // make sure active bolts are destroyed properly and cleaned up
-            foreach (LightningBolt bolt in activeBolts)
-            {
-                bolt.Cleanup(false);
-            }
+            foreach (var bolt in activeBolts) bolt.Cleanup(false);
             activeBolts.Clear();
 
             // cleanup cached lightning bolts
-            foreach (LightningBolt bolt in lightningBoltCache)
-            {
-                bolt.Cleanup(false);
-            }
+            foreach (var bolt in lightningBoltCache) bolt.Cleanup(false);
             lightningBoltCache.Clear();
 
-            if (lightningMaterialMeshInternal != null)
-            {
-                GameObject.Destroy(lightningMaterialMeshInternal);
-            }
-            if (lightningMaterialMeshNoGlowInternal != null)
-            {
-                GameObject.Destroy(lightningMaterialMeshNoGlowInternal);
-            }
+            if (lightningMaterialMeshInternal != null) Destroy(lightningMaterialMeshInternal);
+            if (lightningMaterialMeshNoGlowInternal != null) Destroy(lightningMaterialMeshNoGlowInternal);
         }
 
         #endregion Private methods

@@ -1,24 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LaserCalibrate : MonoBehaviour {
+public class LaserCalibrate : MonoBehaviour
+{
     public RawImage displayImage;
 
     private WebCam webCam;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    private void Start()
+    {
         webCam = WebCam.Instance;
-     //   displayImage.texture = webCam._webcam;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//if (displayImage.texture==null)
-  //      {
-  //          displayImage.texture = webCam._webcam;
-  //      }
-	}
+        //   displayImage.texture = webCam._webcam;
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        //if (displayImage.texture==null)
+        //      {
+        //          displayImage.texture = webCam._webcam;
+        //      }
+    }
 }

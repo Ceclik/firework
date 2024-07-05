@@ -2,7 +2,7 @@ using System;
 
 namespace UnityEngine.Rendering.PostProcessing
 {
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class MaxAttribute : Attribute
     {
         public readonly float max;

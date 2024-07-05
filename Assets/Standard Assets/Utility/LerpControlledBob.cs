@@ -10,7 +10,7 @@ namespace UnityStandardAssets.Utility
         public float BobDuration;
         public float BobAmount;
 
-        private float m_Offset = 0f;
+        private float m_Offset;
 
 
         // provides the offset that can be used
@@ -23,10 +23,10 @@ namespace UnityStandardAssets.Utility
         public IEnumerator DoBobCycle()
         {
             // make the camera move down slightly
-            float t = 0f;
+            var t = 0f;
             while (t < BobDuration)
             {
-                m_Offset = Mathf.Lerp(0f, BobAmount, t/BobDuration);
+                m_Offset = Mathf.Lerp(0f, BobAmount, t / BobDuration);
                 t += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
@@ -35,10 +35,11 @@ namespace UnityStandardAssets.Utility
             t = 0f;
             while (t < BobDuration)
             {
-                m_Offset = Mathf.Lerp(BobAmount, 0f, t/BobDuration);
+                m_Offset = Mathf.Lerp(BobAmount, 0f, t / BobDuration);
                 t += Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
+
             m_Offset = 0f;
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,19 +13,10 @@ namespace FireAimScripts
         private int _heartIndex = 2;
         private Image[] _hearts;
 
-        private void EmptyHeart()
-        {
-            if (_heartIndex >= 0)
-            {
-                _hearts[_heartIndex].sprite = emptyHeart;
-                _heartIndex--;
-            }
-        }
-
         private void Start()
         {
             _hearts = new Image[heartsParent.childCount];
-            for (int i = 0; i < heartsParent.childCount; i++)
+            for (var i = 0; i < heartsParent.childCount; i++)
                 _hearts[i] = heartsParent.GetChild(i).GetComponent<Image>();
 
             foreach (var splitter in splitterSystems)
@@ -37,6 +27,15 @@ namespace FireAimScripts
         {
             foreach (var splitter in splitterSystems)
                 splitter.OnFireSplitted -= EmptyHeart;
+        }
+
+        private void EmptyHeart()
+        {
+            if (_heartIndex >= 0)
+            {
+                _hearts[_heartIndex].sprite = emptyHeart;
+                _heartIndex--;
+            }
         }
     }
 }

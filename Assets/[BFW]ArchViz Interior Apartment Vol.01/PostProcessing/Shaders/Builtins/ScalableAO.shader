@@ -1,10 +1,8 @@
 Shader "Hidden/PostProcessing/ScalableAO"
 {
     HLSLINCLUDE
-
-        #pragma target 3.0
-        #pragma multi_compile __ UNITY_COLORSPACE_GAMMA
-
+    #pragma target 3.0
+    #pragma multi_compile __ UNITY_COLORSPACE_GAMMA
     ENDHLSL
 
     SubShader
@@ -15,14 +13,12 @@ Shader "Hidden/PostProcessing/ScalableAO"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragAO
-                #pragma multi_compile _ APPLY_FORWARD_FOG
-                #pragma multi_compile _ FOG_LINEAR FOG_EXP FOG_EXP2
-                #define SOURCE_DEPTH
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragAO
+            #pragma multi_compile _ APPLY_FORWARD_FOG
+            #pragma multi_compile _ FOG_LINEAR FOG_EXP FOG_EXP2
+            #define SOURCE_DEPTH
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -30,14 +26,12 @@ Shader "Hidden/PostProcessing/ScalableAO"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragAO
-                #pragma multi_compile _ APPLY_FORWARD_FOG
-                #pragma multi_compile _ FOG_LINEAR FOG_EXP FOG_EXP2
-                #define SOURCE_GBUFFER
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragAO
+            #pragma multi_compile _ APPLY_FORWARD_FOG
+            #pragma multi_compile _ FOG_LINEAR FOG_EXP FOG_EXP2
+            #define SOURCE_GBUFFER
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -45,14 +39,12 @@ Shader "Hidden/PostProcessing/ScalableAO"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragBlur
-                #define SOURCE_DEPTHNORMALS
-                #define BLUR_HORIZONTAL
-                #define BLUR_SAMPLE_CENTER_NORMAL
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragBlur
+            #define SOURCE_DEPTHNORMALS
+            #define BLUR_HORIZONTAL
+            #define BLUR_SAMPLE_CENTER_NORMAL
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -60,14 +52,12 @@ Shader "Hidden/PostProcessing/ScalableAO"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragBlur
-                #define SOURCE_GBUFFER
-                #define BLUR_HORIZONTAL
-                #define BLUR_SAMPLE_CENTER_NORMAL
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragBlur
+            #define SOURCE_GBUFFER
+            #define BLUR_HORIZONTAL
+            #define BLUR_SAMPLE_CENTER_NORMAL
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -75,12 +65,10 @@ Shader "Hidden/PostProcessing/ScalableAO"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragBlur
-                #define BLUR_VERTICAL
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragBlur
+            #define BLUR_VERTICAL
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -90,11 +78,9 @@ Shader "Hidden/PostProcessing/ScalableAO"
             Blend Zero OneMinusSrcColor, Zero OneMinusSrcAlpha
 
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragComposition
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragComposition
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -104,11 +90,9 @@ Shader "Hidden/PostProcessing/ScalableAO"
             Blend Zero OneMinusSrcColor, Zero OneMinusSrcAlpha
 
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragCompositionGBuffer
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragCompositionGBuffer
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
 
@@ -116,11 +100,9 @@ Shader "Hidden/PostProcessing/ScalableAO"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragDebugOverlay
-                #include "ScalableAO.hlsl"
-
+            #pragma vertex VertDefault
+            #pragma fragment FragDebugOverlay
+            #include "ScalableAO.hlsl"
             ENDHLSL
         }
     }

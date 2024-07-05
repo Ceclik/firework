@@ -1,27 +1,28 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-public class ViewTotalFPS : MonoBehaviour {
+public class ViewTotalFPS : MonoBehaviour
+{
+    public Text TheLable;
+    private float LastTime;
 
-	public Text TheLable;
-	float LastTime=0;
-	int TheFPS =0;
-	// Use this for initialization
-	void Start () {
-		TheLable.text="";
-	}
+    private int TheFPS;
 
-	// Update is called once per frame
-	void LateUpdate () {
-		TheFPS++;
-		if (Time.time>LastTime+1)
-		{
-			LastTime = Time.time;
-			TheLable.text="Total Frame:"+TheFPS;
-			TheFPS=0;
-		}
-	}
+    // Use this for initialization
+    private void Start()
+    {
+        TheLable.text = "";
+    }
 
-
+    // Update is called once per frame
+    private void LateUpdate()
+    {
+        TheFPS++;
+        if (Time.time > LastTime + 1)
+        {
+            LastTime = Time.time;
+            TheLable.text = "Total Frame:" + TheFPS;
+            TheFPS = 0;
+        }
+    }
 }

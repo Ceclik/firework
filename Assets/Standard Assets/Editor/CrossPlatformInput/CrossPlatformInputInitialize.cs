@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 
@@ -7,6 +6,21 @@ namespace UnityStandardAssets.CrossPlatformInput.Inspector
     [InitializeOnLoad]
     public class CrossPlatformInitialize
     {
+        private static readonly BuildTargetGroup[] buildTargetGroups =
+        {
+            BuildTargetGroup.Standalone,
+            BuildTargetGroup.Android,
+            BuildTargetGroup.iOS
+        };
+
+        private static readonly BuildTargetGroup[] mobileBuildTargetGroups =
+        {
+            BuildTargetGroup.Android,
+            BuildTargetGroup.iOS,
+            BuildTargetGroup.PSM,
+            BuildTargetGroup.Tizen,
+            BuildTargetGroup.WSA
+        };
         // Custom compiler defines:
         //
         // CROSS_PLATFORM_INPUT : denotes that cross platform input package exists, so that other packages can use their CrossPlatformInput functions.
@@ -32,18 +46,18 @@ namespace UnityStandardAssets.CrossPlatformInput.Inspector
             {
                 case BuildTarget.Android:
                 case BuildTarget.iOS:
-                case BuildTarget.PSM: 
-                case BuildTarget.Tizen: 
-                case BuildTarget.WSAPlayer: 
+                case BuildTarget.PSM:
+                case BuildTarget.Tizen:
+                case BuildTarget.WSAPlayer:
                     EditorUtility.DisplayDialog("Mobile Input",
-                                                "You have enabled Mobile Input. You'll need to use the Unity Remote app on a connected device to control your game in the Editor.",
-                                                "OK");
+                        "You have enabled Mobile Input. You'll need to use the Unity Remote app on a connected device to control your game in the Editor.",
+                        "OK");
                     break;
 
                 default:
                     EditorUtility.DisplayDialog("Mobile Input",
-                                                "You have enabled Mobile Input, but you have a non-mobile build target selected in your build settings. The mobile control rigs won't be active or visible on-screen until you switch the build target to a mobile platform.",
-                                                "OK");
+                        "You have enabled Mobile Input, but you have a non-mobile build target selected in your build settings. The mobile control rigs won't be active or visible on-screen until you switch the build target to a mobile platform.",
+                        "OK");
                     break;
             }
         }
@@ -66,8 +80,8 @@ namespace UnityStandardAssets.CrossPlatformInput.Inspector
                 case BuildTarget.Android:
                 case BuildTarget.iOS:
                     EditorUtility.DisplayDialog("Mobile Input",
-                                                "You have disabled Mobile Input. Mobile control rigs won't be visible, and the Cross Platform Input functions will always return standalone controls.",
-                                                "OK");
+                        "You have disabled Mobile Input. Mobile control rigs won't be visible, and the Cross Platform Input functions will always return standalone controls.",
+                        "OK");
                     break;
             }
         }
@@ -81,23 +95,6 @@ namespace UnityStandardAssets.CrossPlatformInput.Inspector
         }
 
 
-        private static BuildTargetGroup[] buildTargetGroups = new BuildTargetGroup[]
-            {
-                BuildTargetGroup.Standalone,
-                BuildTargetGroup.Android,
-                BuildTargetGroup.iOS
-            };
-
-        private static BuildTargetGroup[] mobileBuildTargetGroups = new BuildTargetGroup[]
-            {
-                BuildTargetGroup.Android,
-                BuildTargetGroup.iOS,
-                BuildTargetGroup.PSM, 
-                BuildTargetGroup.Tizen,
-                BuildTargetGroup.WSA 
-            };
-
-
         private static void SetEnabled(string defineName, bool enable, bool mobile)
         {
             //Debug.Log("setting "+defineName+" to "+enable);
@@ -106,24 +103,16 @@ namespace UnityStandardAssets.CrossPlatformInput.Inspector
                 var defines = GetDefinesList(group);
                 if (enable)
                 {
-                    if (defines.Contains(defineName))
-                    {
-                        return;
-                    }
+                    if (defines.Contains(defineName)) return;
                     defines.Add(defineName);
                 }
                 else
                 {
-                    if (!defines.Contains(defineName))
-                    {
-                        return;
-                    }
-                    while (defines.Contains(defineName))
-                    {
-                        defines.Remove(defineName);
-                    }
+                    if (!defines.Contains(defineName)) return;
+                    while (defines.Contains(defineName)) defines.Remove(defineName);
                 }
-                string definesString = string.Join(";", defines.ToArray());
+
+                var definesString = string.Join(";", defines.ToArray());
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(group, definesString);
             }
         }

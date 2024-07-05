@@ -6,29 +6,28 @@
 // 
 
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9
-
 #define UNITY_4
 
 #endif
 
-using UnityEngine;
-
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class LightningParticleSpellScript : LightningSpellScript, ICollisionHandler
     {
-        [Header("Particle system")]
-        public ParticleSystem ParticleSystem;
+        [Header("Particle system")] public ParticleSystem ParticleSystem;
 
-        [Tooltip("Particle system collision interval. This time must elapse before another collision will be registered.")]
-        public float CollisionInterval = 0.0f;
+        [Tooltip(
+            "Particle system collision interval. This time must elapse before another collision will be registered.")]
+        public float CollisionInterval;
+
         protected float collisionTimer;
 
 #if UNITY_4
-
 		/// <summary>
 		/// Particle system callback. Parameters are game object, collision events, and number of collision events
 		/// </summary>
@@ -38,22 +37,20 @@ namespace DigitalRuby.ThunderAndLightning
 #else
 
         /// <summary>
-        /// Particle system callback. Parameters are game object, collision events, and number of collision events
+        ///     Particle system callback. Parameters are game object, collision events, and number of collision events
         /// </summary>
-        [HideInInspector]
-        public System.Action<GameObject, List<ParticleCollisionEvent>, int> CollisionCallback;
+        [HideInInspector] public Action<GameObject, List<ParticleCollisionEvent>, int> CollisionCallback;
 
 #endif
 
-        [Header("Particle Light Properties")]
-        [Tooltip("Whether to enable point lights for the particles")]
+        [Header("Particle Light Properties")] [Tooltip("Whether to enable point lights for the particles")]
         public bool EnableParticleLights = true;
 
         [SingleLineClamp("Possible range for particle lights", 0.001, 100.0f)]
-        public RangeOfFloats ParticleLightRange = new RangeOfFloats { Minimum = 2.0f, Maximum = 5.0f };
+        public RangeOfFloats ParticleLightRange = new() { Minimum = 2.0f, Maximum = 5.0f };
 
         [SingleLineClamp("Possible range of intensity for particle lights", 0.01f, 8.0f)]
-        public RangeOfFloats ParticleLightIntensity = new RangeOfFloats { Minimum = 0.2f, Maximum = 0.3f };
+        public RangeOfFloats ParticleLightIntensity = new() { Minimum = 0.2f, Maximum = 0.3f };
 
         [Tooltip("Possible range of colors for particle lights")]
         public Color ParticleLightColor1 = Color.white;
@@ -64,17 +61,15 @@ namespace DigitalRuby.ThunderAndLightning
         [Tooltip("The culling mask for particle lights")]
         public LayerMask ParticleLightCullingMask = -1;
 
-        private ParticleSystem.Particle[] particles = new ParticleSystem.Particle[512];
-        private readonly List<GameObject> particleLights = new List<GameObject>();
+        private readonly ParticleSystem.Particle[] particles = new ParticleSystem.Particle[512];
+        private readonly List<GameObject> particleLights = new();
 
         private void PopulateParticleLight(Light src)
         {
-
 #if UNITY_4
-
 #else
 
-			src.bounceIntensity = 0.0f;
+            src.bounceIntensity = 0.0f;
 
 #endif
 
@@ -82,41 +77,36 @@ namespace DigitalRuby.ThunderAndLightning
             src.shadows = LightShadows.None;
             src.color = new Color
             (
-                UnityEngine.Random.Range(ParticleLightColor1.r, ParticleLightColor2.r),
-                UnityEngine.Random.Range(ParticleLightColor1.g, ParticleLightColor2.g),
-                UnityEngine.Random.Range(ParticleLightColor1.b, ParticleLightColor2.b),
+                Random.Range(ParticleLightColor1.r, ParticleLightColor2.r),
+                Random.Range(ParticleLightColor1.g, ParticleLightColor2.g),
+                Random.Range(ParticleLightColor1.b, ParticleLightColor2.b),
                 1.0f
             );
             src.cullingMask = ParticleLightCullingMask;
-            src.intensity = UnityEngine.Random.Range(ParticleLightIntensity.Minimum, ParticleLightIntensity.Maximum);
-            src.range = UnityEngine.Random.Range(ParticleLightRange.Minimum, ParticleLightRange.Maximum);
+            src.intensity = Random.Range(ParticleLightIntensity.Minimum, ParticleLightIntensity.Maximum);
+            src.range = Random.Range(ParticleLightRange.Minimum, ParticleLightRange.Maximum);
         }
 
         private void UpdateParticleLights()
         {
-            if (!EnableParticleLights)
-            {
-                return;
-            }
+            if (!EnableParticleLights) return;
 
-            int count = ParticleSystem.GetParticles(particles);
+            var count = ParticleSystem.GetParticles(particles);
             while (particleLights.Count < count)
             {
-                GameObject lightObj = new GameObject("LightningParticleSpellLight");
+                var lightObj = new GameObject("LightningParticleSpellLight");
                 lightObj.hideFlags = HideFlags.HideAndDontSave;
                 PopulateParticleLight(lightObj.AddComponent<Light>());
                 particleLights.Add(lightObj);
-
             }
+
             while (particleLights.Count > count)
             {
-                GameObject.Destroy(particleLights[particleLights.Count - 1]);
+                Destroy(particleLights[particleLights.Count - 1]);
                 particleLights.RemoveAt(particleLights.Count - 1);
             }
-            for (int i = 0; i < count; i++)
-            {
-                particleLights[i].transform.position = particles[i].position;
-            }
+
+            for (var i = 0; i < count; i++) particleLights[i].transform.position = particles[i].position;
         }
 
         private void UpdateParticleSystems()
@@ -126,6 +116,7 @@ namespace DigitalRuby.ThunderAndLightning
                 EmissionParticleSystem.transform.position = SpellStart.transform.position;
                 EmissionParticleSystem.transform.forward = Direction;
             }
+
             if (ParticleSystem != null)
             {
                 if (ParticleSystem.isPlaying)
@@ -133,6 +124,7 @@ namespace DigitalRuby.ThunderAndLightning
                     ParticleSystem.transform.position = SpellStart.transform.position;
                     ParticleSystem.transform.forward = Direction;
                 }
+
                 UpdateParticleLights();
             }
         }
@@ -141,10 +133,7 @@ namespace DigitalRuby.ThunderAndLightning
         {
             base.OnDestroy();
 
-            foreach (GameObject l in particleLights)
-            {
-                GameObject.Destroy(l);
-            }
+            foreach (var l in particleLights) Destroy(l);
         }
 
         protected override void Start()
@@ -171,14 +160,10 @@ namespace DigitalRuby.ThunderAndLightning
 
         protected override void OnStopSpell()
         {
-            if (ParticleSystem != null)
-            {
-                ParticleSystem.Stop();
-            }
+            if (ParticleSystem != null) ParticleSystem.Stop();
         }
 
 #if UNITY_4
-
 		/// <summary>
 		/// Handle a particle collision. Derived classes can override to provide custom logic.
 		/// </summary>
@@ -202,26 +187,23 @@ namespace DigitalRuby.ThunderAndLightning
 #else
 
         /// <summary>
-        /// Handle a particle collision. Derived classes can override to provide custom logic.
+        ///     Handle a particle collision. Derived classes can override to provide custom logic.
         /// </summary>
         /// <param name="obj">Game Object</param>
         /// <param name="collisions">Collisions</param>
         /// <param name="collisionCount">Number of collisions</param>
-        void ICollisionHandler.HandleCollision(GameObject obj, List<ParticleCollisionEvent> collisions, int collisionCount)
+        void ICollisionHandler.HandleCollision(GameObject obj, List<ParticleCollisionEvent> collisions,
+            int collisionCount)
         {
             if (collisionTimer <= 0.0f)
             {
                 collisionTimer = CollisionInterval;
                 PlayCollisionSound(collisions[0].intersection);
                 ApplyCollisionForce(collisions[0].intersection);
-                if (CollisionCallback != null)
-                {
-                    CollisionCallback(obj, collisions, collisionCount);
-                }
+                if (CollisionCallback != null) CollisionCallback(obj, collisions, collisionCount);
             }
         }
 
 #endif
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.IO.Ports;
 using FireAimScripts;
 using FireSeekingScripts;
 using UnityEngine;
@@ -7,72 +8,74 @@ using UnityEngine;
 
 public class DangerObjectHandler : MonoBehaviour
 {
-
     [SerializeField] private AimFireSystemHandler aimFireSystem;
     [SerializeField] private SeekingFireSystemHandler seekingFireSystem;
     [SerializeField] private bool keyControlled;
     [SerializeField] private ParticleSystem gas;
     [SerializeField] private AudioSource kettleSound;
+    private Animator _anim;
+    private AudioSource _audio;
 
     private Collider _collider;
-    private Animator _anim;
-    private bool _falled;
-    private AudioSource _audio;
     private SerialPort _com;
+    private bool _falled;
 
     private bool _gasCrane;
-    
+
     private void Start()
     {
         _anim = GetComponent<Animator>();
         _collider = GetComponentInChildren<BoxCollider>();
         _audio = GetComponent<AudioSource>();
-        _com = new SerialPort(GameManager.Instance.comPort, 9600);
-        Debug.Log("Opening com port:" + GameManager.Instance.comPort);
+        _com = new SerialPort(GameManager.Instance.ComPort, 9600);
+        UnityEngine.Debug.Log("Opening com port:" + GameManager.Instance.ComPort);
         _com.Open();
         _com.ReadTimeout = 1;
-        if (_com.IsOpen) Debug.Log("COM PORT OPENED");
+        if (_com.IsOpen) UnityEngine.Debug.Log("COM PORT OPENED");
         _gasCrane = gas != null;
     }
-    
+
     private void Update()
     {
         if (!_falled && GameManager.Instance.IsFireStarted)
         {
-            int fromCom = int.MaxValue;
-            int comExpected = _gasCrane ? 3 : 2;
+            var fromCom = int.MaxValue;
+            var comExpected = _gasCrane ? 3 : 2;
             if (_com.IsOpen)
-            {
                 try
                 {
                     fromCom = _com.ReadByte();
-                    Debug.Log("Serial:" + fromCom);
+                    UnityEngine.Debug.Log("Serial:" + fromCom);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
-                    // ignored
+                    UnityEngine.Debug.LogError(e);
                 }
-            }
 
             if (!keyControlled)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 if (_collider.Raycast(ray, out _, Mathf.Infinity))
                     OutletFall();
             }
             else if (Input.GetKeyDown(KeyCode.Return) || fromCom == comExpected)
+            {
                 OutletFall();
+            }
         }
+    }
+
+    private void OnDisable()
+    {
+        _com.Close();
+        _com.Dispose();
     }
 
     private void OutletFall()
     {
         _audio.Play();
-        if (kettleSound != null)
-        {
-            StartCoroutine(AudioFade.FadeOut(kettleSound, 1f));
-        }
+        if (kettleSound != null) StartCoroutine(AudioFade.FadeOut(kettleSound, 1f));
 
         if (GameManager.Instance.FireAimGameMode)
         {
@@ -84,14 +87,9 @@ public class DangerObjectHandler : MonoBehaviour
             seekingFireSystem.fake = false;
             seekingFireSystem.startOver = false;
         }
-        
+
         _anim.SetTrigger("Fall");
         _falled = true;
-        if (gas != null) { gas.Stop(); }
-    }
-    private void OnDisable()
-    {
-        _com.Close();
-        _com.Dispose();
+        if (gas != null) gas.Stop();
     }
 }

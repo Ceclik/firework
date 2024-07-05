@@ -18,7 +18,7 @@ float4 _DepthOfFieldTex_TexelSize;
 
 // Camera parameters
 float _Distance;
-float _LensCoeff;  // f^2 / (N * (S1 - f) * film_width * 2)
+float _LensCoeff; // f^2 / (N * (S1 - f) * film_width * 2)
 float _MaxCoC;
 float _RcpMaxCoC;
 float _RcpAspect;
@@ -27,7 +27,8 @@ half3 _TaaParams; // Jitter.x, Jitter.y, Blending
 // CoC calculation
 half4 FragCoC(VaryingsDefault i) : SV_Target
 {
-    float depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoordStereo));
+    float depth = LinearEyeDepth(
+        SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoordStereo));
     half coc = (depth - _Distance) * _LensCoeff / max(depth, 1e-5);
     return saturate(coc * 0.5 * _RcpMaxCoC + 0.5);
 }
@@ -37,7 +38,7 @@ half4 FragTempFilter(VaryingsDefault i) : SV_Target
 {
     float3 uvOffs = _MainTex_TexelSize.xyy * float3(1.0, 1.0, 0.0);
 
-#if UNITY_GATHER_SUPPORTED
+    #if UNITY_GATHER_SUPPORTED
 
     half4 cocTL = GATHER_RED_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord - uvOffs.xy * 0.5)); // top-left
     half4 cocBR = GATHER_RED_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord + uvOffs.xy * 0.5)); // bottom-right
@@ -46,28 +47,35 @@ half4 FragTempFilter(VaryingsDefault i) : SV_Target
     half coc3 = cocBR.x; // bottom
     half coc4 = cocBR.z; // right
 
-#else
+    #else
 
-    half coc1 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord - uvOffs.xz)).r; // top
-    half coc2 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord - uvOffs.zy)).r; // left
-    half coc3 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord + uvOffs.zy)).r; // bottom
-    half coc4 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord + uvOffs.xz)).r; // right
+    half coc1 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord - uvOffs.xz)).r;
+    // top
+    half coc2 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord - uvOffs.zy)).r;
+    // left
+    half coc3 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord + uvOffs.zy)).r;
+    // bottom
+    half coc4 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord + uvOffs.xz)).r;
+    // right
 
-#endif
+    #endif
 
     // Dejittered center sample.
-    half coc0 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, UnityStereoTransformScreenSpaceTex(i.texcoord - _TaaParams.xy)).r;
+    half coc0 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex,
+                                 UnityStereoTransformScreenSpaceTex(i.texcoord - _TaaParams.xy)).r;
 
     // CoC dilation: determine the closest point in the four neighbors
     float3 closest = float3(0.0, 0.0, coc0);
     closest = coc1 < closest.z ? float3(-uvOffs.xz, coc1) : closest;
     closest = coc2 < closest.z ? float3(-uvOffs.zy, coc2) : closest;
-    closest = coc3 < closest.z ? float3( uvOffs.zy, coc3) : closest;
-    closest = coc4 < closest.z ? float3( uvOffs.xz, coc4) : closest;
+    closest = coc3 < closest.z ? float3(uvOffs.zy, coc3) : closest;
+    closest = coc4 < closest.z ? float3(uvOffs.xz, coc4) : closest;
 
     // Sample the history buffer with the motion vector at the closest point
-    float2 motion = SAMPLE_TEXTURE2D(_CameraMotionVectorsTexture, sampler_CameraMotionVectorsTexture, UnityStereoTransformScreenSpaceTex(i.texcoord + closest.xy)).xy;
-    half cocHis = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord - motion)).r;
+    float2 motion = SAMPLE_TEXTURE2D(_CameraMotionVectorsTexture, sampler_CameraMotionVectorsTexture,
+                                     UnityStereoTransformScreenSpaceTex(i.texcoord + closest.xy)).xy;
+    half cocHis = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,
+                                   UnityStereoTransformScreenSpaceTex(i.texcoord - motion)).r;
 
     // Neighborhood clamping
     half cocMin = closest.z;
@@ -81,7 +89,7 @@ half4 FragTempFilter(VaryingsDefault i) : SV_Target
 // Prefilter: downsampling and premultiplying
 half4 FragPrefilter(VaryingsDefault i) : SV_Target
 {
-#if UNITY_GATHER_SUPPORTED
+    #if UNITY_GATHER_SUPPORTED
 
     // Sample source colors
     half4 c_r = GATHER_RED_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoordStereo);
@@ -100,7 +108,7 @@ half4 FragPrefilter(VaryingsDefault i) : SV_Target
     half coc2 = cocs.z;
     half coc3 = cocs.w;
 
-#else
+    #else
 
     float3 duv = _MainTex_TexelSize.xyx * float3(0.5, 0.5, -0.5);
     float2 uv0 = UnityStereoTransformScreenSpaceTex(i.texcoord - duv.xy);
@@ -120,7 +128,7 @@ half4 FragPrefilter(VaryingsDefault i) : SV_Target
     half coc2 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, uv2).r * 2.0 - 1.0;
     half coc3 = SAMPLE_TEXTURE2D(_CoCTex, sampler_CoCTex, uv3).r * 2.0 - 1.0;
 
-#endif
+    #endif
 
     // Apply CoC and luma weights to reduce bleeding and flickering
     float w0 = abs(coc0) / (Max3(c0.r, c0.g, c0.b) + 1.0);
@@ -140,9 +148,9 @@ half4 FragPrefilter(VaryingsDefault i) : SV_Target
     // Premultiply CoC again
     avg *= smoothstep(0, _MainTex_TexelSize.y * 2, abs(coc));
 
-#if defined(UNITY_COLORSPACE_GAMMA)
+    #if defined(UNITY_COLORSPACE_GAMMA)
     avg = SRGBToLinear(avg);
-#endif
+    #endif
 
     return half4(avg, coc);
 }
@@ -171,7 +179,7 @@ half4 FragBlur(VaryingsDefault i) : SV_Target
         // Compare the CoC to the sample distance.
         // Add a small margin to smooth out.
         const half margin = _MainTex_TexelSize.y * 2;
-        half bgWeight = saturate((bgCoC   - dist + margin) / margin);
+        half bgWeight = saturate((bgCoC - dist + margin) / margin);
         half fgWeight = saturate((-samp.a - dist + margin) / margin);
 
         // Cut influence from focused areas because they're darkened by CoC
@@ -207,7 +215,7 @@ half4 FragPostBlur(VaryingsDefault i) : SV_Target
     // 9 tap tent filter with 4 bilinear samples
     const float4 duv = _MainTex_TexelSize.xyxy * float4(0.5, 0.5, -0.5, 0);
     half4 acc;
-    acc  = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord - duv.xy));
+    acc = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord - duv.xy));
     acc += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord - duv.zy));
     acc += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + duv.zy));
     acc += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + duv.xy));
@@ -226,18 +234,18 @@ half4 FragCombine(VaryingsDefault i) : SV_Target
 
     half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoordStereo);
 
-#if defined(UNITY_COLORSPACE_GAMMA)
+    #if defined(UNITY_COLORSPACE_GAMMA)
     color = SRGBToLinear(color);
-#endif
+    #endif
 
     half alpha = Max3(dof.r, dof.g, dof.b);
 
     // lerp(lerp(color, dof, ffa), dof, dof.a)
     color = lerp(color, float4(dof.rgb, alpha), ffa + dof.a - ffa * dof.a);
 
-#if defined(UNITY_COLORSPACE_GAMMA)
+    #if defined(UNITY_COLORSPACE_GAMMA)
     color = LinearToSRGB(color);
-#endif
+    #endif
 
     return color;
 }
@@ -249,7 +257,8 @@ half4 FragDebugOverlay(VaryingsDefault i) : SV_Target
 
     // Calculate the radiuses of CoC.
     half4 src = SAMPLE_TEXTURE2D(_DepthOfFieldTex, sampler_DepthOfFieldTex, i.texcoordStereo);
-    float depth = LinearEyeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoordStereo));
+    float depth = LinearEyeDepth(
+        SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, sampler_CameraDepthTexture, i.texcoordStereo));
     float coc = (depth - _Distance) * _LensCoeff / depth;
     coc *= 80;
 
@@ -261,9 +270,9 @@ half4 FragDebugOverlay(VaryingsDefault i) : SV_Target
     rgb *= Luminance(color) + 0.5;
 
     // Gamma correction
-#if !UNITY_COLORSPACE_GAMMA
+    #if !UNITY_COLORSPACE_GAMMA
     rgb = SRGBToLinear(rgb);
-#endif
+    #endif
 
     return half4(rgb, 1.0);
 }

@@ -1,37 +1,42 @@
 ﻿using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : Component
+namespace Utils
 {
-    private static T instance;
-    public static T Instance
+    public class Singleton<T> : MonoBehaviour where T : Component
     {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<T>();
-                if (instance == null)
-                {
-                    GameObject obj = new GameObject();
-                    obj.name = typeof(T).Name;
-                    instance = obj.AddComponent<T>();
-                }
-            }
-            return instance;
-        }
-    }
+        private static T _instance;
 
-    public virtual void Awake()
-    {
-        Debug.Log("singleton awake"+this.name);
-        if (instance == null)
+        public static T Instance
         {
-            instance = this as T;
-            DontDestroyOnLoad(this.gameObject);
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = FindFirstObjectByType<T>();
+                    if (_instance == null)
+                    {
+                        var obj = new GameObject();
+                        obj.name = typeof(T).Name;
+                        _instance = obj.AddComponent<T>();
+                    }
+                }
+
+                return _instance;
+            }
         }
-        else
+
+        public virtual void Awake()
         {
-            Destroy(gameObject);
+            UnityEngine.Debug.Log("singleton awake" + name);
+            if (_instance == null)
+            {
+                _instance = this as T;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

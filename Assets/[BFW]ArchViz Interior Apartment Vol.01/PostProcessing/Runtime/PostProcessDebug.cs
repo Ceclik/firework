@@ -1,3 +1,5 @@
+using UnityEditor;
+
 namespace UnityEngine.Rendering.PostProcessing
 {
     [ExecuteInEditMode]
@@ -5,7 +7,7 @@ namespace UnityEngine.Rendering.PostProcessing
     public sealed class PostProcessDebug : MonoBehaviour
     {
         public PostProcessLayer postProcessLayer;
-        PostProcessLayer m_PreviousPostProcessLayer;
+        private PostProcessLayer m_PreviousPostProcessLayer;
 
         public bool lightMeter;
         public bool histogram;
@@ -14,10 +16,10 @@ namespace UnityEngine.Rendering.PostProcessing
 
         public DebugOverlay debugOverlay = DebugOverlay.None;
 
-        Camera m_CurrentCamera;
-        CommandBuffer m_CmdAfterEverything;
-        
-        void OnEnable()
+        private Camera m_CurrentCamera;
+        private CommandBuffer m_CmdAfterEverything;
+
+        private void OnEnable()
         {
             m_CmdAfterEverything = new CommandBuffer { name = "Post-processing Debug Overlay" };
 
@@ -25,14 +27,14 @@ namespace UnityEngine.Rendering.PostProcessing
             // Update is only called on object change when ExecuteInEditMode is set, but we need it
             // to execute on every frame no matter what when not in play mode, so we'll use the
             // editor update loop instead...
-            UnityEditor.EditorApplication.update += UpdateStates;
+            EditorApplication.update += UpdateStates;
 #endif
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.update -= UpdateStates;
+            EditorApplication.update -= UpdateStates;
 #endif
 
             if (m_CurrentCamera != null)
@@ -41,7 +43,7 @@ namespace UnityEngine.Rendering.PostProcessing
             m_CurrentCamera = null;
             m_PreviousPostProcessLayer = null;
         }
-        
+
 #if !UNITY_EDITOR
         void Update()
         {
@@ -49,12 +51,12 @@ namespace UnityEngine.Rendering.PostProcessing
         }
 #endif
 
-        void Reset()
+        private void Reset()
         {
             postProcessLayer = GetComponent<PostProcessLayer>();
         }
 
-        void UpdateStates()
+        private void UpdateStates()
         {
             if (m_PreviousPostProcessLayer != postProcessLayer)
             {
@@ -88,17 +90,19 @@ namespace UnityEngine.Rendering.PostProcessing
             postProcessLayer.debugLayer.RequestDebugOverlay(debugOverlay);
         }
 
-        void OnPostRender()
+        private void OnPostRender()
         {
             m_CmdAfterEverything.Clear();
 
-            if (postProcessLayer == null || !postProcessLayer.enabled || !postProcessLayer.debugLayer.debugOverlayActive)
+            if (postProcessLayer == null || !postProcessLayer.enabled ||
+                !postProcessLayer.debugLayer.debugOverlayActive)
                 return;
 
-            m_CmdAfterEverything.Blit(postProcessLayer.debugLayer.debugOverlayTarget, BuiltinRenderTextureType.CameraTarget);
+            m_CmdAfterEverything.Blit(postProcessLayer.debugLayer.debugOverlayTarget,
+                BuiltinRenderTextureType.CameraTarget);
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             if (postProcessLayer == null || !postProcessLayer.enabled)
                 return;
@@ -111,7 +115,7 @@ namespace UnityEngine.Rendering.PostProcessing
             DrawMonitor(ref rect, debugLayer.vectorscope, vectorscope);
         }
 
-        void DrawMonitor(ref Rect rect, Monitor monitor, bool enabled)
+        private void DrawMonitor(ref Rect rect, Monitor monitor, bool enabled)
         {
             if (!enabled || monitor.output == null)
                 return;

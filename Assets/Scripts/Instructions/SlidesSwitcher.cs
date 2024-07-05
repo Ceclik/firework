@@ -11,19 +11,19 @@ namespace Instructions
         [SerializeField] private ActionCompleteHandler[] completeHandlers;
 
         [Space(10)] [SerializeField] private float switchDelay;
-        
+
 
         [Space(20)] [SerializeField] private bool forMainMenu;
         [SerializeField] private float startAfterNotActiveTime;
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private SplashingImagesAfterStartShower logosShower;
 
-        private int _index = 0;
-        private float _waitingTime;
-
         private Vector3 _currentPointerPosition;
 
+        private int _index;
+
         private bool _isShowingSlides;
+        private float _waitingTime;
 
         private void Start()
         {
@@ -31,16 +31,32 @@ namespace Instructions
             foreach (var handler in completeHandlers)
                 handler.OnActionComplete += SwitchSlide;
 
-            if(forMainMenu)
+            if (forMainMenu)
                 logosShower.OnLogosFinish += StartShowingSlides;
+        }
+
+        private void Update()
+        {
+            if (forMainMenu && mainMenu.activeSelf &&
+                _currentPointerPosition != MyInput.Instance.CursorImage.transform.position)
+            {
+                _currentPointerPosition = MyInput.Instance.CursorImage.transform.position;
+                _waitingTime = 0;
+            }
+
+            if (forMainMenu && mainMenu.activeSelf &&
+                _currentPointerPosition == MyInput.Instance.CursorImage.transform.position)
+                _waitingTime += Time.deltaTime;
+
+            if (_waitingTime >= startAfterNotActiveTime && !_isShowingSlides) StartShowingSlides();
         }
 
         private void OnDestroy()
         {
             foreach (var handler in completeHandlers)
                 handler.OnActionComplete -= SwitchSlide;
-            
-            if(forMainMenu)
+
+            if (forMainMenu)
                 logosShower.OnLogosFinish -= StartShowingSlides;
         }
 
@@ -62,33 +78,14 @@ namespace Instructions
                 mainMenu.SetActive(true);
             }
             else
+            {
                 instructionSlides[_index].SetActive(true);
-        }
-
-        private void Update()
-        {
-            if (forMainMenu && mainMenu.activeSelf &&
-                _currentPointerPosition != MyInput.Instance.CursorImage.transform.position)
-            {
-                _currentPointerPosition = MyInput.Instance.CursorImage.transform.position;
-                _waitingTime = 0;
-            }
-
-            if (forMainMenu && mainMenu.activeSelf &&
-                _currentPointerPosition == MyInput.Instance.CursorImage.transform.position)
-            {
-                _waitingTime += Time.deltaTime;
-            }
-
-            if (_waitingTime >= startAfterNotActiveTime && !_isShowingSlides)
-            {
-                StartShowingSlides();
             }
         }
 
         private void StartShowingSlides()
         {
-            if(forMainMenu)
+            if (forMainMenu)
                 mainMenu.SetActive(false);
             _isShowingSlides = true;
             instructionSlides[_index].SetActive(true);

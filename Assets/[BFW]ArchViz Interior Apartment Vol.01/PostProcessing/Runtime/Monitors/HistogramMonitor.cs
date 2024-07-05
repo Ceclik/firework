@@ -17,10 +17,10 @@ namespace UnityEngine.Rendering.PostProcessing
         public int height = 256;
         public Channel channel = Channel.Master;
 
-        ComputeBuffer m_Data;
-        int m_NumBins;
-        int m_ThreadGroupSizeX;
-        int m_ThreadGroupSizeY;
+        private ComputeBuffer m_Data;
+        private int m_NumBins;
+        private int m_ThreadGroupSizeX;
+        private int m_ThreadGroupSizeY;
 
         internal override void OnEnable()
         {
@@ -65,7 +65,7 @@ namespace UnityEngine.Rendering.PostProcessing
             cmd.BeginSample("GammaHistogram");
 
             // Clear the buffer on every frame as we use it to accumulate values on every frame
-            int kernel = compute.FindKernel("KHistogramClear");
+            var kernel = compute.FindKernel("KHistogramClear");
             cmd.SetComputeBufferParam(compute, kernel, "_HistogramBuffer", m_Data);
             cmd.DispatchCompute(compute, kernel, Mathf.CeilToInt(m_NumBins / (float)m_ThreadGroupSizeX), 1, 1);
 
@@ -81,7 +81,7 @@ namespace UnityEngine.Rendering.PostProcessing
             cmd.SetComputeVectorParam(compute, "_Params", parameters);
             cmd.SetComputeTextureParam(compute, kernel, "_Source", ShaderIDs.HalfResFinalCopy);
             cmd.SetComputeBufferParam(compute, kernel, "_HistogramBuffer", m_Data);
-            cmd.DispatchCompute(compute, kernel, 
+            cmd.DispatchCompute(compute, kernel,
                 Mathf.CeilToInt(parameters.x / m_ThreadGroupSizeX),
                 Mathf.CeilToInt(parameters.y / m_ThreadGroupSizeY),
                 1

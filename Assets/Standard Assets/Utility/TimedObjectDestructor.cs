@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace UnityStandardAssets.Utility
@@ -6,7 +5,7 @@ namespace UnityStandardAssets.Utility
     public class TimedObjectDestructor : MonoBehaviour
     {
         [SerializeField] private float m_TimeOut = 1.0f;
-        [SerializeField] private bool m_DetachChildren = false;
+        [SerializeField] private bool m_DetachChildren;
 
 
         private void Awake()
@@ -17,10 +16,7 @@ namespace UnityStandardAssets.Utility
 
         private void DestroyNow()
         {
-            if (m_DetachChildren)
-            {
-                transform.DetachChildren();
-            }
+            if (m_DetachChildren) transform.DetachChildren();
             DestroyObject(gameObject);
         }
     }

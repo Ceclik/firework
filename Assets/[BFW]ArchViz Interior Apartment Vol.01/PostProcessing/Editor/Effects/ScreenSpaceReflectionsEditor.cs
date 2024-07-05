@@ -6,13 +6,13 @@ namespace UnityEditor.Rendering.PostProcessing
     [PostProcessEditor(typeof(ScreenSpaceReflections))]
     public sealed class ScreenSpaceReflectionsEditor : PostProcessEffectEditor<ScreenSpaceReflections>
     {
-        SerializedParameterOverride m_Preset;
-        SerializedParameterOverride m_MaximumIterationCount;
-        SerializedParameterOverride m_Thickness;
-        SerializedParameterOverride m_Resolution;
-        SerializedParameterOverride m_MaximumMarchDistance;
-        SerializedParameterOverride m_DistanceFade;
-        SerializedParameterOverride m_Vignette;
+        private SerializedParameterOverride m_DistanceFade;
+        private SerializedParameterOverride m_MaximumIterationCount;
+        private SerializedParameterOverride m_MaximumMarchDistance;
+        private SerializedParameterOverride m_Preset;
+        private SerializedParameterOverride m_Resolution;
+        private SerializedParameterOverride m_Thickness;
+        private SerializedParameterOverride m_Vignette;
 
         public override void OnEnable()
         {
@@ -29,12 +29,14 @@ namespace UnityEditor.Rendering.PostProcessing
         {
             if (RuntimeUtilities.scriptableRenderPipelineActive)
             {
-                EditorGUILayout.HelpBox("This effect doesn't work with scriptable render pipelines yet.", MessageType.Warning);
+                EditorGUILayout.HelpBox("This effect doesn't work with scriptable render pipelines yet.",
+                    MessageType.Warning);
                 return;
             }
 
             if (Camera.main != null && Camera.main.actualRenderingPath != RenderingPath.DeferredShading)
-                EditorGUILayout.HelpBox("This effect only works with the deferred rendering path.", MessageType.Warning);
+                EditorGUILayout.HelpBox("This effect only works with the deferred rendering path.",
+                    MessageType.Warning);
 
             if (!SystemInfo.supportsComputeShaders)
                 EditorGUILayout.HelpBox("This effect requires compute shader support.", MessageType.Warning);

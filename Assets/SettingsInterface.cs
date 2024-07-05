@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Settings;
+﻿using Settings;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,37 +7,40 @@ using UnityEngine.UI;
 
 public class SettingsInterface : MonoBehaviour
 {
-    LevelSettings[] settings = new LevelSettings[4];
     public LevelGroup[] groups;
 
-    public void DisableAllSliders() //there are no reason to leave these methods public if they don't used anywhere else 
-    {
-        foreach (var slider in GetComponentsInParent<Slider>())
-        {
-            slider.gameObject.SetActive(false);
-        }
-    }
-    public void EnableAllSliders()
-    {
-        foreach (var slider in GetComponentsInParent<Slider>())
-        {
-            slider.gameObject.SetActive(true);
-        }
-    }
+    private readonly LevelSettings[] settings = new LevelSettings[4];
+
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         DisableAllSliders();
         GameManager.Instance.InitSettings();
-        for (int i = 0; i < settings.Length; i++)
+        for (var i = 0; i < settings.Length; i++)
         {
             settings[i] = GameManager.Instance.GetLevelSettings(i);
-            Debug.Log("timer settings:" + settings[i].deadTimer);
+            UnityEngine.Debug.Log("timer settings:" + settings[i].deadTimer);
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S)) Calibrate();
+    }
+
+    public void
+        DisableAllSliders() //there are no reason to leave these methods public if they don't used anywhere else 
+    {
+        foreach (var slider in GetComponentsInParent<Slider>()) slider.gameObject.SetActive(false);
+    }
+
+    public void EnableAllSliders()
+    {
+        foreach (var slider in GetComponentsInParent<Slider>()) slider.gameObject.SetActive(true);
+    }
+
     public void SaveSettings() //onClick methods should be named like for example OnSaveSettingsButtonClick() to show
-                               //what method is doing in its name
+        //what method is doing in its name
     {
         /*for (int i = 0; i < groups.Length; i++)
         {
@@ -62,13 +63,5 @@ public class SettingsInterface : MonoBehaviour
     public void Calibrate()
     {
         GameManager.Instance.SceneCalibrate();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.S))
-        {
-            Calibrate();
-        }
     }
 }

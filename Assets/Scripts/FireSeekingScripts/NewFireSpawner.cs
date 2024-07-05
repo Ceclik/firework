@@ -10,7 +10,7 @@ namespace FireSeekingScripts
         [SerializeField] private Transform fireComplexParent;
 
         public bool IsSpawned { get; set; }
-        
+
         public GameObject SpawnNewFireComplex()
         {
             GameObject newFireComplex = null;
@@ -21,10 +21,9 @@ namespace FireSeekingScripts
                 var particle = newFireComplex.GetComponent<ParticleSystemMultiplier>();
                 particle.multiplier = 0.4f;
                 IsSpawned = true;
-                
             }
+
             return newFireComplex;
         }
-        
     }
 }

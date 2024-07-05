@@ -12,6 +12,7 @@ namespace UnityEditor.Rendering.PostProcessing
             return true;
         }
 
-        public abstract bool OnGUI(SerializedProperty property, SerializedProperty overrideState, GUIContent title, Attribute attribute);
+        public abstract bool OnGUI(SerializedProperty property, SerializedProperty overrideState, GUIContent title,
+            Attribute attribute);
     }
 }

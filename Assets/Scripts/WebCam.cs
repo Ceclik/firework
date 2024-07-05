@@ -1,26 +1,26 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 
-public class WebCam : Singleton<WebCam> {
+public class WebCam : Singleton<WebCam>
+{
+    [HideInInspector] public int camWidth = 800;
 
-    [HideInInspector]    
-    public int camWidth = 800;
     public int camHeight = 600;
-    public bool CameraFlip = false;
+    public bool CameraFlip;
     public WebCamTexture _webcam;
 
     //private WebCamTexture _webcam;
 
-    IEnumerator Start()
+    private IEnumerator Start()
     {
-        Debug.Log("webcam start");
+        UnityEngine.Debug.Log("webcam start");
         yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
         if (Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
-            WebCamDevice[] devices = WebCamTexture.devices;
-            for (int i = 0; i < devices.Length; i++)
-                Debug.Log(devices[i].name);
+            var devices = WebCamTexture.devices;
+            for (var i = 0; i < devices.Length; i++)
+                UnityEngine.Debug.Log(devices[i].name);
 
             _webcam = new WebCamTexture
             {
@@ -30,13 +30,13 @@ public class WebCam : Singleton<WebCam> {
             _webcam.deviceName = devices[devices.Length - 1].name;
             _webcam.Play();
             camWidth = _webcam.width;
-            camHeight = _webcam.height;            
+            camHeight = _webcam.height;
         }
     }
 
-    
-    void Update () {
-        
+
+    private void Update()
+    {
     }
 
     public void Restart()
@@ -51,17 +51,17 @@ public class WebCam : Singleton<WebCam> {
 
     public Vector2Int ScreenToCam(Vector2Int screenCoords)
     {
-        float x = (float)screenCoords.x / ((float)Screen.width / (float)camWidth);
-        float y = (float)screenCoords.y / ((float)Screen.height / (float)camHeight);
+        var x = screenCoords.x / (Screen.width / (float)camWidth);
+        var y = screenCoords.y / (Screen.height / (float)camHeight);
         return new Vector2Int((int)x, (int)y);
     }
 
     public Vector2Int CamToScreen(Vector2Int camCoords)
     {
-        float coofX = ((float)Screen.width / (float)camWidth);
-        float coofY = ((float)Screen.height / (float)camHeight);
-        int x = (int)((float)camCoords.x * coofX);
-        int y = (int)((float)camCoords.y * coofY);
+        var coofX = Screen.width / (float)camWidth;
+        var coofY = Screen.height / (float)camHeight;
+        var x = (int)(camCoords.x * coofX);
+        var y = (int)(camCoords.y * coofY);
         return new Vector2Int(x, y);
     }
 }

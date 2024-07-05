@@ -5,20 +5,18 @@ namespace Instructions
 {
     public class CountDownTimer : MonoBehaviour
     {
+        public delegate void StartLevel();
+
         [SerializeField] private float countdownValue;
         [SerializeField] private float increasingNumberDuration;
         [SerializeField] private GameObject instructionsGameObject;
-        private TextMeshProUGUI _timerText;
-        private float _scaleTimer;
-        private RectTransform _rectTransform;
-
-        private Vector3 _startScale;
         private Vector3 _finishScale;
         private bool _isBelowOne;
-        
-        public delegate void StartLevel();
+        private RectTransform _rectTransform;
+        private float _scaleTimer;
 
-        public event StartLevel OnCountdownPassed;
+        private Vector3 _startScale;
+        private TextMeshProUGUI _timerText;
 
         private void Start()
         {
@@ -35,16 +33,16 @@ namespace Instructions
                 _isBelowOne = true;
                 _timerText.text = "Туши!";
             }
-            
+
             _scaleTimer += Time.deltaTime;
             countdownValue -= Time.deltaTime;
-            if(!_isBelowOne)
+            if (!_isBelowOne)
                 _timerText.text = ((int)countdownValue).ToString();
 
             if (_scaleTimer < 1 && _rectTransform.localScale.x < 2.0f)
                 _rectTransform.localScale = Vector3.Lerp(_rectTransform.localScale, _finishScale,
                     _scaleTimer / increasingNumberDuration);
-            
+
             if (_scaleTimer >= 1)
             {
                 _scaleTimer = 0;
@@ -56,7 +54,8 @@ namespace Instructions
                 OnCountdownPassed?.Invoke();
                 instructionsGameObject.SetActive(false);
             }
-            
         }
+
+        public event StartLevel OnCountdownPassed;
     }
 }

@@ -6,19 +6,16 @@
 // 
 
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9
-
 #define UNITY_4
 
 #endif
 
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DigitalRuby.ThunderAndLightning
 {
-
 #if UNITY_4
-
 	public interface ICollisionHandler
 	{
 		void HandleCollision(GameObject obj, ParticleSystem.CollisionEvent[] positions, int collisionCount);
@@ -34,10 +31,10 @@ namespace DigitalRuby.ThunderAndLightning
 #endif
 
     /// <summary>
-    /// This script simply allows forwarding collision events for the objects that collide with something. This
-    /// allows you to have a generic collision handler and attach a collision forwarder to your child objects.
-    /// In addition, you also get access to the game object that is colliding, along with the object being
-    /// collided into, which is helpful.
+    ///     This script simply allows forwarding collision events for the objects that collide with something. This
+    ///     allows you to have a generic collision handler and attach a collision forwarder to your child objects.
+    ///     In addition, you also get access to the game object that is colliding, along with the object being
+    ///     collided into, which is helpful.
     /// </summary>
     [RequireComponent(typeof(ParticleSystem))]
     public class LightningParticleCollisionForwarder : MonoBehaviour
@@ -48,12 +45,11 @@ namespace DigitalRuby.ThunderAndLightning
         private ParticleSystem _particleSystem;
 
 #if UNITY_4
-
 		private ParticleSystem.CollisionEvent[] collisionEvents = new ParticleSystem.CollisionEvent[16];
 
 #else
 
-        private readonly List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
+        private readonly List<ParticleCollisionEvent> collisionEvents = new();
 
 #endif
 
@@ -64,12 +60,10 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void OnParticleCollision(GameObject other)
         {
-            ICollisionHandler i = CollisionHandler as ICollisionHandler;
+            var i = CollisionHandler as ICollisionHandler;
             if (i != null)
             {
-
 #if UNITY_4
-
 				int numCollisionEvents = _particleSystem.GetCollisionEvents(other, collisionEvents);
 				if (numCollisionEvents != 0)
 				{
@@ -78,14 +72,10 @@ namespace DigitalRuby.ThunderAndLightning
 
 #else
 
-                int numCollisionEvents = _particleSystem.GetCollisionEvents(other, collisionEvents);
-                if (numCollisionEvents != 0)
-                {
-                    i.HandleCollision(other, collisionEvents, numCollisionEvents);
-                }
+                var numCollisionEvents = _particleSystem.GetCollisionEvents(other, collisionEvents);
+                if (numCollisionEvents != 0) i.HandleCollision(other, collisionEvents, numCollisionEvents);
 
 #endif
-
             }
         }
 

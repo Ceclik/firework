@@ -1,10 +1,8 @@
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9
-
 #define UNITY_4
 
 #endif
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,16 +13,16 @@ namespace UnityStandardAssets.Water
     public class PlanarReflection : MonoBehaviour
     {
         public LayerMask reflectionMask;
-        public bool reflectSkybox = false;
+        public bool reflectSkybox;
         public Color clearColor = Color.grey;
-        public String reflectionSampler = "_ReflectionTex";
+        public string reflectionSampler = "_ReflectionTex";
         public float clipPlaneOffset = 0.07F;
+        private Dictionary<Camera, bool> m_HelperCameras;
 
 
-        Vector3 m_Oldpos;
-        Camera m_ReflectionCamera;
-        Material m_SharedMaterial;
-        Dictionary<Camera, bool> m_HelperCameras;
+        private Vector3 m_Oldpos;
+        private Camera m_ReflectionCamera;
+        private Material m_SharedMaterial;
 
 
         public void Start()
@@ -33,96 +31,9 @@ namespace UnityStandardAssets.Water
         }
 
 
-        Camera CreateReflectionCameraFor(Camera cam)
-        {
-            String reflName = gameObject.name + "Reflection" + cam.name;
-            GameObject go = GameObject.Find(reflName);
-
-            if (!go)
-            {
-                go = new GameObject(reflName, typeof(Camera));
-            }
-            if (!go.GetComponent(typeof(Camera)))
-            {
-                go.AddComponent(typeof(Camera));
-            }
-            Camera reflectCamera = go.GetComponent<Camera>();
-
-            reflectCamera.backgroundColor = clearColor;
-            reflectCamera.clearFlags = reflectSkybox ? CameraClearFlags.Skybox : CameraClearFlags.SolidColor;
-
-            SetStandardCameraParameter(reflectCamera, reflectionMask);
-
-            if (!reflectCamera.targetTexture)
-            {
-                reflectCamera.targetTexture = CreateTextureFor(cam);
-            }
-
-            return reflectCamera;
-        }
-
-
-        void SetStandardCameraParameter(Camera cam, LayerMask mask)
-        {
-            cam.cullingMask = mask & ~(1 << LayerMask.NameToLayer("Water"));
-            cam.backgroundColor = Color.black;
-            cam.enabled = false;
-        }
-
-
-        RenderTexture CreateTextureFor(Camera cam)
-        {
-            RenderTexture rt = new RenderTexture(Mathf.FloorToInt(cam.pixelWidth * 0.5F),
-                Mathf.FloorToInt(cam.pixelHeight * 0.5F), 24);
-            rt.hideFlags = HideFlags.DontSave;
-            return rt;
-        }
-
-
-        public void RenderHelpCameras(Camera currentCam)
-        {
-            if (null == m_HelperCameras)
-            {
-                m_HelperCameras = new Dictionary<Camera, bool>();
-            }
-
-            if (!m_HelperCameras.ContainsKey(currentCam))
-            {
-                m_HelperCameras.Add(currentCam, false);
-            }
-            if (m_HelperCameras[currentCam])
-            {
-                return;
-            }
-
-            if (!m_ReflectionCamera)
-            {
-                m_ReflectionCamera = CreateReflectionCameraFor(currentCam);
-            }
-
-            RenderReflectionFor(currentCam, m_ReflectionCamera);
-
-            m_HelperCameras[currentCam] = true;
-        }
-
-
         public void LateUpdate()
         {
-            if (null != m_HelperCameras)
-            {
-                m_HelperCameras.Clear();
-            }
-        }
-
-
-        public void WaterTileBeingRendered(Transform tr, Camera currentCam)
-        {
-            RenderHelpCameras(currentCam);
-
-            if (m_ReflectionCamera && m_SharedMaterial)
-            {
-                m_SharedMaterial.SetTexture(reflectionSampler, m_ReflectionCamera.targetTexture);
-            }
+            if (null != m_HelperCameras) m_HelperCameras.Clear();
         }
 
 
@@ -140,17 +51,72 @@ namespace UnityStandardAssets.Water
         }
 
 
-        void RenderReflectionFor(Camera cam, Camera reflectCamera)
+        private Camera CreateReflectionCameraFor(Camera cam)
         {
-            if (!reflectCamera)
-            {
-                return;
-            }
+            var reflName = gameObject.name + "Reflection" + cam.name;
+            var go = GameObject.Find(reflName);
 
-            if (m_SharedMaterial && !m_SharedMaterial.HasProperty(reflectionSampler))
-            {
-                return;
-            }
+            if (!go) go = new GameObject(reflName, typeof(Camera));
+            if (!go.GetComponent(typeof(Camera))) go.AddComponent(typeof(Camera));
+            var reflectCamera = go.GetComponent<Camera>();
+
+            reflectCamera.backgroundColor = clearColor;
+            reflectCamera.clearFlags = reflectSkybox ? CameraClearFlags.Skybox : CameraClearFlags.SolidColor;
+
+            SetStandardCameraParameter(reflectCamera, reflectionMask);
+
+            if (!reflectCamera.targetTexture) reflectCamera.targetTexture = CreateTextureFor(cam);
+
+            return reflectCamera;
+        }
+
+
+        private void SetStandardCameraParameter(Camera cam, LayerMask mask)
+        {
+            cam.cullingMask = mask & ~(1 << LayerMask.NameToLayer("Water"));
+            cam.backgroundColor = Color.black;
+            cam.enabled = false;
+        }
+
+
+        private RenderTexture CreateTextureFor(Camera cam)
+        {
+            var rt = new RenderTexture(Mathf.FloorToInt(cam.pixelWidth * 0.5F),
+                Mathf.FloorToInt(cam.pixelHeight * 0.5F), 24);
+            rt.hideFlags = HideFlags.DontSave;
+            return rt;
+        }
+
+
+        public void RenderHelpCameras(Camera currentCam)
+        {
+            if (null == m_HelperCameras) m_HelperCameras = new Dictionary<Camera, bool>();
+
+            if (!m_HelperCameras.ContainsKey(currentCam)) m_HelperCameras.Add(currentCam, false);
+            if (m_HelperCameras[currentCam]) return;
+
+            if (!m_ReflectionCamera) m_ReflectionCamera = CreateReflectionCameraFor(currentCam);
+
+            RenderReflectionFor(currentCam, m_ReflectionCamera);
+
+            m_HelperCameras[currentCam] = true;
+        }
+
+
+        public void WaterTileBeingRendered(Transform tr, Camera currentCam)
+        {
+            RenderHelpCameras(currentCam);
+
+            if (m_ReflectionCamera && m_SharedMaterial)
+                m_SharedMaterial.SetTexture(reflectionSampler, m_ReflectionCamera.targetTexture);
+        }
+
+
+        private void RenderReflectionFor(Camera cam, Camera reflectCamera)
+        {
+            if (!reflectCamera) return;
+
+            if (m_SharedMaterial && !m_SharedMaterial.HasProperty(reflectionSampler)) return;
 
             reflectCamera.cullingMask = reflectionMask & ~(1 << LayerMask.NameToLayer("Water"));
 
@@ -159,70 +125,62 @@ namespace UnityStandardAssets.Water
             reflectCamera.backgroundColor = clearColor;
             reflectCamera.clearFlags = reflectSkybox ? CameraClearFlags.Skybox : CameraClearFlags.SolidColor;
             if (reflectSkybox)
-            {
                 if (cam.gameObject.GetComponent(typeof(Skybox)))
                 {
-                    Skybox sb = (Skybox)reflectCamera.gameObject.GetComponent(typeof(Skybox));
-                    if (!sb)
-                    {
-                        sb = (Skybox)reflectCamera.gameObject.AddComponent(typeof(Skybox));
-                    }
+                    var sb = (Skybox)reflectCamera.gameObject.GetComponent(typeof(Skybox));
+                    if (!sb) sb = (Skybox)reflectCamera.gameObject.AddComponent(typeof(Skybox));
                     sb.material = ((Skybox)cam.GetComponent(typeof(Skybox))).material;
                 }
-            }
 
 #if UNITY_4
-
 #else
 
             GL.invertCulling = true;
 
 #endif
 
-            Transform reflectiveSurface = transform; //waterHeight;
+            var reflectiveSurface = transform; //waterHeight;
 
-            Vector3 eulerA = cam.transform.eulerAngles;
+            var eulerA = cam.transform.eulerAngles;
 
             reflectCamera.transform.eulerAngles = new Vector3(-eulerA.x, eulerA.y, eulerA.z);
             reflectCamera.transform.position = cam.transform.position;
 
-            Vector3 pos = reflectiveSurface.transform.position;
+            var pos = reflectiveSurface.transform.position;
             pos.y = reflectiveSurface.position.y;
-            Vector3 normal = reflectiveSurface.transform.up;
-            float d = -Vector3.Dot(normal, pos) - clipPlaneOffset;
-            Vector4 reflectionPlane = new Vector4(normal.x, normal.y, normal.z, d);
+            var normal = reflectiveSurface.transform.up;
+            var d = -Vector3.Dot(normal, pos) - clipPlaneOffset;
+            var reflectionPlane = new Vector4(normal.x, normal.y, normal.z, d);
 
-            Matrix4x4 reflection = Matrix4x4.zero;
+            var reflection = Matrix4x4.zero;
             reflection = CalculateReflectionMatrix(reflection, reflectionPlane);
             m_Oldpos = cam.transform.position;
-            Vector3 newpos = reflection.MultiplyPoint(m_Oldpos);
+            var newpos = reflection.MultiplyPoint(m_Oldpos);
 
             reflectCamera.worldToCameraMatrix = cam.worldToCameraMatrix * reflection;
 
-            Vector4 clipPlane = CameraSpacePlane(reflectCamera, pos, normal, 1.0f);
+            var clipPlane = CameraSpacePlane(reflectCamera, pos, normal, 1.0f);
 
-            Matrix4x4 projection = cam.projectionMatrix;
+            var projection = cam.projectionMatrix;
             projection = CalculateObliqueMatrix(projection, clipPlane);
             reflectCamera.projectionMatrix = projection;
 
             reflectCamera.transform.position = newpos;
-            Vector3 euler = cam.transform.eulerAngles;
+            var euler = cam.transform.eulerAngles;
             reflectCamera.transform.eulerAngles = new Vector3(-euler.x, euler.y, euler.z);
 
             reflectCamera.Render();
 
-#if UNITY_4            
-
+#if UNITY_4
 #else
 
             GL.invertCulling = false;
 
 #endif
-
         }
 
 
-        void SaneCameraSettings(Camera helperCam)
+        private void SaneCameraSettings(Camera helperCam)
         {
             helperCam.depthTextureMode = DepthTextureMode.None;
             helperCam.backgroundColor = Color.black;
@@ -231,15 +189,15 @@ namespace UnityStandardAssets.Water
         }
 
 
-        static Matrix4x4 CalculateObliqueMatrix(Matrix4x4 projection, Vector4 clipPlane)
+        private static Matrix4x4 CalculateObliqueMatrix(Matrix4x4 projection, Vector4 clipPlane)
         {
-            Vector4 q = projection.inverse * new Vector4(
+            var q = projection.inverse * new Vector4(
                 Sgn(clipPlane.x),
                 Sgn(clipPlane.y),
                 1.0F,
                 1.0F
-                );
-            Vector4 c = clipPlane * (2.0F / (Vector4.Dot(clipPlane, q)));
+            );
+            var c = clipPlane * (2.0F / Vector4.Dot(clipPlane, q));
             // third row = clip plane - fourth row
             projection[2] = c.x - projection[3];
             projection[6] = c.y - projection[7];
@@ -250,22 +208,22 @@ namespace UnityStandardAssets.Water
         }
 
 
-        static Matrix4x4 CalculateReflectionMatrix(Matrix4x4 reflectionMat, Vector4 plane)
+        private static Matrix4x4 CalculateReflectionMatrix(Matrix4x4 reflectionMat, Vector4 plane)
         {
-            reflectionMat.m00 = (1.0F - 2.0F * plane[0] * plane[0]);
-            reflectionMat.m01 = (- 2.0F * plane[0] * plane[1]);
-            reflectionMat.m02 = (- 2.0F * plane[0] * plane[2]);
-            reflectionMat.m03 = (- 2.0F * plane[3] * plane[0]);
+            reflectionMat.m00 = 1.0F - 2.0F * plane[0] * plane[0];
+            reflectionMat.m01 = -2.0F * plane[0] * plane[1];
+            reflectionMat.m02 = -2.0F * plane[0] * plane[2];
+            reflectionMat.m03 = -2.0F * plane[3] * plane[0];
 
-            reflectionMat.m10 = (- 2.0F * plane[1] * plane[0]);
-            reflectionMat.m11 = (1.0F - 2.0F * plane[1] * plane[1]);
-            reflectionMat.m12 = (- 2.0F * plane[1] * plane[2]);
-            reflectionMat.m13 = (- 2.0F * plane[3] * plane[1]);
+            reflectionMat.m10 = -2.0F * plane[1] * plane[0];
+            reflectionMat.m11 = 1.0F - 2.0F * plane[1] * plane[1];
+            reflectionMat.m12 = -2.0F * plane[1] * plane[2];
+            reflectionMat.m13 = -2.0F * plane[3] * plane[1];
 
-            reflectionMat.m20 = (- 2.0F * plane[2] * plane[0]);
-            reflectionMat.m21 = (- 2.0F * plane[2] * plane[1]);
-            reflectionMat.m22 = (1.0F - 2.0F * plane[2] * plane[2]);
-            reflectionMat.m23 = (- 2.0F * plane[3] * plane[2]);
+            reflectionMat.m20 = -2.0F * plane[2] * plane[0];
+            reflectionMat.m21 = -2.0F * plane[2] * plane[1];
+            reflectionMat.m22 = 1.0F - 2.0F * plane[2] * plane[2];
+            reflectionMat.m23 = -2.0F * plane[3] * plane[2];
 
             reflectionMat.m30 = 0.0F;
             reflectionMat.m31 = 0.0F;
@@ -276,26 +234,20 @@ namespace UnityStandardAssets.Water
         }
 
 
-        static float Sgn(float a)
+        private static float Sgn(float a)
         {
-            if (a > 0.0F)
-            {
-                return 1.0F;
-            }
-            if (a < 0.0F)
-            {
-                return -1.0F;
-            }
+            if (a > 0.0F) return 1.0F;
+            if (a < 0.0F) return -1.0F;
             return 0.0F;
         }
 
 
-        Vector4 CameraSpacePlane(Camera cam, Vector3 pos, Vector3 normal, float sideSign)
+        private Vector4 CameraSpacePlane(Camera cam, Vector3 pos, Vector3 normal, float sideSign)
         {
-            Vector3 offsetPos = pos + normal * clipPlaneOffset;
-            Matrix4x4 m = cam.worldToCameraMatrix;
-            Vector3 cpos = m.MultiplyPoint(offsetPos);
-            Vector3 cnormal = m.MultiplyVector(normal).normalized * sideSign;
+            var offsetPos = pos + normal * clipPlaneOffset;
+            var m = cam.worldToCameraMatrix;
+            var cpos = m.MultiplyPoint(offsetPos);
+            var cnormal = m.MultiplyVector(normal).normalized * sideSign;
 
             return new Vector4(cnormal.x, cnormal.y, cnormal.z, -Vector3.Dot(cpos, cnormal));
         }

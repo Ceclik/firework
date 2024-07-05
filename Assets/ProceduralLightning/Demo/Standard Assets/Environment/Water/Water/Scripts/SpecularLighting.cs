@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace UnityStandardAssets.Water
@@ -19,15 +18,10 @@ namespace UnityStandardAssets.Water
 
         public void Update()
         {
-            if (!m_WaterBase)
-            {
-                m_WaterBase = (WaterBase)gameObject.GetComponent(typeof(WaterBase));
-            }
+            if (!m_WaterBase) m_WaterBase = (WaterBase)gameObject.GetComponent(typeof(WaterBase));
 
             if (specularLight && m_WaterBase.sharedMaterial)
-            {
                 m_WaterBase.sharedMaterial.SetVector("_WorldLightDir", specularLight.transform.forward);
-            }
         }
     }
 }

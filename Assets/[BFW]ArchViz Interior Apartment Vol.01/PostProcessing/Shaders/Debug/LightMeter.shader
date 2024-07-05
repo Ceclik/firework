@@ -1,52 +1,51 @@
 Shader "Hidden/PostProcessing/Debug/LightMeter"
 {
     HLSLINCLUDE
+    #pragma exclude_renderers gles gles3
+    #pragma target 4.5
+    #include "../StdLib.hlsl"
+    #include "../Builtins/ExposureHistogram.hlsl"
+    #pragma multi_compile __ COLOR_GRADING_HDR
+    #pragma multi_compile __ AUTO_EXPOSURE
 
-        #pragma exclude_renderers gles gles3
-        #pragma target 4.5
-        #include "../StdLib.hlsl"
-        #include "../Builtins/ExposureHistogram.hlsl"
-        #pragma multi_compile __ COLOR_GRADING_HDR
-        #pragma multi_compile __ AUTO_EXPOSURE
+    float4 _Params; // x: lowPercent, y: highPercent, z: minBrightness, w: maxBrightness
+    float4 _ScaleOffsetRes; // x: scale, y: offset, w: histogram pass width, h: histogram pass height
 
-        float4 _Params; // x: lowPercent, y: highPercent, z: minBrightness, w: maxBrightness
-        float4 _ScaleOffsetRes; // x: scale, y: offset, w: histogram pass width, h: histogram pass height
-        
-        TEXTURE3D_SAMPLER3D(_Lut3D, sampler_Lut3D);
+    TEXTURE3D_SAMPLER3D(_Lut3D, sampler_Lut3D);
 
-        StructuredBuffer<uint> _HistogramBuffer;
+    StructuredBuffer<uint> _HistogramBuffer;
 
-        struct VaryingsLightMeter
-        {
-            float4 vertex : SV_POSITION;
-            float2 texcoord : TEXCOORD0;
-            float maxValue : TEXCOORD1;
-            float avgLuminance : TEXCOORD2;
-        };
+    struct VaryingsLightMeter
+    {
+        float4 vertex : SV_POSITION;
+        float2 texcoord : TEXCOORD0;
+        float maxValue : TEXCOORD1;
+        float avgLuminance : TEXCOORD2;
+    };
 
-        VaryingsLightMeter Vert(AttributesDefault v)
-        {
-            VaryingsLightMeter o;
-            o.vertex = float4(v.vertex.xy, 0.0, 1.0);
-            o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
+    VaryingsLightMeter Vert(AttributesDefault v)
+    {
+        VaryingsLightMeter o;
+        o.vertex = float4(v.vertex.xy, 0.0, 1.0);
+        o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
 
         #if UNITY_UV_STARTS_AT_TOP
-            o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
+        o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
         #endif
 
-            o.maxValue = 1.0 / FindMaxHistogramValue(_HistogramBuffer);
-            o.avgLuminance = GetAverageLuminance(_HistogramBuffer, _Params, o.maxValue, _ScaleOffsetRes.xy);
+        o.maxValue = 1.0 / FindMaxHistogramValue(_HistogramBuffer);
+        o.avgLuminance = GetAverageLuminance(_HistogramBuffer, _Params, o.maxValue, _ScaleOffsetRes.xy);
 
-            return o;
-        }
+        return o;
+    }
 
-        float4 Frag(VaryingsLightMeter i) : SV_Target
-        {
-            uint ix = (uint)(round(i.texcoord.x * HISTOGRAM_BINS));
-            float bin = saturate(float(_HistogramBuffer[ix]) * i.maxValue);
-            float fill = step(i.texcoord.y, bin);
+    float4 Frag(VaryingsLightMeter i) : SV_Target
+    {
+        uint ix = (uint)(round(i.texcoord.x * HISTOGRAM_BINS));
+        float bin = saturate(float(_HistogramBuffer[ix]) * i.maxValue);
+        float fill = step(i.texcoord.y, bin);
 
-            float4 color = float4(lerp(0.0, 0.75, fill).xxx, 1.0);
+        float4 color = float4(lerp(0.0, 0.75, fill).xxx, 1.0);
 
         #if AUTO_EXPOSURE
             const float3 kRangeColor = float3(0.05, 0.3, 0.4);
@@ -89,9 +88,8 @@ Shader "Hidden/PostProcessing/Debug/LightMeter"
                 color.rgb = kAvgColor;
         #endif
 
-            return color;
-        }
-
+        return color;
+    }
     ENDHLSL
 
     SubShader
@@ -101,10 +99,8 @@ Shader "Hidden/PostProcessing/Debug/LightMeter"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex Vert
-                #pragma fragment Frag
-
+            #pragma vertex Vert
+            #pragma fragment Frag
             ENDHLSL
         }
     }

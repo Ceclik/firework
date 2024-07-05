@@ -7,7 +7,7 @@ namespace UnityEngine.Rendering.PostProcessing
     // Temporary code dump until the texture format refactor goes into trunk...
     public static class TextureFormatUtilities
     {
-        static Dictionary<TextureFormat, RenderTextureFormat> s_FormatMap;
+        private static readonly Dictionary<TextureFormat, RenderTextureFormat> s_FormatMap;
 
         static TextureFormatUtilities()
         {
@@ -35,18 +35,18 @@ namespace UnityEngine.Rendering.PostProcessing
                 { TextureFormat.BC5, RenderTextureFormat.RGHalf },
                 { TextureFormat.BC6H, RenderTextureFormat.ARGBHalf },
                 { TextureFormat.BC7, RenderTextureFormat.ARGB32 },
-            #if !UNITY_IOS && !UNITY_TVOS
+#if !UNITY_IOS && !UNITY_TVOS
                 { TextureFormat.DXT1Crunched, RenderTextureFormat.ARGB32 },
                 { TextureFormat.DXT5Crunched, RenderTextureFormat.ARGB32 },
-            #endif
+#endif
                 { TextureFormat.PVRTC_RGB2, RenderTextureFormat.ARGB32 },
                 { TextureFormat.PVRTC_RGBA2, RenderTextureFormat.ARGB32 },
                 { TextureFormat.PVRTC_RGB4, RenderTextureFormat.ARGB32 },
                 { TextureFormat.PVRTC_RGBA4, RenderTextureFormat.ARGB32 },
-            #if !UNITY_2018_1_OR_NEWER
+#if !UNITY_2018_1_OR_NEWER
                 { TextureFormat.ATC_RGB4, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ATC_RGBA8, RenderTextureFormat.ARGB32 },
-            #endif
+#endif
                 { TextureFormat.ETC_RGB4, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ETC2_RGB, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ETC2_RGBA1, RenderTextureFormat.ARGB32 },
@@ -62,7 +62,7 @@ namespace UnityEngine.Rendering.PostProcessing
                 { TextureFormat.ASTC_6x6, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ASTC_8x8, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ASTC_10x10, RenderTextureFormat.ARGB32 },
-                { TextureFormat.ASTC_12x12, RenderTextureFormat.ARGB32 },
+                { TextureFormat.ASTC_12x12, RenderTextureFormat.ARGB32 }
                 /*{ TextureFormat.ETC_RGB4_3DS, RenderTextureFormat.ARGB32 },
                 { TextureFormat.ETC_RGBA8_3DS, RenderTextureFormat.ARGB32 }*/
             };

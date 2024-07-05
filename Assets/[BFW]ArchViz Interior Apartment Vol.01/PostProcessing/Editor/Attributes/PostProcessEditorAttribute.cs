@@ -2,7 +2,7 @@ using System;
 
 namespace UnityEngine.Rendering.PostProcessing
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class)]
     public sealed class PostProcessEditorAttribute : Attribute
     {
         public readonly Type settingsType;

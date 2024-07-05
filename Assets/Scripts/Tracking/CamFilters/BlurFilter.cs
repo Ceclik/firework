@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 
@@ -19,7 +14,7 @@ namespace Assets.Scripts.Tracking.CamFilters
             CvInvoke.CvtColor(input, grayImage, ColorConversion.Bgr2Gray);
 
             //use image pyr to remove noise
-            Mat pyrDown = new Mat();
+            var pyrDown = new Mat();
             CvInvoke.PyrDown(grayImage, pyrDown);
             CvInvoke.PyrUp(pyrDown, grayImage);
 
@@ -28,8 +23,8 @@ namespace Assets.Scripts.Tracking.CamFilters
             //Contrast Up
 
             CvInvoke.EqualizeHist(pyrDown, grayImage);
-            
-                //Convert Gray Image to Color
+
+            //Convert Gray Image to Color
             CvInvoke.CvtColor(grayImage, output, ColorConversion.Gray2Rgb);
 
             return output;

@@ -5,14 +5,13 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-using System.Collections;
-
 namespace DigitalRuby.ThunderAndLightning
 {
-    
 #if UNITY_EDITOR && !UNITY_WEBPLAYER
 
     public class LightningSpriteSheetCreator : MonoBehaviour
@@ -46,28 +45,26 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void Start()
         {
-
         }
 
         private void Update()
         {
-
         }
 
         private IEnumerator ExportFrame(int row, int column, float delay)
         {
             yield return new WaitForSeconds(delay);
 
-            float cellWidth = (float)Width / (float)Columns;
-            float cellHeight = (float)Height / (float)Rows;
-            float x = ((float)column * cellWidth) / (float)Width;
-            float y = ((float)row * cellHeight) / (float)Height;
-            float w = cellWidth / (float)Width;
-            float h = cellHeight / (float)Height;
+            var cellWidth = Width / (float)Columns;
+            var cellHeight = Height / (float)Rows;
+            var x = column * cellWidth / Width;
+            var y = row * cellHeight / Height;
+            var w = cellWidth / Width;
+            var h = cellHeight / Height;
 
             Camera.main.clearFlags = CameraClearFlags.Nothing;
             Camera.main.targetTexture = renderTexture;
-            Rect existingViewportRect = Camera.main.rect;
+            var existingViewportRect = Camera.main.rect;
             Camera.main.rect = new Rect(x, 1.0f - y - h, w, h);
             Camera.main.Render();
             Camera.main.rect = existingViewportRect;
@@ -80,15 +77,13 @@ namespace DigitalRuby.ThunderAndLightning
             yield return new WaitForSeconds(delay);
 
             RenderTexture.active = renderTexture;
-            Texture2D png = new Texture2D(Width, Height, TextureFormat.ARGB32, false, false);
+            var png = new Texture2D(Width, Height, TextureFormat.ARGB32, false, false);
             png.ReadPixels(new Rect(0, 0, Width, Height), 0, 0);
             RenderTexture.active = null;
-            byte[] pngBytes = png.EncodeToPNG();
+            var pngBytes = png.EncodeToPNG();
             if (string.IsNullOrEmpty(SaveFileName))
-            {
-                SaveFileName = System.IO.Path.Combine(Application.persistentDataPath, "LightningSpriteSheet.png");
-            }
-            System.IO.File.WriteAllBytes(SaveFileName, pngBytes);
+                SaveFileName = Path.Combine(Application.persistentDataPath, "LightningSpriteSheet.png");
+            File.WriteAllBytes(SaveFileName, pngBytes);
             ExportCompleteLabel.text = "Done!";
             exporting = false;
             renderTexture = null;
@@ -96,33 +91,29 @@ namespace DigitalRuby.ThunderAndLightning
 
         public void ExportTapped()
         {
-            if (exporting)
-            {
-                return;
-            }
+            if (exporting) return;
 
             exporting = true;
             ExportCompleteLabel.text = "Processing...";
-            renderTexture = new RenderTexture(Width, Height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
+            renderTexture = new RenderTexture(Width, Height, 0, RenderTextureFormat.ARGB32,
+                RenderTextureReadWrite.Default);
             renderTexture.anisoLevel = 4;
             renderTexture.antiAliasing = 4;
             RenderTexture.active = renderTexture;
             GL.Clear(true, true, BackgroundColor, 0.0f);
             RenderTexture.active = null;
 
-            float delay = FrameDelay * 0.5f;
-            for (int i = 0; i < Rows; i++)
+            var delay = FrameDelay * 0.5f;
+            for (var i = 0; i < Rows; i++)
+            for (var j = 0; j < Columns; j++)
             {
-                for (int j = 0; j < Columns; j++)
-                {
-                    StartCoroutine(ExportFrame(i, j, delay));
-                    delay += FrameDelay;
-                }
+                StartCoroutine(ExportFrame(i, j, delay));
+                delay += FrameDelay;
             }
+
             StartCoroutine(PerformExport(delay));
         }
     }
 
 #endif
-
 }

@@ -5,25 +5,46 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using System;
 using UnityEngine;
-using System.Collections;
+using Random = UnityEngine.Random;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class LightningBeamSpellScript : LightningSpellScript
     {
-        [Header("Beam")]
-        [Tooltip("The lightning path script creating the beam of lightning")]
+        [Header("Beam")] [Tooltip("The lightning path script creating the beam of lightning")]
         public LightningBoltPathScriptBase LightningPathScript;
 
         [Tooltip("Give the end point some randomization")]
         public float EndPointRandomization = 1.5f;
 
         /// <summary>
-        /// Callback for collision events
+        ///     Callback for collision events
         /// </summary>
-        [HideInInspector]
-        public System.Action<RaycastHit> CollisionCallback;
+        [HideInInspector] public Action<RaycastHit> CollisionCallback;
+
+        /// <summary>
+        ///     Start
+        /// </summary>
+        protected override void Start()
+        {
+            base.Start();
+
+            LightningPathScript.ManualMode = true;
+        }
+
+        /// <summary>
+        ///     Update
+        /// </summary>
+        protected override void LateUpdate()
+        {
+            base.LateUpdate();
+
+            if (!Casting) return;
+
+            CheckCollision();
+        }
 
         private void CheckCollision()
         {
@@ -36,7 +57,7 @@ namespace DigitalRuby.ThunderAndLightning
                 SpellEnd.transform.position = hit.point;
 
                 // additional randomization of end point
-                SpellEnd.transform.position += (UnityEngine.Random.insideUnitSphere * EndPointRandomization);
+                SpellEnd.transform.position += Random.insideUnitSphere * EndPointRandomization;
 
                 // play collision sound
                 PlayCollisionSound(SpellEnd.transform.position);
@@ -51,54 +72,23 @@ namespace DigitalRuby.ThunderAndLightning
                 ApplyCollisionForce(hit.point);
 
                 // notify listeners of collisions
-                if (CollisionCallback != null)
-                {
-                    CollisionCallback(hit);
-                }
+                if (CollisionCallback != null) CollisionCallback(hit);
             }
             else
             {
                 // stop collision particle system
-                if (CollisionParticleSystem != null)
-                {
-                    CollisionParticleSystem.Stop();
-                }
+                if (CollisionParticleSystem != null) CollisionParticleSystem.Stop();
 
                 // extend beam to max length
-                SpellEnd.transform.position = SpellStart.transform.position + (Direction * MaxDistance);
+                SpellEnd.transform.position = SpellStart.transform.position + Direction * MaxDistance;
 
                 // randomize end point a bit
-                SpellEnd.transform.position += (UnityEngine.Random.insideUnitSphere * EndPointRandomization);
+                SpellEnd.transform.position += Random.insideUnitSphere * EndPointRandomization;
             }
         }
 
         /// <summary>
-        /// Start
-        /// </summary>
-        protected override void Start()
-        {
-            base.Start();
-
-            LightningPathScript.ManualMode = true;
-        }
-
-        /// <summary>
-        /// Update
-        /// </summary>
-        protected override void LateUpdate()
-        {
-            base.LateUpdate();
-
-            if (!Casting)
-            {
-                return;
-            }
-
-            CheckCollision();
-        }
-
-        /// <summary>
-        /// OnCastSpell
+        ///     OnCastSpell
         /// </summary>
         protected override void OnCastSpell()
         {
@@ -106,7 +96,7 @@ namespace DigitalRuby.ThunderAndLightning
         }
 
         /// <summary>
-        /// OnStopSpell
+        ///     OnStopSpell
         /// </summary>
         protected override void OnStopSpell()
         {

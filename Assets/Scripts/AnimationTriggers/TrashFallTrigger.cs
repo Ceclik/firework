@@ -10,6 +10,7 @@ namespace AnimationTriggers
         private LevelInstructionShower _instruction;
         private Animator _selfAnimator;
         private StartLevelFireSpawner _startFireSpawner;
+
         public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
             _selfAnimator = animator;
@@ -18,24 +19,24 @@ namespace AnimationTriggers
             _startFireSpawner = GameObject.Find("Fires").GetComponent<StartLevelFireSpawner>();
         }
 
-        private void StartFire()
-        {
-            var can = GameObject.Find("TrashCan");
-            TrashCan trashCan = can.GetComponent<TrashCan>();
-            _selfAnimator.SetTrigger("StartFire");
-            
-            if (!trashCan.falled)
-                trashCan.TrashFall();
-            
-            _startFireSpawner.StartRandomFires();
-        }
-
         public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
             _instruction.OnStartButtonClicked -= StartFire;
         }
-        
-        
+
+        private void StartFire()
+        {
+            var can = GameObject.Find("TrashCan");
+            var trashCan = can.GetComponent<TrashCan>();
+            _selfAnimator.SetTrigger("StartFire");
+
+            if (!trashCan.falled)
+                trashCan.TrashFall();
+
+            _startFireSpawner.StartRandomFires();
+        }
+
+
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         //

@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class LightningLightsabreScript : LightningBoltPrefabScript
     {
-        [Header("Lightsabre Properties")]
-        [Tooltip("Height of the blade")]
+        [Header("Lightsabre Properties")] [Tooltip("Height of the blade")]
         public float BladeHeight = 19.0f;
 
         [Tooltip("How long it takes to turn the lightsabre on and off")]
@@ -21,11 +19,12 @@ namespace DigitalRuby.ThunderAndLightning
         [Tooltip("Sound to play when the lightsabre stays on")]
         public AudioSource ConstantSound;
 
-        private int state; // 0 = off, 1 = on, 2 = turning off, 3 = turning on
-        private Vector3 bladeStart;
         private Vector3 bladeDir;
-        private float bladeTime;
         private float bladeIntensity;
+        private Vector3 bladeStart;
+        private float bladeTime;
+
+        private int state; // 0 = off, 1 = on, 2 = turning off, 3 = turning on
 
         protected override void Start()
         {
@@ -37,10 +36,10 @@ namespace DigitalRuby.ThunderAndLightning
             if (state == 2 || state == 3)
             {
                 bladeTime += Time.deltaTime;
-                float percent = Mathf.Lerp(0.01f, 1.0f, bladeTime / ActivationTime);
-                Vector3 end = bladeStart + (bladeDir * percent * BladeHeight);
+                var percent = Mathf.Lerp(0.01f, 1.0f, bladeTime / ActivationTime);
+                var end = bladeStart + bladeDir * percent * BladeHeight;
                 Destination.transform.position = end;
-                GlowIntensity = bladeIntensity * (state == 3 ? percent : (1.0f - percent));
+                GlowIntensity = bladeIntensity * (state == 3 ? percent : 1.0f - percent);
 
                 if (bladeTime >= ActivationTime)
                 {
@@ -57,27 +56,25 @@ namespace DigitalRuby.ThunderAndLightning
                     }
                 }
             }
+
             base.Update();
         }
 
         /// <summary>
-        /// True to turn on the lightsabre, false to turn it off
+        ///     True to turn on the lightsabre, false to turn it off
         /// </summary>
         /// <param name="value">Whether the lightsabre is on or off</param>
         /// <returns>True if success, false if invalid operation (i.e. lightsabre is already on or off)</returns>
         public bool TurnOn(bool value)
         {
-            if (state == 2 || state == 3 || (state == 1 && value) || (state == 0 && !value))
-            {
-                return false;
-            }
+            if (state == 2 || state == 3 || (state == 1 && value) || (state == 0 && !value)) return false;
             bladeStart = Destination.transform.position;
             ManualMode = false;
             bladeIntensity = GlowIntensity;
 
             if (value)
             {
-                bladeDir = (Camera.orthographic ? transform.up : transform.forward);
+                bladeDir = Camera.orthographic ? transform.up : transform.forward;
                 state = 3;
                 StartSound.Play();
                 StopSound.Stop();
@@ -96,7 +93,7 @@ namespace DigitalRuby.ThunderAndLightning
         }
 
         /// <summary>
-        /// Convenience method to turn lightsabre on / off from Unity GUI
+        ///     Convenience method to turn lightsabre on / off from Unity GUI
         /// </summary>
         /// <param name="value">Value</param>
         public void TurnOnGUI(bool value)

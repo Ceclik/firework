@@ -1,50 +1,50 @@
-﻿using Assets.Scripts.Tracking;
+﻿using System;
+using Assets.Scripts.Tracking;
 using Assets.Scripts.Tracking.Previewvers;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Tracking;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CalibrateMenu : MonoBehaviour
 {
-
     public GameObject previewImage;
     public GameObject hsvImage;
     public GameObject resultImage;
     public GameObject cameraSettingsPanel;
     public GameObject hsvPanel;
     public GameObject whiteBorder;
-    [Space(20)]
-    [Header("HSV Sliders")]
-    public Slider HueMinSlider;
+
+    [Space(20)] [Header("HSV Sliders")] public Slider HueMinSlider;
+
     public Slider HueMaxSlider;
-    [Space(5)]
-    public Slider SatMinSlider;
+
+    [Space(5)] public Slider SatMinSlider;
+
     public Slider SatMaxSlider;
-    [Space(5)]
-    public Slider ValMinSlider;
+
+    [Space(5)] public Slider ValMinSlider;
+
     public Slider ValMaxSlider;
-    [Space(20)]
-    [Header("Camera Sliders")]
-    public Slider ExposureSlider;
+
+    [Space(20)] [Header("Camera Sliders")] public Slider ExposureSlider;
+
     public Slider SaturationSlider;
     public Slider FocusSlider;
 
     private HsvPreviewer _hsvPreviewer;
     private ResultPreviewer _resultPreviewer;
-    private int hsvSliderInitialized = 0;
+    private int hsvSliderInitialized;
 
     private void Awake()
     {
-        if (Tracker.Instance!=null)
+        if (Tracker.Instance != null)
         {
             //Tracker.Instance.TurnOff();
         }
     }
+
     private void Start()
-    {        
+    {
         cameraSettingsPanel.SetActive(false);
         _hsvPreviewer = hsvImage.GetComponent<HsvPreviewer>();
         _resultPreviewer = resultImage.GetComponent<ResultPreviewer>();
@@ -89,7 +89,7 @@ public class CalibrateMenu : MonoBehaviour
         _resultPreviewer.SettingsFromCamera();
         previewImage.SetActive(false);
         hsvImage.SetActive(false);
-        resultImage.SetActive(true);        
+        resultImage.SetActive(true);
     }
 
     public void OpenCameraSettingsPanel()
@@ -101,16 +101,18 @@ public class CalibrateMenu : MonoBehaviour
     {
         EmguCamera.Instance.SetExposure(exposure);
     }
+
     public void ChangeSaturation(float saturation)
     {
         EmguCamera.Instance.SetSaturation(saturation);
     }
+
     public void ChangeFocus(float focus)
     {
         EmguCamera.Instance.SetFocus(focus);
     }
 
-    public void ChangeHsvThreshold(float Hmin,float Hmax,float Smin, float Smax, float Vmin, float Vmax)
+    public void ChangeHsvThreshold(float Hmin, float Hmax, float Smin, float Smax, float Vmin, float Vmax)
     {
         _hsvPreviewer.HueMin = Hmin;
         _hsvPreviewer.HueMax = Hmax;
@@ -135,25 +137,23 @@ public class CalibrateMenu : MonoBehaviour
 
     public void OnUpdateHueSlider(Slider slider)
     {
-        if (hsvSliderInitialized<6)
+        if (hsvSliderInitialized < 6)
         {
             hsvSliderInitialized++;
             return;
         }
-        Debug.Log("SLIDER UPDATE!");
+
+        UnityEngine.Debug.Log("SLIDER UPDATE!");
         Slider sliderMin;
-        Slider sliderMax;        
+        Slider sliderMax;
 
-        bool isMin = false; //is slider in event for min or max value
+        var isMin = false; //is slider in event for min or max value
 
-        if (slider.name.Contains("Min"))
-        {
-            isMin = true;
-        }
+        if (slider.name.Contains("Min")) isMin = true;
 
         //Find min and max sliders for change properly baseed on min and max values 
         //(min slider value cannot be greater then max slider value etc)
-        if (slider.name.Contains("Hue")) 
+        if (slider.name.Contains("Hue"))
         {
             sliderMin = HueMinSlider;
             sliderMax = HueMaxSlider;
@@ -174,14 +174,11 @@ public class CalibrateMenu : MonoBehaviour
         }
 
         if (isMin)
-        {
             sliderMin.value = Mathf.Clamp(sliderMin.value, sliderMin.minValue, sliderMax.value);
-        }
         else
-        {
             sliderMax.value = Mathf.Clamp(sliderMax.value, sliderMin.value, sliderMax.maxValue);
-        }
 
-        ChangeHsvThreshold(HueMinSlider.value, HueMaxSlider.value, SatMinSlider.value, SatMaxSlider.value, ValMinSlider.value, ValMaxSlider.value);
+        ChangeHsvThreshold(HueMinSlider.value, HueMaxSlider.value, SatMinSlider.value, SatMaxSlider.value,
+            ValMinSlider.value, ValMaxSlider.value);
     }
 }

@@ -5,16 +5,16 @@ namespace UnityEditor.Rendering.PostProcessing
     [PostProcessEditor(typeof(Bloom))]
     public sealed class BloomEditor : PostProcessEffectEditor<Bloom>
     {
-        SerializedParameterOverride m_Intensity;
-        SerializedParameterOverride m_Threshold;
-        SerializedParameterOverride m_SoftKnee;
-        SerializedParameterOverride m_Diffusion;
-        SerializedParameterOverride m_AnamorphicRatio;
-        SerializedParameterOverride m_Color;
-        SerializedParameterOverride m_MobileOptimized;
+        private SerializedParameterOverride m_AnamorphicRatio;
+        private SerializedParameterOverride m_Color;
+        private SerializedParameterOverride m_Diffusion;
+        private SerializedParameterOverride m_DirtIntensity;
 
-        SerializedParameterOverride m_DirtTexture;
-        SerializedParameterOverride m_DirtIntensity;
+        private SerializedParameterOverride m_DirtTexture;
+        private SerializedParameterOverride m_Intensity;
+        private SerializedParameterOverride m_MobileOptimized;
+        private SerializedParameterOverride m_SoftKnee;
+        private SerializedParameterOverride m_Threshold;
 
         public override void OnEnable()
         {
@@ -25,7 +25,7 @@ namespace UnityEditor.Rendering.PostProcessing
             m_AnamorphicRatio = FindParameterOverride(x => x.anamorphicRatio);
             m_Color = FindParameterOverride(x => x.color);
             m_MobileOptimized = FindParameterOverride(x => x.fastMode);
-            
+
             m_DirtTexture = FindParameterOverride(x => x.dirtTexture);
             m_DirtIntensity = FindParameterOverride(x => x.dirtIntensity);
         }
@@ -49,11 +49,9 @@ namespace UnityEditor.Rendering.PostProcessing
             PropertyField(m_DirtIntensity);
 
             if (RuntimeUtilities.isVREnabled)
-            {
                 if ((m_DirtIntensity.overrideState.boolValue && m_DirtIntensity.value.floatValue > 0f)
-                 || (m_DirtTexture.overrideState.boolValue && m_DirtTexture.value.objectReferenceValue != null))
+                    || (m_DirtTexture.overrideState.boolValue && m_DirtTexture.value.objectReferenceValue != null))
                     EditorGUILayout.HelpBox("Using a dirt texture in VR is not recommended.", MessageType.Warning);
-            }
         }
     }
 }

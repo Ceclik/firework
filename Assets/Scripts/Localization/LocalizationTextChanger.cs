@@ -6,19 +6,17 @@ namespace Localization
     public class LocalizationTextChanger : MonoBehaviour //changing text to the chosen language
     {
         [SerializeField] protected string key;
+        protected Text InitializableText;
 
         protected LocalizationManager LocalizationMgr;
-        protected Text InitializableText;
 
         private void Awake()
         {
             InitializableText = GetComponent<Text>();
-            
+
             if (LocalizationMgr == null)
-            {
                 LocalizationMgr = GameObject.FindGameObjectWithTag("LocalizationManager")
                     .GetComponent<LocalizationManager>();
-            }
 
             if (InitializableText == null)
                 InitializableText.text = LocalizationMgr.GetLocalizedValue(key);
@@ -38,17 +36,15 @@ namespace Localization
 
         protected virtual void UpdateText()
         {
-            if(gameObject == null) return;
+            if (gameObject == null) return;
 
             if (LocalizationMgr == null)
-            {
                 LocalizationMgr = GameObject.FindGameObjectWithTag("LocalizationManager")
                     .GetComponent<LocalizationManager>();
-            }
 
             if (InitializableText == null)
                 InitializableText = GetComponent<Text>();
-            
+
             InitializableText.text = LocalizationMgr.GetLocalizedValue(key);
         }
     }

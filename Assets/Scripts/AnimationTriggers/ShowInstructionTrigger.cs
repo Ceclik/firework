@@ -6,6 +6,7 @@ namespace AnimationTriggers
     public class ShowInstructionTrigger : StateMachineBehaviour
     {
         private LevelInstructionShower _instruction;
+
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             _instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();

@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class FadeInFadeOut : MonoBehaviour {
-
-    private CanvasGroup _group;    
-
+public class FadeInFadeOut : MonoBehaviour
+{
     [SerializeField] private float fadeInTime;
     [SerializeField] private float enabledTime;
     [SerializeField] private float disabledTime;
+
+    private CanvasGroup _group;
 
     private void OnEnable()
     {
@@ -18,7 +18,7 @@ public class FadeInFadeOut : MonoBehaviour {
     private void OnDisable()
     {
         StopAllCoroutines();
-    }    
+    }
 
     private IEnumerator FadeIn()
     {
@@ -29,6 +29,7 @@ public class FadeInFadeOut : MonoBehaviour {
             timer = timer + Time.deltaTime;
             yield return null;
         }
+
         yield return new WaitForSeconds(enabledTime);
         StartCoroutine(FadeOut());
     }
@@ -38,12 +39,12 @@ public class FadeInFadeOut : MonoBehaviour {
         float timer = 0;
         while (timer < fadeInTime)
         {
-            _group.alpha = 1 - (timer / fadeInTime);
+            _group.alpha = 1 - timer / fadeInTime;
             timer = timer + Time.deltaTime;
             yield return null;
         }
+
         yield return new WaitForSeconds(disabledTime);
         StartCoroutine(FadeIn());
     }
-    
 }

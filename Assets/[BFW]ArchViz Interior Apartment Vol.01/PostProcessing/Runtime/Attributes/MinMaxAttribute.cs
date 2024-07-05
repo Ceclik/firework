@@ -2,11 +2,11 @@ using System;
 
 namespace UnityEngine.Rendering.PostProcessing
 {
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class MinMaxAttribute : Attribute
     {
-        public readonly float min;
         public readonly float max;
+        public readonly float min;
 
         public MinMaxAttribute(float min, float max)
         {

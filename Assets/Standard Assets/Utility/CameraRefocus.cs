@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace UnityStandardAssets.Utility
@@ -7,10 +6,10 @@ namespace UnityStandardAssets.Utility
     {
         public Camera Camera;
         public Vector3 Lookatpoint;
-        public Transform Parent;
 
-        private Vector3 m_OrigCameraPos;
+        private readonly Vector3 m_OrigCameraPos;
         private bool m_Refocus;
+        public Transform Parent;
 
 
         public CameraRefocus(Camera camera, Transform parent, Vector3 origCameraPos)
@@ -37,22 +36,20 @@ namespace UnityStandardAssets.Utility
         {
             RaycastHit hitInfo;
             if (Physics.Raycast(Parent.transform.position + m_OrigCameraPos, Parent.transform.forward, out hitInfo,
-                                100f))
+                    100f))
             {
                 Lookatpoint = hitInfo.point;
                 m_Refocus = true;
                 return;
             }
+
             m_Refocus = false;
         }
 
 
         public void SetFocusPoint()
         {
-            if (m_Refocus)
-            {
-                Camera.transform.LookAt(Lookatpoint);
-            }
+            if (m_Refocus) Camera.transform.LookAt(Lookatpoint);
         }
     }
 }

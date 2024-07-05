@@ -6,17 +6,13 @@
 // 
 
 using UnityEngine;
-using System.Collections;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class LightningFieldScript : LightningBoltPrefabScriptBase
     {
-        [Header("Lightning Field Properties")]
-        [Tooltip("The minimum length for a field segment")]
+        [Header("Lightning Field Properties")] [Tooltip("The minimum length for a field segment")]
         public float MinimumLength = 0.01f;
-        private float minimumLengthSquared;
-        private float lightGrow;
 
         [Tooltip("The bounds to put the field in.")]
         public Bounds FieldBounds;
@@ -24,19 +20,8 @@ namespace DigitalRuby.ThunderAndLightning
         [Tooltip("Optional light for the lightning field to emit")]
         public Light Light;
 
-        private Vector3 RandomPointInBounds()
-        {
-            float x = UnityEngine.Random.Range(FieldBounds.min.x, FieldBounds.max.x);
-            float y = UnityEngine.Random.Range(FieldBounds.min.y, FieldBounds.max.y);
-            float z = UnityEngine.Random.Range(FieldBounds.min.z, FieldBounds.max.z);
-
-            return new Vector3(x, y, z);
-        }
-
-        private void OnEnable()
-        {
-            lightGrow = 0;
-        }
+        private float lightGrow;
+        private float minimumLengthSquared;
 
         protected override void Start()
         {
@@ -63,30 +48,38 @@ namespace DigitalRuby.ThunderAndLightning
                 }
                 else
                 {
-                    Light.intensity = UnityEngine.Random.Range(2.8f, 3.2f);
+                    Light.intensity = Random.Range(2.8f, 3.2f);
                 }
             }
+        }
+
+        private void OnEnable()
+        {
+            lightGrow = 0;
+        }
+
+        private Vector3 RandomPointInBounds()
+        {
+            var x = Random.Range(FieldBounds.min.x, FieldBounds.max.x);
+            var y = Random.Range(FieldBounds.min.y, FieldBounds.max.y);
+            var z = Random.Range(FieldBounds.min.z, FieldBounds.max.z);
+
+            return new Vector3(x, y, z);
         }
 
         public override void CreateLightningBolt(LightningBoltParameters parameters)
         {
             minimumLengthSquared = MinimumLength * MinimumLength;
 
-            for (int i = 0; i < 16; i++)
+            for (var i = 0; i < 16; i++)
             {
                 // get two random points in the bounds
                 parameters.Start = RandomPointInBounds();
                 parameters.End = RandomPointInBounds();
-                if ((parameters.End - parameters.Start).sqrMagnitude >= minimumLengthSquared)
-                {
-                    break;
-                }
+                if ((parameters.End - parameters.Start).sqrMagnitude >= minimumLengthSquared) break;
             }
 
-            if (Light != null)
-            {
-                Light.enabled = true;
-            }
+            if (Light != null) Light.enabled = true;
 
             base.CreateLightningBolt(parameters);
         }

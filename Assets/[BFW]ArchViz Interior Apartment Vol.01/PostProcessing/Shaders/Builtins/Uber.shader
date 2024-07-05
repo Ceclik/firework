@@ -1,43 +1,42 @@
 Shader "Hidden/PostProcessing/Uber"
 {
     HLSLINCLUDE
+    #pragma target 3.0
 
-        #pragma target 3.0
+    #pragma multi_compile __ UNITY_COLORSPACE_GAMMA
+    #pragma multi_compile __ CHROMATIC_ABERRATION CHROMATIC_ABERRATION_LOW
+    #pragma multi_compile __ BLOOM
+    #pragma multi_compile __ COLOR_GRADING_LDR_2D COLOR_GRADING_HDR_2D COLOR_GRADING_HDR_3D
+    #pragma multi_compile __ VIGNETTE
+    #pragma multi_compile __ GRAIN
+    #pragma multi_compile __ FINALPASS
 
-        #pragma multi_compile __ UNITY_COLORSPACE_GAMMA
-        #pragma multi_compile __ CHROMATIC_ABERRATION CHROMATIC_ABERRATION_LOW
-        #pragma multi_compile __ BLOOM
-        #pragma multi_compile __ COLOR_GRADING_LDR_2D COLOR_GRADING_HDR_2D COLOR_GRADING_HDR_3D
-        #pragma multi_compile __ VIGNETTE
-        #pragma multi_compile __ GRAIN
-        #pragma multi_compile __ FINALPASS
-        
-        #include "../StdLib.hlsl"
-        #include "../Colors.hlsl"
-        #include "../Sampling.hlsl"
-        #include "Dithering.hlsl"
+    #include "../StdLib.hlsl"
+    #include "../Colors.hlsl"
+    #include "../Sampling.hlsl"
+    #include "Dithering.hlsl"
 
-        #define MAX_CHROMATIC_SAMPLES 16
+    #define MAX_CHROMATIC_SAMPLES 16
 
-        TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
-        float4 _MainTex_TexelSize;
+    TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
+    float4 _MainTex_TexelSize;
 
-        // Auto exposure / eye adaptation
-        TEXTURE2D_SAMPLER2D(_AutoExposureTex, sampler_AutoExposureTex);
+    // Auto exposure / eye adaptation
+    TEXTURE2D_SAMPLER2D(_AutoExposureTex, sampler_AutoExposureTex);
 
-        // Bloom
-        TEXTURE2D_SAMPLER2D(_BloomTex, sampler_BloomTex);
-        TEXTURE2D_SAMPLER2D(_Bloom_DirtTex, sampler_Bloom_DirtTex);
-        float4 _BloomTex_TexelSize;
-        float4 _Bloom_DirtTileOffset; // xy: tiling, zw: offset
-        half3 _Bloom_Settings; // x: sampleScale, y: intensity, z: dirt intensity
-        half3 _Bloom_Color;
+    // Bloom
+    TEXTURE2D_SAMPLER2D(_BloomTex, sampler_BloomTex);
+    TEXTURE2D_SAMPLER2D(_Bloom_DirtTex, sampler_Bloom_DirtTex);
+    float4 _BloomTex_TexelSize;
+    float4 _Bloom_DirtTileOffset; // xy: tiling, zw: offset
+    half3 _Bloom_Settings; // x: sampleScale, y: intensity, z: dirt intensity
+    half3 _Bloom_Color;
 
-        // Chromatic aberration
-        TEXTURE2D_SAMPLER2D(_ChromaticAberration_SpectralLut, sampler_ChromaticAberration_SpectralLut);
-        half _ChromaticAberration_Amount;
+    // Chromatic aberration
+    TEXTURE2D_SAMPLER2D(_ChromaticAberration_SpectralLut, sampler_ChromaticAberration_SpectralLut);
+    half _ChromaticAberration_Amount;
 
-        // Color grading
+    // Color grading
     #if COLOR_GRADING_HDR_3D
 
         TEXTURE3D_SAMPLER3D(_Lut3D, sampler_Lut3D);
@@ -45,38 +44,38 @@ Shader "Hidden/PostProcessing/Uber"
 
     #else
 
-        TEXTURE2D_SAMPLER2D(_Lut2D, sampler_Lut2D);
-        float3 _Lut2D_Params;
+    TEXTURE2D_SAMPLER2D(_Lut2D, sampler_Lut2D);
+    float3 _Lut2D_Params;
 
     #endif
 
-        half _PostExposure; // EV (exp2)
+    half _PostExposure; // EV (exp2)
 
-        // Vignette
-        half3 _Vignette_Color;
-        half2 _Vignette_Center; // UV space
-        half4 _Vignette_Settings; // x: intensity, y: smoothness, z: roundness, w: rounded
-        half _Vignette_Opacity;
-        half _Vignette_Mode; // <0.5: procedural, >=0.5: masked
-        TEXTURE2D_SAMPLER2D(_Vignette_Mask, sampler_Vignette_Mask);
+    // Vignette
+    half3 _Vignette_Color;
+    half2 _Vignette_Center; // UV space
+    half4 _Vignette_Settings; // x: intensity, y: smoothness, z: roundness, w: rounded
+    half _Vignette_Opacity;
+    half _Vignette_Mode; // <0.5: procedural, >=0.5: masked
+    TEXTURE2D_SAMPLER2D(_Vignette_Mask, sampler_Vignette_Mask);
 
-        // Grain
-        TEXTURE2D_SAMPLER2D(_GrainTex, sampler_GrainTex);
-        half2 _Grain_Params1; // x: lum_contrib, y: intensity
-        float4 _Grain_Params2; // x: xscale, h: yscale, z: xoffset, w: yoffset
+    // Grain
+    TEXTURE2D_SAMPLER2D(_GrainTex, sampler_GrainTex);
+    half2 _Grain_Params1; // x: lum_contrib, y: intensity
+    float4 _Grain_Params2; // x: xscale, h: yscale, z: xoffset, w: yoffset
 
-        // Misc
-        half _LumaInAlpha;
+    // Misc
+    half _LumaInAlpha;
 
-        half4 FragUber(VaryingsDefault i) : SV_Target
-        {
-            float2 uv = i.texcoord;
-            half autoExposure = SAMPLE_TEXTURE2D(_AutoExposureTex, sampler_AutoExposureTex, uv).r;
-            half4 color = (0.0).xxxx;
+    half4 FragUber(VaryingsDefault i) : SV_Target
+    {
+        float2 uv = i.texcoord;
+        half autoExposure = SAMPLE_TEXTURE2D(_AutoExposureTex, sampler_AutoExposureTex, uv).r;
+        half4 color = (0.0).xxxx;
 
-            // Inspired by the method described in "Rendering Inside" [Playdead 2016]
-            // https://twitter.com/pixelmager/status/717019757766123520
-            #if CHROMATIC_ABERRATION
+        // Inspired by the method described in "Rendering Inside" [Playdead 2016]
+        // https://twitter.com/pixelmager/status/717019757766123520
+        #if CHROMATIC_ABERRATION
             {
                 float2 coords = 2.0 * uv - 1.0;
                 float2 end = uv - coords * dot(coords, coords) * _ChromaticAberration_Amount;
@@ -100,7 +99,7 @@ Shader "Hidden/PostProcessing/Uber"
 
                 color = sum / filterSum;
             }
-            #elif CHROMATIC_ABERRATION_LOW
+        #elif CHROMATIC_ABERRATION_LOW
             {
                 float2 coords = 2.0 * uv - 1.0;
                 float2 end = uv - coords * dot(coords, coords) * _ChromaticAberration_Amount;
@@ -118,22 +117,22 @@ Shader "Hidden/PostProcessing/Uber"
                 half4 filterSum = filterA + filterB + filterC;
                 color = sum / filterSum;
             }
-            #else
-            {
-                color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoordStereo);
-            }
-            #endif
+        #else
+        {
+            color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoordStereo);
+        }
+        #endif
 
-            // Gamma space... Gah.
-            #if UNITY_COLORSPACE_GAMMA
+        // Gamma space... Gah.
+        #if UNITY_COLORSPACE_GAMMA
             {
                 color = SRGBToLinear(color);
             }
-            #endif
+        #endif
 
-            color.rgb *= autoExposure;
+        color.rgb *= autoExposure;
 
-            #if BLOOM
+        #if BLOOM
             {
                 half4 bloom = UpsampleTent(TEXTURE2D_PARAM(_BloomTex, sampler_BloomTex), i.texcoord, _BloomTex_TexelSize.xy, _Bloom_Settings.x);
                 half4 dirt = half4(SAMPLE_TEXTURE2D(_Bloom_DirtTex, sampler_Bloom_DirtTex, i.texcoord * _Bloom_DirtTileOffset.xy + _Bloom_DirtTileOffset.zw).rgb, 0.0);
@@ -144,9 +143,9 @@ Shader "Hidden/PostProcessing/Uber"
                 color += bloom * half4(_Bloom_Color, 1.0);
                 color += dirt * bloom;
             }
-            #endif
+        #endif
 
-            #if VIGNETTE
+        #if VIGNETTE
             {
                 if (_Vignette_Mode < 0.5)
                 {
@@ -161,20 +160,20 @@ Shader "Hidden/PostProcessing/Uber"
                 {
                     half vfactor = SAMPLE_TEXTURE2D(_Vignette_Mask, sampler_Vignette_Mask, uv).a;
 
-                    #if !UNITY_COLORSPACE_GAMMA
+        #if !UNITY_COLORSPACE_GAMMA
                     {
                         vfactor = SRGBToLinear(vfactor);
                     }
-                    #endif
+        #endif
 
                     half3 new_color = color.rgb * lerp(_Vignette_Color, (1.0).xxx, vfactor);
                     color.rgb = lerp(color.rgb, new_color, _Vignette_Opacity);
                     color.a = lerp(1.0, color.a, vfactor);
                 }
             }
-            #endif
+        #endif
 
-            #if GRAIN
+        #if GRAIN
             {
                 half3 grain = SAMPLE_TEXTURE2D(_GrainTex, sampler_GrainTex, i.texcoordStereo * _Grain_Params2.xy + _Grain_Params2.zw).rgb;
 
@@ -184,55 +183,54 @@ Shader "Hidden/PostProcessing/Uber"
 
                 color.rgb += color.rgb * grain * _Grain_Params1.y * lum;
             }
-            #endif
+        #endif
 
-            #if COLOR_GRADING_HDR_3D
+        #if COLOR_GRADING_HDR_3D
             {
                 color *= _PostExposure;
                 float3 colorLutSpace = saturate(LUT_SPACE_ENCODE(color.rgb));
                 color.rgb = ApplyLut3D(TEXTURE3D_PARAM(_Lut3D, sampler_Lut3D), colorLutSpace, _Lut3D_Params);
             }
-            #elif COLOR_GRADING_HDR_2D
+        #elif COLOR_GRADING_HDR_2D
             {
                 color *= _PostExposure;
                 float3 colorLutSpace = saturate(LUT_SPACE_ENCODE(color.rgb));
                 color.rgb = ApplyLut2D(TEXTURE2D_PARAM(_Lut2D, sampler_Lut2D), colorLutSpace, _Lut2D_Params);
             }
-            #elif COLOR_GRADING_LDR_2D
+        #elif COLOR_GRADING_LDR_2D
             {
                 color = saturate(color);
                 color.rgb = ApplyLut2D(TEXTURE2D_PARAM(_Lut2D, sampler_Lut2D), color.rgb, _Lut2D_Params);
             }
-            #endif
+        #endif
 
-            half4 output = color;
+        half4 output = color;
 
-            #if FINALPASS
+        #if FINALPASS
             {
                 output.rgb = Dither(output.rgb, i.texcoord);
             }
-            #else
+        #else
+        {
+            if (_LumaInAlpha > 0.5)
             {
-                if (_LumaInAlpha > 0.5)
-                {
-                    // Put saturated luma in alpha for FXAA - higher quality than "green as luma" and
-                    // necessary as RGB values will potentially still be HDR for the FXAA pass
-                    half luma = Luminance(saturate(output));
-                    output.a = luma;
-                }
+                // Put saturated luma in alpha for FXAA - higher quality than "green as luma" and
+                // necessary as RGB values will potentially still be HDR for the FXAA pass
+                half luma = Luminance(saturate(output));
+                output.a = luma;
             }
-            #endif
+        }
+        #endif
 
-            #if UNITY_COLORSPACE_GAMMA
+        #if UNITY_COLORSPACE_GAMMA
             {
                 output = LinearToSRGB(output);
             }
-            #endif
+        #endif
 
-            // Output RGB is still HDR at that point (unless range was crunched by a tonemapper)
-            return output;
-        }
-
+        // Output RGB is still HDR at that point (unless range was crunched by a tonemapper)
+        return output;
+    }
     ENDHLSL
 
     SubShader
@@ -242,20 +240,16 @@ Shader "Hidden/PostProcessing/Uber"
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragUber
-
+            #pragma vertex VertDefault
+            #pragma fragment FragUber
             ENDHLSL
         }
 
         Pass
         {
             HLSLPROGRAM
-
-                #pragma vertex VertDefaultNoFlip
-                #pragma fragment FragUber
-
+            #pragma vertex VertDefaultNoFlip
+            #pragma fragment FragUber
             ENDHLSL
         }
     }

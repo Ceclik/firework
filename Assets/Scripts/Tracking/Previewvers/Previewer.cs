@@ -1,24 +1,19 @@
 ﻿using Assets.Scripts.Tracking.CamFilters;
 using Emgu.CV;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Tracking.Previewvers
 {
-    [RequireComponent (typeof (RawImage))]
-    public abstract class Previewer:MonoBehaviour
+    [RequireComponent(typeof(RawImage))]
+    public abstract class Previewer : MonoBehaviour
     {
+        private EmguCamera _camera;
+        private byte[] _data;
+        protected ICamFilter[] _filters;
         private RawImage _previewImage;
 
         private Texture2D _texture;
-        protected ICamFilter[] _filters;
-        private EmguCamera _camera;
-        private Byte[] _data;
 
         private bool _updated; //need to update preview texture;        
 
@@ -36,10 +31,8 @@ namespace Assets.Scripts.Tracking.Previewvers
         {
             _previewImage = GetComponent<RawImage>();
             _camera = EmguCamera.Instance;
-            if (_texture==null)
-            {
+            if (_texture == null)
                 _texture = new Texture2D(_camera.Width, _camera.Height, TextureFormat.RGB24, false, true);
-            }
             _previewImage.texture = _texture;
             _camera.ProcessFrame += ProcessFrame;
         }
@@ -50,16 +43,11 @@ namespace Assets.Scripts.Tracking.Previewvers
         }
 
         private void ProcessFrame(object sender, Mat frame)
-        {            
+        {
             var currentFrame = frame;
-            foreach (var filter in _filters)
-            {
-                currentFrame = filter.ProcessFrame(currentFrame);
-            }
+            foreach (var filter in _filters) currentFrame = filter.ProcessFrame(currentFrame);
             _data = currentFrame.GetData();
             _updated = true;
         }
-
-        
     }
 }

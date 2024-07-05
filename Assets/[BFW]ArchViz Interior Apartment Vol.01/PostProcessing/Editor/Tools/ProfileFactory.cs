@@ -1,18 +1,20 @@
-using UnityEngine;
-using UnityEditor.ProjectWindowCallback;
 using System.IO;
-using UnityEngine.SceneManagement;
+using UnityEditor.ProjectWindowCallback;
+using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 
 namespace UnityEditor.Rendering.PostProcessing
 {
     public class ProfileFactory
     {
         [MenuItem("Assets/Create/Post-processing Profile", priority = 201)]
-        static void CreatePostProcessProfile()
+        private static void CreatePostProcessProfile()
         {
             //var icon = EditorGUIUtility.FindTexture("ScriptableObject Icon");
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<DoCreatePostProcessProfile>(), "New Post-processing Profile.asset", null, null);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+                ScriptableObject.CreateInstance<DoCreatePostProcessProfile>(), "New Post-processing Profile.asset",
+                null, null);
         }
 
         public static PostProcessProfile CreatePostProcessProfileAtPath(string path)
@@ -47,7 +49,7 @@ namespace UnityEditor.Rendering.PostProcessing
 
             path += targetName + " Profile.asset";
             path = AssetDatabase.GenerateUniqueAssetPath(path);
-                        
+
             var profile = ScriptableObject.CreateInstance<PostProcessProfile>();
             AssetDatabase.CreateAsset(profile, path);
             AssetDatabase.SaveAssets();
@@ -56,7 +58,7 @@ namespace UnityEditor.Rendering.PostProcessing
         }
     }
 
-    class DoCreatePostProcessProfile : EndNameEditAction
+    internal class DoCreatePostProcessProfile : EndNameEditAction
     {
         public override void Action(int instanceId, string pathName, string resourceFile)
         {

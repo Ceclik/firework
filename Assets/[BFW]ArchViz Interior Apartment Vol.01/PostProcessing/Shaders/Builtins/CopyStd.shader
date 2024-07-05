@@ -13,75 +13,74 @@ Shader "Hidden/PostProcessing/CopyStd"
     }
 
     CGINCLUDE
+    struct Attributes
+    {
+        float4 vertex : POSITION;
+        float2 texcoord : TEXCOORD0;
+    };
 
-        struct Attributes
-        {
-            float4 vertex : POSITION;
-            float2 texcoord : TEXCOORD0;
-        };
+    struct Varyings
+    {
+        float4 vertex : SV_POSITION;
+        float2 texcoord : TEXCOORD0;
+    };
 
-        struct Varyings
-        {
-            float4 vertex : SV_POSITION;
-            float2 texcoord : TEXCOORD0;
-        };
+    sampler2D _MainTex;
+    float4 _MainTex_ST;
 
-        sampler2D _MainTex;
-        float4 _MainTex_ST;
+    Varyings Vert(Attributes v)
+    {
+        Varyings o;
+        o.vertex = float4(v.vertex.xy * 2.0 - 1.0, 0.0, 1.0);
+        o.texcoord = v.texcoord;
 
-        Varyings Vert(Attributes v)
-        {
-            Varyings o;
-            o.vertex = float4(v.vertex.xy * 2.0 - 1.0, 0.0, 1.0);
-            o.texcoord = v.texcoord;
-
-            #if UNITY_UV_STARTS_AT_TOP
+        #if UNITY_UV_STARTS_AT_TOP
             o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
-            #endif
+        #endif
 
-            o.texcoord = o.texcoord * _MainTex_ST.xy + _MainTex_ST.zw; // We need this for VR
+        o.texcoord = o.texcoord * _MainTex_ST.xy + _MainTex_ST.zw; // We need this for VR
 
-            return o;
-        }
+        return o;
+    }
 
-        float4 Frag(Varyings i) : SV_Target
-        {
-            float4 color = tex2D(_MainTex, i.texcoord);
-            return color;
-        }
+    float4 Frag(Varyings i) : SV_Target
+    {
+        float4 color = tex2D(_MainTex, i.texcoord);
+        return color;
+    }
 
-        //>>> We don't want to include StdLib.hlsl in this file so let's copy/paste what we need
-        bool IsNan(float x)
-        {
+    //>>> We don't want to include StdLib.hlsl in this file so let's copy/paste what we need
+    bool IsNan(float x)
+    {
         #if !SHADER_API_GLES
-            return isnan(x) || isinf(x);
+        return isnan(x) || isinf(x);
         #else
             return (x <= 0.0 || 0.0 <= x) ? false : true;
         #endif
-        }
+    }
 
-        bool AnyIsNan(float4 x)
-        {
+    bool AnyIsNan(float4 x)
+    {
         #if !SHADER_API_GLES
-            return any(isnan(x)) || any(isinf(x));
+        return any(isnan(x)) || any(isinf(x));
         #else
             return IsNan(x.x) || IsNan(x.y) || IsNan(x.z) || IsNan(x.w);
         #endif
-        }
-        //<<<
+    }
 
-        float4 FragKillNaN(Varyings i) : SV_Target
+    //<<<
+
+    float4 FragKillNaN(Varyings i) : SV_Target
+    {
+        float4 color = tex2D(_MainTex, i.texcoord);
+
+        if (AnyIsNan(color))
         {
-            float4 color = tex2D(_MainTex, i.texcoord);
-
-            if (AnyIsNan(color))
-            {
-                color = (0.0).xxxx;
-            }
-
-            return color;
+            color = (0.0).xxxx;
         }
 
+        return color;
+    }
     ENDCG
 
     SubShader
@@ -92,10 +91,8 @@ Shader "Hidden/PostProcessing/CopyStd"
         Pass
         {
             CGPROGRAM
-
-                #pragma vertex Vert
-                #pragma fragment Frag
-
+            #pragma vertex Vert
+            #pragma fragment Frag
             ENDCG
         }
 
@@ -103,10 +100,8 @@ Shader "Hidden/PostProcessing/CopyStd"
         Pass
         {
             CGPROGRAM
-
-                #pragma vertex Vert
-                #pragma fragment FragKillNaN
-
+            #pragma vertex Vert
+            #pragma fragment FragKillNaN
             ENDCG
         }
     }

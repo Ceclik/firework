@@ -46,6 +46,6 @@
     #define FXAA_HLSL_5 1
     #define SMAA_HLSL_4_1 1
 #else
-    #define FXAA_HLSL_4 1
-    #define SMAA_HLSL_4 1
+#define FXAA_HLSL_4 1
+#define SMAA_HLSL_4 1
 #endif

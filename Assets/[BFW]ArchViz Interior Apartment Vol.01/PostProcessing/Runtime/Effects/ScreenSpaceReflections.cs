@@ -5,7 +5,14 @@ namespace UnityEngine.Rendering.PostProcessing
 {
     public enum ScreenSpaceReflectionPreset
     {
-        Lower, Low, Medium, High, Higher, Ultra, Overkill, Custom
+        Lower,
+        Low,
+        Medium,
+        High,
+        Higher,
+        Ultra,
+        Overkill,
+        Custom
     }
 
     public enum ScreenSpaceReflectionResolution
@@ -16,84 +23,99 @@ namespace UnityEngine.Rendering.PostProcessing
     }
 
     [Serializable]
-    public sealed class ScreenSpaceReflectionPresetParameter : ParameterOverride<ScreenSpaceReflectionPreset> { }
+    public sealed class ScreenSpaceReflectionPresetParameter : ParameterOverride<ScreenSpaceReflectionPreset>
+    {
+    }
 
     [Serializable]
-    public sealed class ScreenSpaceReflectionResolutionParameter : ParameterOverride<ScreenSpaceReflectionResolution> { }
+    public sealed class ScreenSpaceReflectionResolutionParameter : ParameterOverride<ScreenSpaceReflectionResolution>
+    {
+    }
 
     [Serializable]
     [PostProcess(typeof(ScreenSpaceReflectionsRenderer), "Unity/Screen-space reflections")]
     public sealed class ScreenSpaceReflections : PostProcessEffectSettings
     {
-        [Tooltip("Choose a quality preset, or use \"Custom\" to fine tune it. Don't use a preset higher than \"Medium\" if you care about performances on consoles.")]
-        public ScreenSpaceReflectionPresetParameter preset = new ScreenSpaceReflectionPresetParameter { value = ScreenSpaceReflectionPreset.Medium };
+        [Tooltip(
+            "Choose a quality preset, or use \"Custom\" to fine tune it. Don't use a preset higher than \"Medium\" if you care about performances on consoles.")]
+        public ScreenSpaceReflectionPresetParameter preset = new() { value = ScreenSpaceReflectionPreset.Medium };
 
-        [Range(0, 256), Tooltip("Maximum iteration count.")]
-        public IntParameter maximumIterationCount = new IntParameter { value = 16 };
+        [Range(0, 256)] [Tooltip("Maximum iteration count.")]
+        public IntParameter maximumIterationCount = new() { value = 16 };
 
-        [Tooltip("Changes the size of the SSR buffer. Downsample it to maximize performances or supersample it to get slow but higher quality results.")]
-        public ScreenSpaceReflectionResolutionParameter resolution = new ScreenSpaceReflectionResolutionParameter { value = ScreenSpaceReflectionResolution.Downsampled };
+        [Tooltip(
+            "Changes the size of the SSR buffer. Downsample it to maximize performances or supersample it to get slow but higher quality results.")]
+        public ScreenSpaceReflectionResolutionParameter resolution = new()
+            { value = ScreenSpaceReflectionResolution.Downsampled };
 
-        [Range(1f, 64f), Tooltip("Ray thickness. Lower values are more expensive but allow the effect to detect smaller details.")]
-        public FloatParameter thickness = new FloatParameter { value = 8f };
+        [Range(1f, 64f)]
+        [Tooltip("Ray thickness. Lower values are more expensive but allow the effect to detect smaller details.")]
+        public FloatParameter thickness = new() { value = 8f };
 
         [Tooltip("Maximum distance to traverse after which it will stop drawing reflections.")]
-        public FloatParameter maximumMarchDistance = new FloatParameter { value = 100f };
+        public FloatParameter maximumMarchDistance = new() { value = 100f };
 
-        [Range(0f, 1f), Tooltip("Fades reflections close to the near planes.")]
-        public FloatParameter distanceFade = new FloatParameter { value = 0.5f };
+        [Range(0f, 1f)] [Tooltip("Fades reflections close to the near planes.")]
+        public FloatParameter distanceFade = new() { value = 0.5f };
 
-        [Range(0f, 1f), Tooltip("Fades reflections close to the screen edges.")]
-        public FloatParameter vignette = new FloatParameter { value = 0.5f };
+        [Range(0f, 1f)] [Tooltip("Fades reflections close to the screen edges.")]
+        public FloatParameter vignette = new() { value = 0.5f };
 
         public override bool IsEnabledAndSupported(PostProcessRenderContext context)
         {
             return enabled
-                && context.camera.actualRenderingPath == RenderingPath.DeferredShading
-                && SystemInfo.supportsMotionVectors
-                && SystemInfo.supportsComputeShaders
-                && SystemInfo.copyTextureSupport > CopyTextureSupport.None;
+                   && context.camera.actualRenderingPath == RenderingPath.DeferredShading
+                   && SystemInfo.supportsMotionVectors
+                   && SystemInfo.supportsComputeShaders
+                   && SystemInfo.copyTextureSupport > CopyTextureSupport.None;
         }
     }
 
     public sealed class ScreenSpaceReflectionsRenderer : PostProcessEffectRenderer<ScreenSpaceReflections>
     {
-        RenderTexture m_Resolve;
-        RenderTexture m_History;
-        int[] m_MipIDs;
-
-        class QualityPreset
+        private readonly QualityPreset[] m_Presets =
         {
-            public int maximumIterationCount;
-            public float thickness;
-            public ScreenSpaceReflectionResolution downsampling;
-        }
-
-        readonly QualityPreset[] m_Presets =
-        {
-            new QualityPreset { maximumIterationCount = 10, thickness = 32, downsampling = ScreenSpaceReflectionResolution.Downsampled  }, // Lower
-            new QualityPreset { maximumIterationCount = 16, thickness = 32, downsampling = ScreenSpaceReflectionResolution.Downsampled  }, // Low
-            new QualityPreset { maximumIterationCount = 32, thickness = 16, downsampling = ScreenSpaceReflectionResolution.Downsampled  }, // Medium
-            new QualityPreset { maximumIterationCount = 48, thickness =  8, downsampling = ScreenSpaceReflectionResolution.Downsampled  }, // High
-            new QualityPreset { maximumIterationCount = 16, thickness = 32, downsampling = ScreenSpaceReflectionResolution.FullSize }, // Higher
-            new QualityPreset { maximumIterationCount = 48, thickness = 16, downsampling = ScreenSpaceReflectionResolution.FullSize }, // Ultra
-            new QualityPreset { maximumIterationCount = 128, thickness = 12, downsampling = ScreenSpaceReflectionResolution.Supersampled }, // Overkill
+            new()
+            {
+                maximumIterationCount = 10, thickness = 32, downsampling = ScreenSpaceReflectionResolution.Downsampled
+            }, // Lower
+            new()
+            {
+                maximumIterationCount = 16, thickness = 32, downsampling = ScreenSpaceReflectionResolution.Downsampled
+            }, // Low
+            new()
+            {
+                maximumIterationCount = 32, thickness = 16, downsampling = ScreenSpaceReflectionResolution.Downsampled
+            }, // Medium
+            new()
+            {
+                maximumIterationCount = 48, thickness = 8, downsampling = ScreenSpaceReflectionResolution.Downsampled
+            }, // High
+            new()
+            {
+                maximumIterationCount = 16, thickness = 32, downsampling = ScreenSpaceReflectionResolution.FullSize
+            }, // Higher
+            new()
+            {
+                maximumIterationCount = 48, thickness = 16, downsampling = ScreenSpaceReflectionResolution.FullSize
+            }, // Ultra
+            new()
+            {
+                maximumIterationCount = 128, thickness = 12, downsampling = ScreenSpaceReflectionResolution.Supersampled
+            } // Overkill
         };
 
-        enum Pass
-        {
-            Test,
-            Resolve,
-            Reproject,
-            Composite
-        }
+        private RenderTexture m_History;
+        private int[] m_MipIDs;
+        private RenderTexture m_Resolve;
 
         public override DepthTextureMode GetCameraFlags()
         {
             return DepthTextureMode.Depth | DepthTextureMode.MotionVectors;
         }
 
-        internal void CheckRT(ref RenderTexture rt, int width, int height, RenderTextureFormat format, FilterMode filterMode, bool useMipMap)
+        internal void CheckRT(ref RenderTexture rt, int width, int height, RenderTextureFormat format,
+            FilterMode filterMode, bool useMipMap)
         {
             if (rt == null || !rt.IsCreated() || rt.width != width || rt.height != height)
             {
@@ -120,7 +142,7 @@ namespace UnityEngine.Rendering.PostProcessing
             // Get quality settings
             if (settings.preset.value != ScreenSpaceReflectionPreset.Custom)
             {
-                int id = (int)settings.preset.value;
+                var id = (int)settings.preset.value;
                 settings.maximumIterationCount.value = m_Presets[id].maximumIterationCount;
                 settings.thickness.value = m_Presets[id].thickness;
                 settings.resolution.value = m_Presets[id].downsampling;
@@ -129,7 +151,7 @@ namespace UnityEngine.Rendering.PostProcessing
             settings.maximumMarchDistance.value = Mathf.Max(0f, settings.maximumMarchDistance.value);
 
             // Square POT target
-            int size = Mathf.ClosestPowerOfTwo(Mathf.Min(context.width, context.height));
+            var size = Mathf.ClosestPowerOfTwo(Mathf.Min(context.width, context.height));
 
             if (settings.resolution.value == ScreenSpaceReflectionResolution.Downsampled)
                 size >>= 1;
@@ -139,7 +161,7 @@ namespace UnityEngine.Rendering.PostProcessing
             // The gaussian pyramid compute works in blocks of 8x8 so make sure the last lod has a
             // minimum size of 8x8
             const int kMaxLods = 12;
-            int lodCount = Mathf.FloorToInt(Mathf.Log(size, 2f) - 3f);
+            var lodCount = Mathf.FloorToInt(Mathf.Log(size, 2f) - 3f);
             lodCount = Mathf.Min(lodCount, kMaxLods);
 
             CheckRT(ref m_Resolve, size, size, context.sourceFormat, FilterMode.Trilinear, true);
@@ -161,8 +183,12 @@ namespace UnityEngine.Rendering.PostProcessing
             sheet.properties.SetMatrix(ShaderIDs.InverseViewMatrix, context.camera.worldToCameraMatrix.inverse);
             sheet.properties.SetMatrix(ShaderIDs.InverseProjectionMatrix, projectionMatrix.inverse);
             sheet.properties.SetMatrix(ShaderIDs.ScreenSpaceProjectionMatrix, screenSpaceProjectionMatrix);
-            sheet.properties.SetVector(ShaderIDs.Params, new Vector4((float)settings.vignette.value, settings.distanceFade.value, settings.maximumMarchDistance.value, lodCount));
-            sheet.properties.SetVector(ShaderIDs.Params2, new Vector4((float)context.width / (float)context.height, (float)size / (float)noiseTex.width, settings.thickness.value, settings.maximumIterationCount.value));
+            sheet.properties.SetVector(ShaderIDs.Params,
+                new Vector4(settings.vignette.value, settings.distanceFade.value, settings.maximumMarchDistance.value,
+                    lodCount));
+            sheet.properties.SetVector(ShaderIDs.Params2,
+                new Vector4(context.width / (float)context.height, size / (float)noiseTex.width,
+                    settings.thickness.value, settings.maximumIterationCount.value));
 
             cmd.GetTemporaryRT(ShaderIDs.Test, size, size, 0, FilterMode.Point, context.sourceFormat);
             cmd.BlitFullscreenTriangle(context.source, ShaderIDs.Test, sheet, (int)Pass.Test);
@@ -199,21 +225,22 @@ namespace UnityEngine.Rendering.PostProcessing
             {
                 m_MipIDs = new int[kMaxLods];
 
-                for (int i = 0; i < kMaxLods; i++)
+                for (var i = 0; i < kMaxLods; i++)
                     m_MipIDs[i] = Shader.PropertyToID("_SSRGaussianMip" + i);
             }
 
             var compute = context.resources.computeShaders.gaussianDownsample;
-            int kernel = compute.FindKernel("KMain");
+            var kernel = compute.FindKernel("KMain");
 
             var last = new RenderTargetIdentifier(m_Resolve);
 
-            for (int i = 0; i < lodCount; i++)
+            for (var i = 0; i < lodCount; i++)
             {
                 size >>= 1;
                 Assert.IsTrue(size > 0);
 
-                cmd.GetTemporaryRT(m_MipIDs[i], size, size, 0, FilterMode.Bilinear, context.sourceFormat, RenderTextureReadWrite.Default, 1, true);
+                cmd.GetTemporaryRT(m_MipIDs[i], size, size, 0, FilterMode.Bilinear, context.sourceFormat,
+                    RenderTextureReadWrite.Default, 1, true);
                 cmd.SetComputeTextureParam(compute, kernel, "_Source", last);
                 cmd.SetComputeTextureParam(compute, kernel, "_Result", m_MipIDs[i]);
                 cmd.SetComputeVectorParam(compute, "_Size", new Vector4(size, size, 1f / size, 1f / size));
@@ -223,7 +250,7 @@ namespace UnityEngine.Rendering.PostProcessing
                 last = m_MipIDs[i];
             }
 
-            for (int i = 0; i < lodCount; i++)
+            for (var i = 0; i < lodCount; i++)
                 cmd.ReleaseTemporaryRT(m_MipIDs[i]);
 
             sheet.properties.SetTexture(ShaderIDs.Resolve, m_Resolve);
@@ -237,6 +264,21 @@ namespace UnityEngine.Rendering.PostProcessing
             RuntimeUtilities.Destroy(m_History);
             m_Resolve = null;
             m_History = null;
+        }
+
+        private class QualityPreset
+        {
+            public ScreenSpaceReflectionResolution downsampling;
+            public int maximumIterationCount;
+            public float thickness;
+        }
+
+        private enum Pass
+        {
+            Test,
+            Resolve,
+            Reproject,
+            Composite
         }
     }
 }

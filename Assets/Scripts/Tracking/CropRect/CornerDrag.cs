@@ -1,12 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CornerDrag : MonoBehaviour,IDragHandler,IEndDragHandler {
+public class CornerDrag : MonoBehaviour, IDragHandler, IEndDragHandler
+{
+    private Canvas _canvas;
 
     private CropRectPreview _rect;
-    private Canvas _canvas;
+
+    // Use this for initialization
+    private void Start()
+    {
+        _rect = GetComponentInParent<CropRectPreview>();
+        _canvas = GetComponentInParent<Canvas>();
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -14,7 +25,7 @@ public class CornerDrag : MonoBehaviour,IDragHandler,IEndDragHandler {
         transform.position = new Vector2(
             Mathf.Clamp(transform.position.x, 0, _canvas.pixelRect.width - 1),
             Mathf.Clamp(transform.position.y, 0, _canvas.pixelRect.height - 1)
-            );
+        );
         _rect.UpdateCoords();
     }
 
@@ -22,15 +33,4 @@ public class CornerDrag : MonoBehaviour,IDragHandler,IEndDragHandler {
     {
         _rect.SaveCoords();
     }
-
-    // Use this for initialization
-    void Start () {
-        _rect = GetComponentInParent<CropRectPreview>();
-        _canvas = GetComponentInParent<Canvas>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

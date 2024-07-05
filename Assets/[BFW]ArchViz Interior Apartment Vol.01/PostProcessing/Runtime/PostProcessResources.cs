@@ -7,6 +7,12 @@ namespace UnityEngine.Rendering.PostProcessing
     // better dependency tracking and better interoperability with asset bundles.
     public sealed class PostProcessResources : ScriptableObject
     {
+        public Texture2D[] blueNoise64;
+        public Texture2D[] blueNoise256;
+        public SMAALuts smaaLuts;
+        public Shaders shaders;
+        public ComputeShaders computeShaders;
+
         [Serializable]
         public sealed class Shaders
         {
@@ -57,11 +63,5 @@ namespace UnityEngine.Rendering.PostProcessing
             public Texture2D area;
             public Texture2D search;
         }
-        
-        public Texture2D[] blueNoise64;
-        public Texture2D[] blueNoise256;
-        public SMAALuts smaaLuts;
-        public Shaders shaders;
-        public ComputeShaders computeShaders;
     }
 }

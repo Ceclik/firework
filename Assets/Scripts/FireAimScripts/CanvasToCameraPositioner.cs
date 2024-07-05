@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace FireAimScripts
@@ -7,9 +6,8 @@ namespace FireAimScripts
     {
         private void Update()
         {
-            Transform camPos = Camera.main?.transform;
+            var camPos = Camera.main?.transform;
             transform.LookAt(camPos.position - camPos.forward);
-
         }
     }
 }

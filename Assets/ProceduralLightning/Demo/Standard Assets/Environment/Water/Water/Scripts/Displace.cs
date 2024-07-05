@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace UnityStandardAssets.Water
@@ -10,13 +9,9 @@ namespace UnityStandardAssets.Water
         public void Awake()
         {
             if (enabled)
-            {
                 OnEnable();
-            }
             else
-            {
                 OnDisable();
-            }
         }
 
 

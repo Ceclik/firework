@@ -6,19 +6,24 @@
 // 
 
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9
-
 #define UNITY_4
 
 #endif
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
-using System.Collections;
+using UnityEngine.Profiling;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class DemoConfigureScript : MonoBehaviour
     {
-        private const string scriptTemplate = @"// Important, make sure this script is assigned properly, or you will get null ref exceptions.
+        private const string scriptTemplate =
+            @"// Important, make sure this script is assigned properly, or you will get null ref exceptions.
     DigitalRuby.ThunderAndLightning.LightningBoltScript script = gameObject.GetComponent<DigitalRuby.ThunderAndLightning.LightningBoltScript>();
     int count = {0};
     float duration = {1}f;
@@ -62,43 +67,54 @@ namespace DigitalRuby.ThunderAndLightning
     script.CreateLightningBolts(paramList);
 ";
 
-        private int lastSeed;
-        private Vector3 lastStart;
-        private Vector3 lastEnd;
-
         public LightningBoltScript LightningBoltScript;
 
-        public UnityEngine.UI.Slider GenerationsSlider;
-        public UnityEngine.UI.Slider BoltCountSlider;
-        public UnityEngine.UI.Slider DurationSlider;
-        public UnityEngine.UI.Slider ChaosSlider;
-        public UnityEngine.UI.Slider TrunkWidthSlider;
-        public UnityEngine.UI.Slider ForkednessSlider;
-        public UnityEngine.UI.Slider IntensitySlider;
-        public UnityEngine.UI.Text IntensityValueLabel;
-        public UnityEngine.UI.Slider GlowIntensitySlider;
-        public UnityEngine.UI.Slider GlowWidthSlider;
-        public UnityEngine.UI.Slider FadePercentSlider;
-        public UnityEngine.UI.Slider GrowthMultiplierSlider;
-        public UnityEngine.UI.Slider DistanceSlider;
-        public UnityEngine.UI.Text GenerationsValueLabel;
-        public UnityEngine.UI.Text BoltCountValueLabel;
-        public UnityEngine.UI.Text DurationValueLabel;
-        public UnityEngine.UI.Text ChaosValueLabel;
-        public UnityEngine.UI.Text TrunkWidthValueLabel;
-        public UnityEngine.UI.Text ForkednessValueLabel;
-        public UnityEngine.UI.Text GlowIntensityValueLabel;
-        public UnityEngine.UI.Text GlowWidthValueLabel;
-        public UnityEngine.UI.Text FadePercentValueLabel;
-        public UnityEngine.UI.Text GrowthMultiplierValueLabel;
-        public UnityEngine.UI.Text DistanceValueLabel;
-        public UnityEngine.UI.Text SeedLabel;
-        public UnityEngine.UI.RawImage StartImage;
-        public UnityEngine.UI.RawImage EndImage;
-        public UnityEngine.UI.Button CopySeedButton;
-        public UnityEngine.UI.InputField SeedInputField;
-        public UnityEngine.UI.Text SpaceBarLabel;
-        public UnityEngine.UI.Toggle OrthographicToggle;
+        public Slider GenerationsSlider;
+        public Slider BoltCountSlider;
+        public Slider DurationSlider;
+        public Slider ChaosSlider;
+        public Slider TrunkWidthSlider;
+        public Slider ForkednessSlider;
+        public Slider IntensitySlider;
+        public Text IntensityValueLabel;
+        public Slider GlowIntensitySlider;
+        public Slider GlowWidthSlider;
+        public Slider FadePercentSlider;
+        public Slider GrowthMultiplierSlider;
+        public Slider DistanceSlider;
+        public Text GenerationsValueLabel;
+        public Text BoltCountValueLabel;
+        public Text DurationValueLabel;
+        public Text ChaosValueLabel;
+        public Text TrunkWidthValueLabel;
+        public Text ForkednessValueLabel;
+        public Text GlowIntensityValueLabel;
+        public Text GlowWidthValueLabel;
+        public Text FadePercentValueLabel;
+        public Text GrowthMultiplierValueLabel;
+        public Text DistanceValueLabel;
+        public Text SeedLabel;
+        public RawImage StartImage;
+        public RawImage EndImage;
+        public Button CopySeedButton;
+        public InputField SeedInputField;
+        public Text SpaceBarLabel;
+        public Toggle OrthographicToggle;
+        private Vector3 lastEnd;
+
+        private int lastSeed;
+        private Vector3 lastStart;
+
+        private void Start()
+        {
+            UpdateUI();
+            UpdateStatusLabel(TimeSpan.Zero);
+        }
+
+        private void Update()
+        {
+            if (!SeedInputField.isFocused && Input.GetKeyDown(KeyCode.Space)) CallLightning();
+        }
 
         public void GenerationsSliderChanged(float value)
         {
@@ -183,13 +199,13 @@ namespace DigitalRuby.ThunderAndLightning
         public void CopyButtonClicked()
         {
             SeedInputField.text = lastSeed.ToString();
-            TextEditor te = new TextEditor();
-            string copyText = string.Format(scriptTemplate,
+            var te = new TextEditor();
+            var copyText = string.Format(scriptTemplate,
                 BoltCountSlider.value,
                 DurationSlider.value,
                 SeedInputField.text,
                 lastStart.x, lastStart.y, lastStart.z,
-                lastEnd.x, lastEnd.y, lastEnd.z,                
+                lastEnd.x, lastEnd.y, lastEnd.z,
                 GenerationsSlider.value,
                 ChaosSlider.value,
                 TrunkWidthSlider.value,
@@ -202,7 +218,6 @@ namespace DigitalRuby.ThunderAndLightning
             );
 
 #if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-
             // Unity Pre 5.3:
             te.content = new GUIContent(copyText);
 
@@ -245,38 +260,35 @@ namespace DigitalRuby.ThunderAndLightning
                 SpaceBarLabel = null;
             }
 
-            lastStart = StartImage.transform.position + (Camera.main.transform.forward * DistanceSlider.value);
-            lastEnd = EndImage.transform.position + (Camera.main.transform.forward * DistanceSlider.value);
+            lastStart = StartImage.transform.position + Camera.main.transform.forward * DistanceSlider.value;
+            lastEnd = EndImage.transform.position + Camera.main.transform.forward * DistanceSlider.value;
             lastStart = Camera.main.ScreenToWorldPoint(lastStart);
             lastEnd = Camera.main.ScreenToWorldPoint(lastEnd);
 
-            int count = (int)BoltCountSlider.value;
-            float duration = DurationSlider.value;
-            float delay = 0.0f;
-            float chaosFactor = ChaosSlider.value;
-            float trunkWidth = TrunkWidthSlider.value;
-            float forkedness = ForkednessSlider.value;
-            if (!int.TryParse(SeedInputField.text, out lastSeed))
-            {
-                lastSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-            }
-            System.Random r = new System.Random(lastSeed);
-            float singleDuration = Mathf.Max(1.0f / 30.0f, (duration / (float)count));
-            float fadePercent = FadePercentSlider.value;
-            float growthMultiplier = GrowthMultiplierSlider.value;
-            System.Collections.Generic.List<LightningBoltParameters> paramList = new System.Collections.Generic.List<LightningBoltParameters>();
+            var count = (int)BoltCountSlider.value;
+            var duration = DurationSlider.value;
+            var delay = 0.0f;
+            var chaosFactor = ChaosSlider.value;
+            var trunkWidth = TrunkWidthSlider.value;
+            var forkedness = ForkednessSlider.value;
+            if (!int.TryParse(SeedInputField.text, out lastSeed)) lastSeed = Random.Range(int.MinValue, int.MaxValue);
+            var r = new System.Random(lastSeed);
+            var singleDuration = Mathf.Max(1.0f / 30.0f, duration / count);
+            var fadePercent = FadePercentSlider.value;
+            var growthMultiplier = GrowthMultiplierSlider.value;
+            var paramList = new List<LightningBoltParameters>();
 
-            UnityEngine.Profiling.Profiler.BeginSample("CreateLightningBolt");
-            System.Diagnostics.Stopwatch timer = System.Diagnostics.Stopwatch.StartNew();
-            
+            Profiler.BeginSample("CreateLightningBolt");
+            var timer = Stopwatch.StartNew();
+
             while (count-- > 0)
             {
-                LightningBoltParameters parameters = new LightningBoltParameters
+                var parameters = new LightningBoltParameters
                 {
                     Start = lastStart,
                     End = lastEnd,
                     Generations = (int)GenerationsSlider.value,
-                    LifeTime = (count == 1 ? singleDuration : (singleDuration * (((float)r.NextDouble() * 0.4f) + 0.8f))),
+                    LifeTime = count == 1 ? singleDuration : singleDuration * ((float)r.NextDouble() * 0.4f + 0.8f),
                     Delay = delay,
                     ChaosFactor = chaosFactor,
                     TrunkWidth = trunkWidth,
@@ -289,41 +301,28 @@ namespace DigitalRuby.ThunderAndLightning
                     GrowthMultiplier = growthMultiplier
                 };
                 paramList.Add(parameters);
-                delay += (singleDuration * (((float)r.NextDouble() * 0.8f) + 0.4f));
+                delay += singleDuration * ((float)r.NextDouble() * 0.8f + 0.4f);
             }
+
             LightningBoltScript.CreateLightningBolts(paramList);
 
             timer.Stop();
-            UnityEngine.Profiling.Profiler.EndSample();
+            Profiler.EndSample();
 
             UpdateStatusLabel(timer.Elapsed);
         }
 
-        private void UpdateStatusLabel(System.TimeSpan time)
+        private void UpdateStatusLabel(TimeSpan time)
         {
-            SeedLabel.text = "Time to create: " + time.TotalMilliseconds.ToString() + "ms" +
-                System.Environment.NewLine + "Seed: " + lastSeed.ToString() +
-                System.Environment.NewLine + "Start: " + lastStart.ToString() +
-                System.Environment.NewLine + "End: " + lastEnd.ToString() +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Use SPACE to create a bolt" + System.Environment.NewLine +
-                "Drag circle and anchor" + System.Environment.NewLine +
-                "Type in seed or clear for random" + System.Environment.NewLine +
-                "Click copy to generate script";
-        }
-
-        private void Start()
-        {
-            UpdateUI();
-            UpdateStatusLabel(System.TimeSpan.Zero);
-        }
-
-        private void Update()
-        {
-            if (!SeedInputField.isFocused && Input.GetKeyDown(KeyCode.Space))
-            {
-                CallLightning();
-            }
+            SeedLabel.text = "Time to create: " + time.TotalMilliseconds + "ms" +
+                             Environment.NewLine + "Seed: " + lastSeed +
+                             Environment.NewLine + "Start: " + lastStart +
+                             Environment.NewLine + "End: " + lastEnd +
+                             Environment.NewLine + Environment.NewLine +
+                             "Use SPACE to create a bolt" + Environment.NewLine +
+                             "Drag circle and anchor" + Environment.NewLine +
+                             "Type in seed or clear for random" + Environment.NewLine +
+                             "Click copy to generate script";
         }
     }
 }

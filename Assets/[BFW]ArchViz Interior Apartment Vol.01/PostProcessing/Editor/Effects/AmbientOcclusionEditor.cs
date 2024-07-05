@@ -6,14 +6,14 @@ namespace UnityEditor.Rendering.PostProcessing
     [PostProcessEditor(typeof(AmbientOcclusion))]
     public sealed class AmbientOcclusionEditor : PostProcessEffectEditor<AmbientOcclusion>
     {
-        SerializedParameterOverride m_Mode;
-        SerializedParameterOverride m_Intensity;
-        SerializedParameterOverride m_Color;
-        SerializedParameterOverride m_AmbientOnly;
-        SerializedParameterOverride m_ThicknessModifier;
-        SerializedParameterOverride m_DirectLightingStrength;
-        SerializedParameterOverride m_Quality;
-        SerializedParameterOverride m_Radius;
+        private SerializedParameterOverride m_AmbientOnly;
+        private SerializedParameterOverride m_Color;
+        private SerializedParameterOverride m_DirectLightingStrength;
+        private SerializedParameterOverride m_Intensity;
+        private SerializedParameterOverride m_Mode;
+        private SerializedParameterOverride m_Quality;
+        private SerializedParameterOverride m_Radius;
+        private SerializedParameterOverride m_ThicknessModifier;
 
         public override void OnEnable()
         {
@@ -30,11 +30,13 @@ namespace UnityEditor.Rendering.PostProcessing
         public override void OnInspectorGUI()
         {
             PropertyField(m_Mode);
-            int aoMode = m_Mode.value.intValue;
+            var aoMode = m_Mode.value.intValue;
 
-            if (RuntimeUtilities.scriptableRenderPipelineActive && aoMode == (int)AmbientOcclusionMode.ScalableAmbientObscurance)
+            if (RuntimeUtilities.scriptableRenderPipelineActive &&
+                aoMode == (int)AmbientOcclusionMode.ScalableAmbientObscurance)
             {
-                EditorGUILayout.HelpBox("Scalable ambient obscurance doesn't work with scriptable render pipelines.", MessageType.Warning);
+                EditorGUILayout.HelpBox("Scalable ambient obscurance doesn't work with scriptable render pipelines.",
+                    MessageType.Warning);
                 return;
             }
 
@@ -56,7 +58,8 @@ namespace UnityEditor.Rendering.PostProcessing
             else if (aoMode == (int)AmbientOcclusionMode.MultiScaleVolumetricObscurance)
             {
                 if (!SystemInfo.supportsComputeShaders)
-                    EditorGUILayout.HelpBox("Multi-scale volumetric obscurance requires compute shader support.", MessageType.Warning);
+                    EditorGUILayout.HelpBox("Multi-scale volumetric obscurance requires compute shader support.",
+                        MessageType.Warning);
 
                 PropertyField(m_ThicknessModifier);
 
@@ -66,7 +69,8 @@ namespace UnityEditor.Rendering.PostProcessing
 
             PropertyField(m_Color);
 
-            if (Camera.main != null && Camera.main.actualRenderingPath == RenderingPath.DeferredShading && Camera.main.allowHDR)
+            if (Camera.main != null && Camera.main.actualRenderingPath == RenderingPath.DeferredShading &&
+                Camera.main.allowHDR)
                 PropertyField(m_AmbientOnly);
         }
     }

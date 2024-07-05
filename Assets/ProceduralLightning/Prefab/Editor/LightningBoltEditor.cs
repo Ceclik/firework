@@ -6,47 +6,41 @@
 //
 
 #if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_4_8 || UNITY_4_9
-
 #define UNITY_4
 
 #endif
 
-using UnityEngine;
+using System.Reflection;
 using UnityEditor;
 using UnityEditorInternal;
-
-using System;
-using System.Reflection;
+using UnityEngine;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     [CustomEditor(typeof(LightningBoltScript), true)]
     public class LightningBoltEditor : UnityEditor.Editor
     {
-        private GUIContent[] sortingLayerNames;
-        private string layerName;
-        private int orderInLayer;
         private int chosenIndex;
         private LightningBoltScript inspectorTarget;
+        private string layerName;
+        private int orderInLayer;
+        private GUIContent[] sortingLayerNames;
 
         private void OnEnable()
         {
             inspectorTarget = target as LightningBoltScript;
 
             //Get the layer names
-            string[] layerNames = GetSortingLayerNames();
+            var layerNames = GetSortingLayerNames();
 
             //Put them in a GUIContent variable, so that we can display a tooltip later
             sortingLayerNames = new GUIContent[layerNames.Length];
-            string currentSortLayerName = (inspectorTarget.SortLayerName ?? string.Empty);
+            var currentSortLayerName = inspectorTarget.SortLayerName ?? string.Empty;
 
-            for (int i = 0; i < sortingLayerNames.Length; i++)
+            for (var i = 0; i < sortingLayerNames.Length; i++)
             {
                 sortingLayerNames[i] = new GUIContent(layerNames[i] ?? string.Empty);
-                if (currentSortLayerName == layerNames[i])
-                {
-                    chosenIndex = i;
-                }
+                if (currentSortLayerName == layerNames[i]) chosenIndex = i;
             }
         }
 
@@ -61,11 +55,11 @@ namespace DigitalRuby.ThunderAndLightning
                 EditorGUILayout.BeginVertical("box");
                 EditorGUILayout.LabelField("2D Settings:");
 
-                GUIContent layerTip = new GUIContent("Sorting Layer", "Layer name for custom sorting");
+                var layerTip = new GUIContent("Sorting Layer", "Layer name for custom sorting");
                 chosenIndex = EditorGUILayout.Popup(layerTip, chosenIndex, sortingLayerNames);
-                layerName = (sortingLayerNames[chosenIndex] == null ? null : sortingLayerNames[chosenIndex].text);
+                layerName = sortingLayerNames[chosenIndex] == null ? null : sortingLayerNames[chosenIndex].text;
 
-                GUIContent orderTip = new GUIContent("Sort Order", "Sort order in the sort layer");
+                var orderTip = new GUIContent("Sort Order", "Sort order in the sort layer");
                 orderInLayer = EditorGUILayout.IntField(orderTip, inspectorTarget.SortOrderInLayer);
 
                 EditorGUILayout.EndVertical();
@@ -86,9 +80,11 @@ namespace DigitalRuby.ThunderAndLightning
         // Get the sorting layer names
         public string[] GetSortingLayerNames()
         {
-            Type internalEditorUtilityType = typeof(InternalEditorUtility);
-            PropertyInfo sortingLayersProperty = internalEditorUtilityType.GetProperty("sortingLayerNames", BindingFlags.Static | BindingFlags.NonPublic);
-            string[] results = (string[])sortingLayersProperty.GetValue(null, new object[0]);
+            var internalEditorUtilityType = typeof(InternalEditorUtility);
+            var sortingLayersProperty =
+                internalEditorUtilityType.GetProperty("sortingLayerNames",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+            var results = (string[])sortingLayersProperty.GetValue(null, new object[0]);
             return results;
         }
     }

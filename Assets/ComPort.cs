@@ -1,35 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ComPort : MonoBehaviour
 {
-
     public Text comText;
 
-    private int counter = 0;
+    private int counter;
+
     // Use this for initialization
-    void Start()
+    private void Start()
     {
-        GetComponent<InputField>().text = GameManager.Instance.comPort;
-        Debug.Log("setting comport string");
+        GetComponent<InputField>().text = GameManager.Instance.ComPort;
+        UnityEngine.Debug.Log("setting comport string");
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 
     public void ChangeCom(string com)
     {
         if (counter > 0)
         {
-            GameManager.Instance.comPort = com;
+            GameManager.Instance.ComPort = com;
             PlayerPrefs.SetString("COM", com);
-            Debug.Log("Com port settings saved:" + com);
+            UnityEngine.Debug.Log("Com port settings saved:" + com);
         }
+
         counter++;
     }
 }

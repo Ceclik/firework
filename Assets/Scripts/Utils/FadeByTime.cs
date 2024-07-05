@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //This script is using for fade in level name in it beginning
@@ -10,6 +9,23 @@ public class FadeByTime : MonoBehaviour
     public float fadeInTime;
 
     private CanvasGroup _fadeGroup;
+
+    private void Awake()
+    {
+        _fadeGroup = GetComponent<CanvasGroup>();
+    }
+
+    // Use this for initialization
+    private void Start()
+    {
+        _fadeGroup.alpha = 0;
+        StartCoroutine(WaitForStart());
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 
 
     private IEnumerator FadeIn()
@@ -28,22 +44,4 @@ public class FadeByTime : MonoBehaviour
         yield return new WaitForSeconds(startTime);
         StartCoroutine(FadeIn());
     }
-    private void Awake()
-    {
-        _fadeGroup = GetComponent<CanvasGroup>();
-    }
-    // Use this for initialization
-    void Start()
-    {        
-        _fadeGroup.alpha = 0;
-        StartCoroutine(WaitForStart());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
 }

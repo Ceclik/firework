@@ -50,21 +50,30 @@ struct Result
 //
 // Uniforms
 //
-Texture2D _MainTex; SamplerState sampler_MainTex;
-Texture2D _History; SamplerState sampler_History;
+Texture2D _MainTex;
+SamplerState sampler_MainTex;
+Texture2D _History;
+SamplerState sampler_History;
 
-Texture2D _CameraDepthTexture; SamplerState sampler_CameraDepthTexture;
-Texture2D _CameraMotionVectorsTexture; SamplerState sampler_CameraMotionVectorsTexture;
-Texture2D _CameraReflectionsTexture; SamplerState sampler_CameraReflectionsTexture;
+Texture2D _CameraDepthTexture;
+SamplerState sampler_CameraDepthTexture;
+Texture2D _CameraMotionVectorsTexture;
+SamplerState sampler_CameraMotionVectorsTexture;
+Texture2D _CameraReflectionsTexture;
+SamplerState sampler_CameraReflectionsTexture;
 
 Texture2D _CameraGBufferTexture0; // albedo = g[0].rgb
 Texture2D _CameraGBufferTexture1; // roughness = g[1].a
-Texture2D _CameraGBufferTexture2; SamplerState sampler_CameraGBufferTexture2; // normal.xyz 2. * g[2].rgb - 1.
+Texture2D _CameraGBufferTexture2;
+SamplerState sampler_CameraGBufferTexture2; // normal.xyz 2. * g[2].rgb - 1.
 
-Texture2D _Noise; SamplerState sampler_Noise;
+Texture2D _Noise;
+SamplerState sampler_Noise;
 
-Texture2D _Test; SamplerState sampler_Test;
-Texture2D _Resolve; SamplerState sampler_Resolve;
+Texture2D _Test;
+SamplerState sampler_Test;
+Texture2D _Resolve;
+SamplerState sampler_Resolve;
 
 float4 _MainTex_TexelSize;
 float4 _Test_TexelSize;
@@ -108,7 +117,8 @@ float Vignette(float2 uv)
 
 float3 GetViewSpacePosition(float2 uv)
 {
-    float depth = _CameraDepthTexture.SampleLevel(sampler_CameraDepthTexture, UnityStereoTransformScreenSpaceTex(uv), 0).r;
+    float depth = _CameraDepthTexture.SampleLevel(sampler_CameraDepthTexture, UnityStereoTransformScreenSpaceTex(uv), 0)
+                                     .r;
     float4 result = mul(_InverseProjectionMatrix, float4(2.0 * uv - 1.0, depth, 1.0));
     return result.xyz / result.w;
 }
@@ -163,7 +173,8 @@ Result March(Ray ray, VaryingsDefault input)
     segment.end *= homogenizers.y;
 
     float4 endPoints = float4(r.xy, q.xy) * homogenizers.xxyy;
-    endPoints.zw += step(GetSquaredDistance(endPoints.xy, endPoints.zw), 0.0001) * max(_Test_TexelSize.x, _Test_TexelSize.y);
+    endPoints.zw += step(GetSquaredDistance(endPoints.xy, endPoints.zw), 0.0001) * max(
+        _Test_TexelSize.x, _Test_TexelSize.y);
 
     float2 displacement = endPoints.zw - endPoints.xy;
 
@@ -181,7 +192,8 @@ Result March(Ray ray, VaryingsDefault input)
     float normalizer = direction / displacement.x;
 
     segment.direction = (segment.end - segment.start) * normalizer;
-    float4 derivatives = float4(float2(direction, displacement.y * normalizer), (homogenizers.y - homogenizers.x) * normalizer, segment.direction.z);
+    float4 derivatives = float4(float2(direction, displacement.y * normalizer),
+                                (homogenizers.y - homogenizers.x) * normalizer, segment.direction.z);
 
     float stride = 1.0 - min(1.0, -ray.origin.z * 0.01);
 
@@ -211,14 +223,14 @@ Result March(Ray ray, VaryingsDefault input)
         z.y = tracker.w + derivatives.w * 0.5;
         z.y /= tracker.z + derivatives.z * 0.5;
 
-#if SSR_KILL_FIREFLIES
+        #if SSR_KILL_FIREFLIES
         UNITY_FLATTEN
         if (z.y < -_MaximumMarchDistance)
         {
             result.isHit = false;
             return result;
         }
-#endif
+        #endif
 
         UNITY_FLATTEN
         if (z.y > z.x)
@@ -236,7 +248,8 @@ Result March(Ray ray, VaryingsDefault input)
 
         uv *= _Test_TexelSize.xy;
 
-        float d = _CameraDepthTexture.SampleLevel(sampler_CameraDepthTexture, UnityStereoTransformScreenSpaceTex(uv), 0);
+        float d = _CameraDepthTexture.
+            SampleLevel(sampler_CameraDepthTexture, UnityStereoTransformScreenSpaceTex(uv), 0);
         float depth = -LinearEyeDepth(d);
 
         UNITY_FLATTEN
@@ -279,7 +292,7 @@ float4 FragTest(VaryingsDefault i) : SV_Target
 
     Result result = March(ray, i);
 
-    float confidence = (float)result.iterationCount / (float)_MaximumIterationCount;
+    float confidence = (float)result.iterationCount / _MaximumIterationCount;
     return float4(result.uv, confidence, (float)result.isHit);
 }
 
@@ -315,7 +328,7 @@ float4 FragReproject(VaryingsDefault i) : SV_Target
         _MainTex.SampleLevel(sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + float2(-k.x, -k.y)), 0),
         _MainTex.SampleLevel(sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + float2( 0.0, -k.y)), 0),
         _MainTex.SampleLevel(sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + float2( k.x, -k.y)), 0),
-        _MainTex.SampleLevel(sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + float2(-k.x,  0.0)), 0)
+        _MainTex.SampleLevel(sampler_MainTex, UnityStereoTransformScreenSpaceTex(i.texcoord + float2(-k.x, 0.0)), 0)
     );
 
     //     0
@@ -332,8 +345,12 @@ float4 FragReproject(VaryingsDefault i) : SV_Target
         float4 minimum = min3(min3(min3(min3(top[0], top[1], top[2]), top[3], bottom[0]), bottom[1], bottom[2]), bottom[3], color);
         float4 maximum = max3(max3(max3(max3(top[0], top[1], top[2]), top[3], bottom[0]), bottom[1], bottom[2]), bottom[3], color);
     #else
-        float4 minimum = min(min(min(min(min(min(min(min(top[0], top[1]), top[2]), top[3]), bottom[0]), bottom[1]), bottom[2]), bottom[3]), color);
-        float4 maximum = max(max(max(max(max(max(max(max(top[0], top[1]), top[2]), top[3]), bottom[0]), bottom[1]), bottom[2]), bottom[3]), color);
+    float4 minimum = min(
+        min(min(min(min(min(min(min(top[0], top[1]), top[2]), top[3]), bottom[0]), bottom[1]), bottom[2]), bottom[3]),
+        color);
+    float4 maximum = max(
+        max(max(max(max(max(max(max(top[0], top[1]), top[2]), top[3]), bottom[0]), bottom[1]), bottom[2]), bottom[3]),
+        color);
     #endif
 
     float4 history = _History.SampleLevel(sampler_History, UnityStereoTransformScreenSpaceTex(uv), 0);
@@ -342,7 +359,7 @@ float4 FragReproject(VaryingsDefault i) : SV_Target
     color.a = saturate(smoothstep(0.002 * _MainTex_TexelSize.z, 0.0035 * _MainTex_TexelSize.z, length(motion)));
 
     float weight = clamp(lerp(SSR_FINAL_BLEND_STATIC_FACTOR, SSR_FINAL_BLEND_DYNAMIC_FACTOR,
-        history.a * 100.0), SSR_FINAL_BLEND_DYNAMIC_FACTOR, SSR_FINAL_BLEND_STATIC_FACTOR);
+                              history.a * 100.0), SSR_FINAL_BLEND_DYNAMIC_FACTOR, SSR_FINAL_BLEND_STATIC_FACTOR);
 
     color.a *= 0.85;
     return lerp(color, history, weight);
@@ -368,12 +385,13 @@ float4 FragComposite(VaryingsDefault i) : SV_Target
     float3 eye = mul((float3x3)_InverseViewMatrix, normalize(position));
     position = mul(_InverseViewMatrix, float4(position, 1.0)).xyz;
 
-#if SSR_ENABLE_CONTACTS
+    #if SSR_ENABLE_CONTACTS
     float4 test = _Test.SampleLevel(sampler_Test, i.texcoordStereo, 0);
     float4 resolve = _Resolve.SampleLevel(sampler_Resolve, i.texcoordStereo, SmoothnessToRoughness(gbuffer1.a) * (_BlurPyramidLODCount - 1.0) * test.z + 1.0);
-#else
-    float4 resolve = _Resolve.SampleLevel(sampler_Resolve, i.texcoordStereo, SmoothnessToRoughness(gbuffer1.a) * (_BlurPyramidLODCount - 1.0) + 1.0);
-#endif
+    #else
+    float4 resolve = _Resolve.SampleLevel(sampler_Resolve, i.texcoordStereo,
+                                          SmoothnessToRoughness(gbuffer1.a) * (_BlurPyramidLODCount - 1.0) + 1.0);
+    #endif
 
     float confidence = saturate(2.0 * dot(-eye, normalize(reflect(-eye, normal))));
 
@@ -386,7 +404,8 @@ float4 FragComposite(VaryingsDefault i) : SV_Target
     indirect.diffuse = 0.0;
     indirect.specular = resolve.rgb;
 
-    resolve.rgb = UNITY_BRDF_PBS(gbuffer0.rgb, gbuffer1.rgb, oneMinusReflectivity, gbuffer1.a, normal, -eye, light, indirect).rgb;
+    resolve.rgb = UNITY_BRDF_PBS(gbuffer0.rgb, gbuffer1.rgb, oneMinusReflectivity, gbuffer1.a, normal, -eye, light,
+                                 indirect).rgb;
 
     float4 reflectionProbes = _CameraReflectionsTexture.Sample(sampler_CameraReflectionsTexture, i.texcoordStereo);
 

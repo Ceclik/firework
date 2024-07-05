@@ -6,7 +6,6 @@
 // 
 
 using UnityEngine;
-using System.Collections;
 
 namespace DigitalRuby.ThunderAndLightning
 {
@@ -24,10 +23,7 @@ namespace DigitalRuby.ThunderAndLightning
                 if (Camera == null)
                 {
                     Camera = Camera.current;
-                    if (Camera == null)
-                    {
-                        return;
-                    }
+                    if (Camera == null) return;
                 }
             }
 

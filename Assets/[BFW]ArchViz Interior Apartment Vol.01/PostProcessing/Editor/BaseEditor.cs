@@ -8,10 +8,7 @@ namespace UnityEditor.Rendering.PostProcessing
     public class BaseEditor<T> : Editor
         where T : MonoBehaviour
     {
-        protected T m_Target
-        {
-            get { return (T)target; }
-        }
+        protected T m_Target => (T)target;
 
         protected SerializedProperty FindProperty<TValue>(Expression<Func<T, TValue>> expr)
         {

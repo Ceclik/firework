@@ -13,19 +13,6 @@ namespace Scenes
         [SerializeField] private Button homeFireAimGasButton;
         [SerializeField] private Button schoolFireButton;
 
-        private void OnEnable()
-        {
-            if (GameManager.Instance.FireSeekGameMode)
-            {
-                schoolSceneText.text = $"Highscore: {PlayerPrefs.GetInt("SchoolFireSeekSceneHigscore")}";
-            }
-            else
-            {
-                homeTVText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimTVSceneHigscore")}";
-                homeGasText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimGasSceneHigscore")}";
-            }
-        }
-
         private void Start()
         {
             if (GameManager.Instance.FireSeekGameMode)
@@ -39,6 +26,19 @@ namespace Scenes
                 schoolFireButton.gameObject.SetActive(false);
                 homeFireAimGasButton.gameObject.SetActive(true);
                 homeFireAimTVButton.gameObject.SetActive(true);
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (GameManager.Instance.FireSeekGameMode)
+            {
+                schoolSceneText.text = $"Highscore: {PlayerPrefs.GetInt("SchoolFireSeekSceneHigscore")}";
+            }
+            else
+            {
+                homeTVText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimTVSceneHigscore")}";
+                homeGasText.text = $"Highscore: {PlayerPrefs.GetInt("HomeFireAimGasSceneHigscore")}";
             }
         }
     }

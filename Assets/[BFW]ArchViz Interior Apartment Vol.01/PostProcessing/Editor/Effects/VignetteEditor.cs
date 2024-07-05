@@ -6,17 +6,16 @@ namespace UnityEditor.Rendering.PostProcessing
     [PostProcessEditor(typeof(Vignette))]
     public sealed class VignetteEditor : PostProcessEffectEditor<Vignette>
     {
-        SerializedParameterOverride m_Mode;
-        SerializedParameterOverride m_Color;
+        private SerializedParameterOverride m_Center;
+        private SerializedParameterOverride m_Color;
+        private SerializedParameterOverride m_Intensity;
 
-        SerializedParameterOverride m_Center;
-        SerializedParameterOverride m_Intensity;
-        SerializedParameterOverride m_Smoothness;
-        SerializedParameterOverride m_Roundness;
-        SerializedParameterOverride m_Rounded;
-
-        SerializedParameterOverride m_Mask;
-        SerializedParameterOverride m_Opacity;
+        private SerializedParameterOverride m_Mask;
+        private SerializedParameterOverride m_Mode;
+        private SerializedParameterOverride m_Opacity;
+        private SerializedParameterOverride m_Rounded;
+        private SerializedParameterOverride m_Roundness;
+        private SerializedParameterOverride m_Smoothness;
 
         public override void OnEnable()
         {
@@ -61,14 +60,15 @@ namespace UnityEditor.Rendering.PostProcessing
                     // builtin resources, thus the check for null
                     if (importer != null)
                     {
-                        bool valid = importer.anisoLevel == 0
-                            && importer.mipmapEnabled == false
-                            && importer.alphaSource == TextureImporterAlphaSource.FromGrayScale
-                            && importer.textureCompression == TextureImporterCompression.Uncompressed
-                            && importer.wrapMode == TextureWrapMode.Clamp;
+                        var valid = importer.anisoLevel == 0
+                                    && importer.mipmapEnabled == false
+                                    && importer.alphaSource == TextureImporterAlphaSource.FromGrayScale
+                                    && importer.textureCompression == TextureImporterCompression.Uncompressed
+                                    && importer.wrapMode == TextureWrapMode.Clamp;
 
                         if (!valid)
-                            EditorUtilities.DrawFixMeBox("Invalid mask import settings.", () => SetMaskImportSettings(importer));
+                            EditorUtilities.DrawFixMeBox("Invalid mask import settings.",
+                                () => SetMaskImportSettings(importer));
                     }
                 }
 
@@ -76,7 +76,7 @@ namespace UnityEditor.Rendering.PostProcessing
             }
         }
 
-        void SetMaskImportSettings(TextureImporter importer)
+        private void SetMaskImportSettings(TextureImporter importer)
         {
             importer.textureType = TextureImporterType.SingleChannel;
             importer.alphaSource = TextureImporterAlphaSource.FromGrayScale;

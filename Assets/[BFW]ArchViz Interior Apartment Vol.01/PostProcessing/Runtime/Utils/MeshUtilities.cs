@@ -4,10 +4,10 @@ using UnityEngine.Assertions;
 
 namespace UnityEngine.Rendering.PostProcessing
 {
-    static class MeshUtilities
+    internal static class MeshUtilities
     {
-        static Dictionary<PrimitiveType, Mesh> s_Primitives;
-        static Dictionary<Type, PrimitiveType> s_ColliderPrimitives;
+        private static readonly Dictionary<PrimitiveType, Mesh> s_Primitives;
+        private static readonly Dictionary<Type, PrimitiveType> s_ColliderPrimitives;
 
         static MeshUtilities()
         {
@@ -47,7 +47,7 @@ namespace UnityEngine.Rendering.PostProcessing
         // (Not pretty) hack to get meshes from `unity default resources` in user land
         // What it does is create a new GameObject using the CreatePrimitive utility, retrieve its
         // mesh and discard it...
-        static Mesh GetBuiltinMesh(PrimitiveType primitiveType)
+        private static Mesh GetBuiltinMesh(PrimitiveType primitiveType)
         {
             var gameObject = GameObject.CreatePrimitive(primitiveType);
             var mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;

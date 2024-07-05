@@ -5,8 +5,20 @@ namespace UnityEngine.Rendering.PostProcessing
 {
     public sealed class PostProcessBundle
     {
-        public PostProcessAttribute attribute { get; private set; }
-        public PostProcessEffectSettings settings { get; private set; }
+        private PostProcessEffectRenderer m_Renderer;
+
+        internal PostProcessBundle(PostProcessEffectSettings settings)
+        {
+            // If settings is null, it means that at some point a null element has been added to
+            // the volume effect list or there was a deserialization error and a reference to
+            // the settings scriptableobject was lost
+            Assert.IsNotNull(settings);
+            this.settings = settings;
+            attribute = settings.GetType().GetAttribute<PostProcessAttribute>();
+        }
+
+        public PostProcessAttribute attribute { get; }
+        public PostProcessEffectSettings settings { get; }
 
         internal PostProcessEffectRenderer renderer
         {
@@ -23,18 +35,6 @@ namespace UnityEngine.Rendering.PostProcessing
 
                 return m_Renderer;
             }
-        }
-
-        PostProcessEffectRenderer m_Renderer;
-
-        internal PostProcessBundle(PostProcessEffectSettings settings)
-        {
-            // If settings is null, it means that at some point a null element has been added to
-            // the volume effect list or there was a deserialization error and a reference to
-            // the settings scriptableobject was lost
-            Assert.IsNotNull(settings);
-            this.settings = settings;
-            attribute = settings.GetType().GetAttribute<PostProcessAttribute>();
         }
 
         internal void Release()

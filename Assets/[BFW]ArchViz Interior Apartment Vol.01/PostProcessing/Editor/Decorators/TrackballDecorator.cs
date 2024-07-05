@@ -7,18 +7,19 @@ namespace UnityEditor.Rendering.PostProcessing
     [Decorator(typeof(TrackballAttribute))]
     public sealed class TrackballDecorator : AttributeDecorator
     {
-        static readonly int k_ThumbHash = "colorWheelThumb".GetHashCode();
-        static Material s_Material;
+        private static readonly int k_ThumbHash = "colorWheelThumb".GetHashCode();
+        private static Material s_Material;
+        private Vector2 m_CursorPos;
 
-        bool m_ResetState;
-        Vector2 m_CursorPos;
+        private bool m_ResetState;
 
         public override bool IsAutoProperty()
         {
             return false;
         }
 
-        public override bool OnGUI(SerializedProperty property, SerializedProperty overrideState, GUIContent title, Attribute attribute)
+        public override bool OnGUI(SerializedProperty property, SerializedProperty overrideState, GUIContent title,
+            Attribute attribute)
         {
             if (property.propertyType != SerializedPropertyType.Vector4)
                 return false;
@@ -28,7 +29,9 @@ namespace UnityEditor.Rendering.PostProcessing
             using (new EditorGUILayout.VerticalScope())
             {
                 using (new EditorGUI.DisabledScope(!overrideState.boolValue))
+                {
                     DrawWheel(ref value, overrideState.boolValue, (TrackballAttribute)attribute);
+                }
 
                 DrawLabelAndOverride(title, overrideState);
             }
@@ -44,42 +47,44 @@ namespace UnityEditor.Rendering.PostProcessing
             return true;
         }
 
-        void DrawWheel(ref Vector4 value, bool overrideState, TrackballAttribute attr)
+        private void DrawWheel(ref Vector4 value, bool overrideState, TrackballAttribute attr)
         {
             var wheelRect = GUILayoutUtility.GetAspectRect(1f);
-            float size = wheelRect.width;
-            float hsize = size / 2f;
-            float radius = 0.38f * size;
+            var size = wheelRect.width;
+            var hsize = size / 2f;
+            var radius = 0.38f * size;
 
             Vector3 hsv;
             Color.RGBToHSV(value, out hsv.x, out hsv.y, out hsv.z);
-            float offset = value.w;
+            var offset = value.w;
 
             // Thumb
             var thumbPos = Vector2.zero;
-            float theta = hsv.x * (Mathf.PI * 2f);
-            thumbPos.x = Mathf.Cos(theta + (Mathf.PI / 2f));
-            thumbPos.y = Mathf.Sin(theta - (Mathf.PI / 2f));
+            var theta = hsv.x * (Mathf.PI * 2f);
+            thumbPos.x = Mathf.Cos(theta + Mathf.PI / 2f);
+            thumbPos.y = Mathf.Sin(theta - Mathf.PI / 2f);
             thumbPos *= hsv.y * radius;
 
             // Draw the wheel
             if (Event.current.type == EventType.Repaint)
             {
                 // Retina support
-                float scale = EditorGUIUtility.pixelsPerPoint;
+                var scale = EditorGUIUtility.pixelsPerPoint;
 
                 if (s_Material == null)
-                    s_Material = new Material(Shader.Find("Hidden/PostProcessing/Editor/Trackball")) { hideFlags = HideFlags.HideAndDontSave };
+                    s_Material = new Material(Shader.Find("Hidden/PostProcessing/Editor/Trackball"))
+                        { hideFlags = HideFlags.HideAndDontSave };
 
                 // Wheel texture
-            #if UNITY_2018_1_OR_NEWER
+#if UNITY_2018_1_OR_NEWER
                 const RenderTextureReadWrite kReadWrite = RenderTextureReadWrite.sRGB;
-            #else
+#else
                 const RenderTextureReadWrite kReadWrite = RenderTextureReadWrite.Linear;
-            #endif
+#endif
 
                 var oldRT = RenderTexture.active;
-                var rt = RenderTexture.GetTemporary((int)(size * scale), (int)(size * scale), 0, RenderTextureFormat.ARGB32, kReadWrite);
+                var rt = RenderTexture.GetTemporary((int)(size * scale), (int)(size * scale), 0,
+                    RenderTextureFormat.ARGB32, kReadWrite);
                 s_Material.SetFloat("_Offset", offset);
                 s_Material.SetFloat("_DisabledState", overrideState ? 1f : 0.5f);
                 s_Material.SetVector("_Resolution", new Vector2(size * scale, size * scale / 2f));
@@ -91,7 +96,10 @@ namespace UnityEditor.Rendering.PostProcessing
 
                 var thumbSize = Styling.wheelThumbSize;
                 var thumbSizeH = thumbSize / 2f;
-                Styling.wheelThumb.Draw(new Rect(wheelRect.x + hsize + thumbPos.x - thumbSizeH.x, wheelRect.y + hsize + thumbPos.y - thumbSizeH.y, thumbSize.x, thumbSize.y), false, false, false, false);
+                Styling.wheelThumb.Draw(
+                    new Rect(wheelRect.x + hsize + thumbPos.x - thumbSizeH.x,
+                        wheelRect.y + hsize + thumbPos.y - thumbSizeH.y, thumbSize.x, thumbSize.y), false, false, false,
+                    false);
             }
 
             // Input
@@ -105,7 +113,7 @@ namespace UnityEditor.Rendering.PostProcessing
 
             // Offset
             var sliderRect = GUILayoutUtility.GetRect(1f, 17f);
-            float padding = sliderRect.width * 0.05f; // 5% padding
+            var padding = sliderRect.width * 0.05f; // 5% padding
             sliderRect.xMin += padding;
             sliderRect.xMax -= padding;
             value.w = GUI.HorizontalSlider(sliderRect, value.w, -1f, 1f);
@@ -118,11 +126,14 @@ namespace UnityEditor.Rendering.PostProcessing
 
             switch (attr.mode)
             {
-                case TrackballAttribute.Mode.Lift: displayValue = ColorUtilities.ColorToLift(value);
+                case TrackballAttribute.Mode.Lift:
+                    displayValue = ColorUtilities.ColorToLift(value);
                     break;
-                case TrackballAttribute.Mode.Gamma: displayValue = ColorUtilities.ColorToInverseGamma(value);
+                case TrackballAttribute.Mode.Gamma:
+                    displayValue = ColorUtilities.ColorToInverseGamma(value);
                     break;
-                case TrackballAttribute.Mode.Gain: displayValue = ColorUtilities.ColorToGain(value);
+                case TrackballAttribute.Mode.Gain:
+                    displayValue = ColorUtilities.ColorToGain(value);
                     break;
             }
 
@@ -139,12 +150,13 @@ namespace UnityEditor.Rendering.PostProcessing
             }
         }
 
-        void DrawLabelAndOverride(GUIContent title, SerializedProperty overrideState)
+        private void DrawLabelAndOverride(GUIContent title, SerializedProperty overrideState)
         {
             // Title
             var areaRect = GUILayoutUtility.GetRect(1f, 17f);
             var labelSize = Styling.wheelLabel.CalcSize(title);
-            var labelRect = new Rect(areaRect.x + areaRect.width / 2 - labelSize.x / 2, areaRect.y, labelSize.x, labelSize.y);
+            var labelRect = new Rect(areaRect.x + areaRect.width / 2 - labelSize.x / 2, areaRect.y, labelSize.x,
+                labelSize.y);
             GUI.Label(labelRect, title, Styling.wheelLabel);
 
             // Override checkbox
@@ -152,7 +164,7 @@ namespace UnityEditor.Rendering.PostProcessing
             EditorUtilities.DrawOverrideCheckbox(overrideRect, overrideState);
         }
 
-        Vector3 GetInput(Rect bounds, Vector3 hsv, Vector2 thumbPos, float radius)
+        private Vector3 GetInput(Rect bounds, Vector3 hsv, Vector2 thumbPos, float radius)
         {
             var e = Event.current;
             var id = GUIUtility.GetControlID(k_ThumbHash, FocusType.Passive, bounds);
@@ -163,7 +175,7 @@ namespace UnityEditor.Rendering.PostProcessing
                 if (e.button == 0)
                 {
                     var center = new Vector2(bounds.x + radius, bounds.y + radius);
-                    float dist = Vector2.Distance(center, mousePos);
+                    var dist = Vector2.Distance(center, mousePos);
 
                     if (dist <= radius)
                     {
@@ -196,13 +208,13 @@ namespace UnityEditor.Rendering.PostProcessing
             return hsv;
         }
 
-        void GetWheelHueSaturation(float x, float y, float radius, out float hue, out float saturation)
+        private void GetWheelHueSaturation(float x, float y, float radius, out float hue, out float saturation)
         {
-            float dx = (x - radius) / radius;
-            float dy = (y - radius) / radius;
-            float d = Mathf.Sqrt(dx * dx + dy * dy);
+            var dx = (x - radius) / radius;
+            var dy = (y - radius) / radius;
+            var d = Mathf.Sqrt(dx * dx + dy * dy);
             hue = Mathf.Atan2(dx, -dy);
-            hue = 1f - ((hue > 0) ? hue : (Mathf.PI * 2f) + hue) / (Mathf.PI * 2f);
+            hue = 1f - (hue > 0 ? hue : Mathf.PI * 2f + hue) / (Mathf.PI * 2f);
             saturation = Mathf.Clamp01(d);
         }
     }

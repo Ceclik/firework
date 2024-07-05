@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace UnityEngine.Rendering.PostProcessing
 {
-    class TargetPool
+    internal class TargetPool
     {
-        readonly List<int> m_Pool;
-        int m_Current;
+        private readonly List<int> m_Pool;
+        private int m_Current;
 
         internal TargetPool()
         {
@@ -15,12 +15,12 @@ namespace UnityEngine.Rendering.PostProcessing
 
         internal int Get()
         {
-            int ret = Get(m_Current);
+            var ret = Get(m_Current);
             m_Current++;
             return ret;
         }
 
-        int Get(int i)
+        private int Get(int i)
         {
             int ret;
 

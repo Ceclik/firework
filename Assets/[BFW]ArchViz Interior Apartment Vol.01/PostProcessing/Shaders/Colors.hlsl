@@ -38,7 +38,7 @@ static const ParamsLogC LogC =
     0.244161, // c
     0.386036, // d
     5.301883, // e
-    0.092819  // f
+    0.092819 // f
 };
 
 float LinearToLogC_Precise(half x)
@@ -53,15 +53,15 @@ float LinearToLogC_Precise(half x)
 
 float3 LinearToLogC(float3 x)
 {
-#if USE_PRECISE_LOGC
+    #if USE_PRECISE_LOGC
     return float3(
         LinearToLogC_Precise(x.x),
         LinearToLogC_Precise(x.y),
         LinearToLogC_Precise(x.z)
     );
-#else
+    #else
     return LogC.c * log10(LogC.a * x + LogC.b) + LogC.d;
-#endif
+    #endif
 }
 
 float LogCToLinear_Precise(float x)
@@ -76,15 +76,15 @@ float LogCToLinear_Precise(float x)
 
 float3 LogCToLinear(float3 x)
 {
-#if USE_PRECISE_LOGC
+    #if USE_PRECISE_LOGC
     return float3(
         LogCToLinear_Precise(x.x),
         LogCToLinear_Precise(x.y),
         LogCToLinear_Precise(x.z)
     );
-#else
+    #else
     return (pow(10.0, (x - LogC.d) / LogC.c) - LogC.b) / LogC.a;
-#endif
+    #endif
 }
 
 //
@@ -99,11 +99,11 @@ struct ParamsPQ
 
 static const ParamsPQ PQ =
 {
-    2610.0 / 4096.0 / 4.0,   // N
+    2610.0 / 4096.0 / 4.0, // N
     2523.0 / 4096.0 * 128.0, // M
-    3424.0 / 4096.0,         // C1
-    2413.0 / 4096.0 * 32.0,  // C2
-    2392.0 / 4096.0 * 32.0,  // C3
+    3424.0 / 4096.0, // C1
+    2413.0 / 4096.0 * 32.0, // C2
+    2392.0 / 4096.0 * 32.0, // C3
 };
 
 float3 LinearToPQ(float3 x, float maxPQValue)
@@ -280,17 +280,18 @@ float EvalCustomSegment(float x, float4 segmentA, float2 segmentB)
 {
     const float kOffsetX = segmentA.x;
     const float kOffsetY = segmentA.y;
-    const float kScaleX  = segmentA.z;
-    const float kScaleY  = segmentA.w;
-    const float kLnA     = segmentB.x;
-    const float kB       = segmentB.y;
+    const float kScaleX = segmentA.z;
+    const float kScaleY = segmentA.w;
+    const float kLnA = segmentB.x;
+    const float kB = segmentB.y;
 
     float x0 = (x - kOffsetX) * kScaleX;
     float y0 = (x0 > 0.0) ? exp(kLnA + kB * log(x0)) : 0.0;
     return y0 * kScaleY + kOffsetY;
 }
 
-float EvalCustomCurve(float x, float3 curve, float4 toeSegmentA, float2 toeSegmentB, float4 midSegmentA, float2 midSegmentB, float4 shoSegmentA, float2 shoSegmentB)
+float EvalCustomCurve(float x, float3 curve, float4 toeSegmentA, float2 toeSegmentB, float4 midSegmentA,
+                      float2 midSegmentB, float4 shoSegmentA, float2 shoSegmentB)
 {
     float4 segmentA;
     float2 segmentB;
@@ -315,13 +316,17 @@ float EvalCustomCurve(float x, float3 curve, float4 toeSegmentA, float2 toeSegme
 }
 
 // curve: x: inverseWhitePoint, y: x0, z: x1
-float3 CustomTonemap(float3 x, float3 curve, float4 toeSegmentA, float2 toeSegmentB, float4 midSegmentA, float2 midSegmentB, float4 shoSegmentA, float2 shoSegmentB)
+float3 CustomTonemap(float3 x, float3 curve, float4 toeSegmentA, float2 toeSegmentB, float4 midSegmentA,
+                     float2 midSegmentB, float4 shoSegmentA, float2 shoSegmentB)
 {
     float3 normX = x * curve.x;
     float3 ret;
-    ret.x = EvalCustomCurve(normX.x, curve, toeSegmentA, toeSegmentB, midSegmentA, midSegmentB, shoSegmentA, shoSegmentB);
-    ret.y = EvalCustomCurve(normX.y, curve, toeSegmentA, toeSegmentB, midSegmentA, midSegmentB, shoSegmentA, shoSegmentB);
-    ret.z = EvalCustomCurve(normX.z, curve, toeSegmentA, toeSegmentB, midSegmentA, midSegmentB, shoSegmentA, shoSegmentB);
+    ret.x = EvalCustomCurve(normX.x, curve, toeSegmentA, toeSegmentB, midSegmentA, midSegmentB, shoSegmentA,
+                            shoSegmentB);
+    ret.y = EvalCustomCurve(normX.y, curve, toeSegmentA, toeSegmentB, midSegmentA, midSegmentB, shoSegmentA,
+                            shoSegmentB);
+    ret.z = EvalCustomCurve(normX.z, curve, toeSegmentA, toeSegmentB, midSegmentA, midSegmentB, shoSegmentA,
+                            shoSegmentB);
     return ret;
 }
 
@@ -331,13 +336,13 @@ float3 CustomTonemap(float3 x, float3 curve, float4 toeSegmentA, float2 toeSegme
 //
 float3 AcesTonemap(float3 aces)
 {
-#if TONEMAPPING_USE_FULL_ACES
+    #if TONEMAPPING_USE_FULL_ACES
 
     float3 oces = RRT(aces);
     float3 odt = ODT_RGBmonitor_100nits_dim(oces);
     return odt;
 
-#else
+    #else
 
     // --- Glow module --- //
     float saturation = rgb_2_saturation(aces);
@@ -398,7 +403,7 @@ float3 AcesTonemap(float3 aces)
 
     return linearCV;
 
-#endif
+    #endif
 }
 
 //
@@ -458,8 +463,8 @@ static const float3x3 LIN_2_LMS_MAT = {
 
 static const float3x3 LMS_2_LIN_MAT = {
     2.85847e+0, -1.62879e+0, -2.48910e-2,
-    -2.10182e-1,  1.15820e+0,  3.24281e-4,
-    -4.18120e-2, -1.18169e-1,  1.06867e+0
+    -2.10182e-1, 1.15820e+0, 3.24281e-4,
+    -4.18120e-2, -1.18169e-1, 1.06867e+0
 };
 
 float3 WhiteBalance(float3 c, float3 balance)
@@ -474,9 +479,9 @@ float3 WhiteBalance(float3 c, float3 balance)
 //
 float3 RgbToYCbCr(float3 c)
 {
-    float Y  =  0.299 * c.r + 0.587 * c.g + 0.114 * c.b;
+    float Y = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b;
     float Cb = -0.169 * c.r - 0.331 * c.g + 0.500 * c.b;
-    float Cr =  0.500 * c.r - 0.419 * c.g - 0.081 * c.b;
+    float Cr = 0.500 * c.r - 0.419 * c.g - 0.081 * c.b;
     return float3(Y, Cb, Cr);
 }
 
@@ -515,10 +520,10 @@ float3 HsvToRgb(float3 c)
 float RotateHue(float value, float low, float hi)
 {
     return (value < low)
-            ? value + hi
-            : (value > hi)
-                ? value - hi
-                : value;
+               ? value + hi
+               : (value > hi)
+               ? value - hi
+               : value;
 }
 
 //

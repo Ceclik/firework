@@ -6,25 +6,25 @@ namespace FireAimScripts
 {
     public class FireSplitter : MonoBehaviour
     {
-        [Space(10)][Header("Timer parameters")]
-        [SerializeField] private TextMeshProUGUI timerText;
+        public delegate void DecreaseLives();
+
+        [Space(10)] [Header("Timer parameters")] [SerializeField]
+        private TextMeshProUGUI timerText;
+
         [SerializeField] private float timerIncreasingTime;
         [SerializeField] private float timerStartIncreasingValue;
+        private Vector3 _endLocalScale;
+        private float _extinguishingTime;
+        private float _scaleTimer;
+        private Vector3 _startLocalScale;
+        private float _timer;
 
         public float StartTimerValue { get; set; }
-        private float _timer;
-        private Vector3 _startLocalScale;
-        private Vector3 _endLocalScale;
-        private float _scaleTimer;
-        
+
         public bool IsExtinguishing { get; set; }
-        private float _extinguishingTime;
-        
+
         public float FireStopSpeed { get; private set; }
         public float FireStopTime { get; set; }
-        
-        public delegate void DecreaseLives();
-        public event DecreaseLives OnFireSplitted;
 
         private void Start()
         {
@@ -33,28 +33,14 @@ namespace FireAimScripts
             _endLocalScale = new Vector3(3.0f, 3.0f, 3.0f);
             FireStopSpeed = CountFireStopSpeed();
         }
-        
-        private float CountFireStopSpeed()
-        {
-            return 0.5f * 1.26f / FireStopTime;
-        }
-
-        public void OnEndExtinguishing()
-        {
-            IsExtinguishing = false;
-            Debug.LogError($"Extinguishing time: {_extinguishingTime}");
-        }
 
         private void Update()
         {
-            if (IsExtinguishing)
-            {
-                _extinguishingTime += Time.deltaTime;
-            }
-            
-            if(!IsExtinguishing)
+            if (IsExtinguishing) _extinguishingTime += Time.deltaTime;
+
+            if (!IsExtinguishing)
                 _timer -= Time.deltaTime;
-            
+
             timerText.text = ((int)_timer).ToString();
 
             if (_timer <= timerStartIncreasingValue)
@@ -72,10 +58,23 @@ namespace FireAimScripts
             }
         }
 
+        public event DecreaseLives OnFireSplitted;
+
+        private float CountFireStopSpeed()
+        {
+            return 0.5f * 1.26f / FireStopTime;
+        }
+
+        public void OnEndExtinguishing()
+        {
+            IsExtinguishing = false;
+            UnityEngine.Debug.Log($"Extinguishing time: {_extinguishingTime}");
+        }
+
         private void SplitFire()
         {
             timerText.rectTransform.localScale = _startLocalScale;
-            Debug.LogError("In split fire");
+            UnityEngine.Debug.Log("In split fire");
             OnFireSplitted?.Invoke();
             GetComponent<ParticleSystemMultiplier>().multiplier = 0;
         }

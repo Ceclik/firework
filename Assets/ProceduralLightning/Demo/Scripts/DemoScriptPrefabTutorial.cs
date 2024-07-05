@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-
-using DigitalRuby.ThunderAndLightning;
 
 namespace DigitalRuby.ThunderAndLightning
 {
@@ -11,15 +8,11 @@ namespace DigitalRuby.ThunderAndLightning
 
         private void Start()
         {
-
         }
 
         private void Update()
         {
-            if (Input.GetKey(KeyCode.Space))
-            {
-                LightningScript.Trigger();
-            }
+            if (Input.GetKey(KeyCode.Space)) LightningScript.Trigger();
         }
     }
 }

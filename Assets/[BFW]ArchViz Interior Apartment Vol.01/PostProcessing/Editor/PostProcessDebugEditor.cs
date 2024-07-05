@@ -6,26 +6,26 @@ namespace UnityEditor.Rendering.PostProcessing
     [CustomEditor(typeof(PostProcessDebug))]
     public sealed class PostProcessDebugEditor : BaseEditor<PostProcessDebug>
     {
-        SerializedProperty m_PostProcessLayer;
-        SerializedProperty m_LightMeterEnabled;
-        SerializedProperty m_HistogramEnabled;
-        SerializedProperty m_WaveformEnabled;
-        SerializedProperty m_VectorscopeEnabled;
-        SerializedProperty m_Overlay;
+        private SerializedProperty m_ColorBlindness;
+        private SerializedProperty m_ColorBlindnessStrength;
+        private SerializedProperty m_HistogramChannel;
+        private SerializedProperty m_HistogramEnabled;
 
-        SerializedObject m_LayerObject;
+        private SerializedObject m_LayerObject;
+        private SerializedProperty m_LightMeterEnabled;
 
-        SerializedProperty m_LightMeterShowCurves;
-        SerializedProperty m_HistogramChannel;
-        SerializedProperty m_WaveformExposure;
-        SerializedProperty m_VectorscopeExposure;
-        
-        SerializedProperty m_MotionColorIntensity;
-        SerializedProperty m_MotionGridSize;
-        SerializedProperty m_ColorBlindness;
-        SerializedProperty m_ColorBlindnessStrength;
+        private SerializedProperty m_LightMeterShowCurves;
 
-        void OnEnable()
+        private SerializedProperty m_MotionColorIntensity;
+        private SerializedProperty m_MotionGridSize;
+        private SerializedProperty m_Overlay;
+        private SerializedProperty m_PostProcessLayer;
+        private SerializedProperty m_VectorscopeEnabled;
+        private SerializedProperty m_VectorscopeExposure;
+        private SerializedProperty m_WaveformEnabled;
+        private SerializedProperty m_WaveformExposure;
+
+        private void OnEnable()
         {
             m_PostProcessLayer = FindProperty(x => x.postProcessLayer);
             m_LightMeterEnabled = FindProperty(x => x.lightMeter);
@@ -38,7 +38,7 @@ namespace UnityEditor.Rendering.PostProcessing
                 RebuildProperties();
         }
 
-        void RebuildProperties()
+        private void RebuildProperties()
         {
             if (m_PostProcessLayer.objectReferenceValue == null)
                 return;
@@ -73,7 +73,7 @@ namespace UnityEditor.Rendering.PostProcessing
             if (m_PostProcessLayer.objectReferenceValue != null)
             {
                 m_LayerObject.Update();
-                
+
                 // Overlays
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField(EditorUtilities.GetContent("Overlay"), EditorStyles.boldLabel);
@@ -84,7 +84,9 @@ namespace UnityEditor.Rendering.PostProcessing
 
                 // Special cases
                 if (m_Overlay.intValue == (int)DebugOverlay.NANTracker && m_Target.postProcessLayer.stopNaNPropagation)
-                    EditorGUILayout.HelpBox("Disable \"Stop NaN Propagation\" in the Post-process layer or NaNs will be overwritten!", MessageType.Warning);
+                    EditorGUILayout.HelpBox(
+                        "Disable \"Stop NaN Propagation\" in the Post-process layer or NaNs will be overwritten!",
+                        MessageType.Warning);
 
                 EditorGUI.indentLevel--;
 
@@ -104,7 +106,7 @@ namespace UnityEditor.Rendering.PostProcessing
             serializedObject.ApplyModifiedProperties();
         }
 
-        void DoMonitorGUI(GUIContent content, SerializedProperty prop, params SerializedProperty[] settings)
+        private void DoMonitorGUI(GUIContent content, SerializedProperty prop, params SerializedProperty[] settings)
         {
             EditorGUILayout.PropertyField(prop, content);
 
@@ -120,7 +122,7 @@ namespace UnityEditor.Rendering.PostProcessing
             }
         }
 
-        void DoOverlayGUI(DebugOverlay overlay, params SerializedProperty[] settings)
+        private void DoOverlayGUI(DebugOverlay overlay, params SerializedProperty[] settings)
         {
             if (m_Overlay.intValue != (int)overlay)
                 return;

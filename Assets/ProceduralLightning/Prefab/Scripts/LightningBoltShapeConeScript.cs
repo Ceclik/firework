@@ -5,16 +5,14 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using UnityEditor;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class LightningBoltShapeConeScript : LightningBoltPrefabScriptBase
     {
-        [Header("Lightning Cone Properties")]
-        [Tooltip("Radius at base of cone where lightning can emit from")]
+        [Header("Lightning Cone Properties")] [Tooltip("Radius at base of cone where lightning can emit from")]
         public float InnerRadius = 0.1f;
 
         [Tooltip("Radius at outer part of the cone where lightning emits to")]
@@ -29,30 +27,30 @@ namespace DigitalRuby.ThunderAndLightning
         {
             base.OnDrawGizmos();
 
-            UnityEditor.Handles.DrawWireDisc(transform.position, transform.forward, InnerRadius);
-            UnityEditor.Handles.DrawWireDisc(transform.position + (transform.forward * Length), transform.forward, OuterRadius);
+            Handles.DrawWireDisc(transform.position, transform.forward, InnerRadius);
+            Handles.DrawWireDisc(transform.position + transform.forward * Length, transform.forward, OuterRadius);
 
-            UnityEditor.Handles.DrawLine(transform.position + (transform.rotation * Vector3.right * InnerRadius),
-                transform.position + (transform.rotation * Vector3.right * OuterRadius) + (transform.forward * Length));
+            Handles.DrawLine(transform.position + transform.rotation * Vector3.right * InnerRadius,
+                transform.position + transform.rotation * Vector3.right * OuterRadius + transform.forward * Length);
 
-            UnityEditor.Handles.DrawLine(transform.position + (transform.rotation * -Vector3.right * InnerRadius),
-                transform.position + (transform.rotation * -Vector3.right * OuterRadius) + (transform.forward * Length));
+            Handles.DrawLine(transform.position + transform.rotation * -Vector3.right * InnerRadius,
+                transform.position + transform.rotation * -Vector3.right * OuterRadius + transform.forward * Length);
 
-            UnityEditor.Handles.DrawLine(transform.position + (transform.rotation * Vector3.up * InnerRadius),
-                transform.position + (transform.rotation * Vector3.up * OuterRadius) + (transform.forward * Length));
+            Handles.DrawLine(transform.position + transform.rotation * Vector3.up * InnerRadius,
+                transform.position + transform.rotation * Vector3.up * OuterRadius + transform.forward * Length);
 
-            UnityEditor.Handles.DrawLine(transform.position + (transform.rotation * -Vector3.up * InnerRadius),
-                transform.position + (transform.rotation * -Vector3.up * OuterRadius) + (transform.forward * Length));
+            Handles.DrawLine(transform.position + transform.rotation * -Vector3.up * InnerRadius,
+                transform.position + transform.rotation * -Vector3.up * OuterRadius + transform.forward * Length);
         }
 
 #endif
 
         public override void CreateLightningBolt(LightningBoltParameters parameters)
         {
-            Vector2 circle1 = UnityEngine.Random.insideUnitCircle * InnerRadius;
-            Vector3 start = transform.rotation * new Vector3(circle1.x, circle1.y, 0.0f);
-            Vector2 circle2 = UnityEngine.Random.insideUnitCircle * OuterRadius;
-            Vector3 end = (transform.rotation * new Vector3(circle2.x, circle2.y, 0.0f)) + (transform.forward * Length);
+            var circle1 = Random.insideUnitCircle * InnerRadius;
+            var start = transform.rotation * new Vector3(circle1.x, circle1.y, 0.0f);
+            var circle2 = Random.insideUnitCircle * OuterRadius;
+            var end = transform.rotation * new Vector3(circle2.x, circle2.y, 0.0f) + transform.forward * Length;
 
             parameters.Start = start;
             parameters.End = end;

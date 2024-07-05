@@ -1,26 +1,23 @@
-﻿
-using System;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 namespace Scenes
 {
-    public class AfterLevelMenuDisplayer : MonoBehaviour {
-        
+    public class AfterLevelMenuDisplayer : MonoBehaviour
+    {
         [SerializeField] private float fadeTime;
         [SerializeField] private GameObject winner;
         [SerializeField] private GameObject looser;
-        
-        private AudioSource _winnerSound;
-        private AudioSource _looserSound;
+        private CanvasGroup _canvasGroup;
 
         private bool _isFading;
-        private CanvasGroup _canvasGroup;
-        
-        void Awake ()
+        private AudioSource _looserSound;
+
+        private AudioSource _winnerSound;
+
+        private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
-            
+
             var audios = GetComponents<AudioSource>();
             if (audios.Length > 1)
             {
@@ -31,10 +28,7 @@ namespace Scenes
 
         private void Update()
         {
-            if (_isFading && _canvasGroup.alpha < 1)
-            {
-                _canvasGroup.alpha += fadeTime * Time.deltaTime;
-            }
+            if (_isFading && _canvasGroup.alpha < 1) _canvasGroup.alpha += fadeTime * Time.deltaTime;
         }
 
         public void Show(bool isWin)

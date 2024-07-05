@@ -155,8 +155,8 @@ void Eval(uint3 id)
     #define GROUP_SIZE_XY 8
     #define GROUP_SIZE_Z 2
 #else
-    #define GROUP_SIZE_XY 8
-    #define GROUP_SIZE_Z 8
+#define GROUP_SIZE_XY 8
+#define GROUP_SIZE_Z 8
 #endif
 
 [numthreads(GROUP_SIZE_XY, GROUP_SIZE_XY, GROUP_SIZE_Z)]

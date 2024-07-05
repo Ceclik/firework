@@ -5,7 +5,7 @@ public class SchoolSeekFireStarter : StateMachineBehaviour
 {
     private LevelInstructionShower _instruction;
     private Animator _selfAnimator;
-    
+
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _instruction = GameObject.Find("LevelInstructionShower").GetComponent<LevelInstructionShower>();
@@ -17,5 +17,4 @@ public class SchoolSeekFireStarter : StateMachineBehaviour
     {
         _selfAnimator.SetTrigger("Fire");
     }
-    
 }

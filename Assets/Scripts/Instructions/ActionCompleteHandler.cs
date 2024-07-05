@@ -5,9 +5,9 @@ namespace Instructions
     public class ActionCompleteHandler : MonoBehaviour
     {
         public delegate void CompleteAction();
-        public event CompleteAction OnActionComplete;
-        
+
         [SerializeField] protected bool keyControlled;
+
         protected bool IsKeyPressed;
         //private SerialPort _com;
 
@@ -17,26 +17,18 @@ namespace Instructions
             /*_com = new SerialPort(GameManager.Instance.comPort, 9600);
             _com.Open();
             _com.ReadTimeout = 1;*/
-            
         }
 
-        protected void InvokeCompleteActionEvent()
-        {
-            OnActionComplete?.Invoke();
-        }
-        
 
         private void Update()
         {
             if (keyControlled)
-            {
-                if (Input.GetKeyDown(KeyCode.RightShift)  && !IsKeyPressed)
+                if (Input.GetKeyDown(KeyCode.RightShift) && !IsKeyPressed)
                 {
                     IsKeyPressed = true;
                     InvokeCompleteActionEvent();
                 }
-            }
-            
+
             /*int fromCom = int.MaxValue;
             int comExpected = 2;
             if (_com.IsOpen)
@@ -51,12 +43,18 @@ namespace Instructions
                     // Обработка исключения при чтении
                 }
             }
-            
+
             if(fromCom == comExpected)
                 OnActionComplete?.Invoke();*/
-            
         }
-        
+
+        public event CompleteAction OnActionComplete;
+
+        protected void InvokeCompleteActionEvent()
+        {
+            OnActionComplete?.Invoke();
+        }
+
         /*private void OnDisable()
         {
             _com.Close();

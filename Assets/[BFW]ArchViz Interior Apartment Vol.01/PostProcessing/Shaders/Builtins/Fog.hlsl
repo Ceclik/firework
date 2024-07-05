@@ -11,14 +11,14 @@ float3 _FogParams;
 half ComputeFog(float z)
 {
     half fog = 0.0;
-#if FOG_LINEAR
+    #if FOG_LINEAR
     fog = (FOG_END - z) / (FOG_END - FOG_START);
-#elif FOG_EXP
+    #elif FOG_EXP
     fog = exp2(-FOG_DENSITY * z);
-#else // FOG_EXP2
+    #else // FOG_EXP2
     fog = FOG_DENSITY * z;
     fog = exp2(-fog * fog);
-#endif
+    #endif
     return saturate(fog);
 }
 

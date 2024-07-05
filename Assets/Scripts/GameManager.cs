@@ -6,30 +6,48 @@ using Settings;
 using Tracking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-//Script in which all main game actions are implemented like changing scenes, finding fire systems in scenes etc. 
-//Using game manager is bad practice. All actions should be in separate scripts.
+using Utils;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private string comPort;
 
-    public bool firstRun = true;
-    public bool IsFireStarted { get; private set; }
-    public string comPort;
-    private GameSettings _settings;
+    private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
 
     //private FireSystem _fireSystem;
     private AimFireSystemHandler _aimFireHandler;
+    private int _currentLevel;
     private SeekingFireSystemHandler _seekingFireHandler;
 
-    private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
+    private GameSettings _settings;
+    public bool firstRun { get; set; } = true;
+    public bool IsFireStarted { get; private set; }
+    public string ComPort { get; set; }
     public GameObject PauseButton { get; set; }
     public Timer Timer { get; set; }
     public GameObject Hearts { get; set; }
-    private int _currentLevel;
 
     public bool FireSeekGameMode { get; set; }
     public bool FireAimGameMode { get; set; }
+
+    private void Start()
+    {
+        MyInput.Instance.Init();
+        if (_currentLevel == 0) Cursor.visible = false;
+
+        ComPort = PlayerPrefs.GetString("COM");
+        UnityEngine.Debug.Log("Com port settings:" + ComPort);
+        if (string.IsNullOrEmpty(ComPort))
+        {
+            UnityEngine.Debug.Log("Cant load comport settings");
+            ComPort = "COM0";
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape)) MainMenu();
+    }
 
     private void OnEnable()
     {
@@ -39,15 +57,15 @@ public class GameManager : Singleton<GameManager>
         _settings.LoadSettings();
     }
 
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+    }
+
     public void InitSettings()
     {
         _settings.Defaults();
         _settings.LoadSettings();
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 
     public void SaveSettings()
@@ -112,26 +130,8 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene("Settings");
     }
 
-    private void Start()
-    {
-        MyInput.Instance.Init();
-        if (_currentLevel == 0)
-        {
-            Cursor.visible = false;
-        }
-
-        comPort = PlayerPrefs.GetString("COM");
-        Debug.Log("Com port settings:" + comPort);
-        if (string.IsNullOrEmpty(comPort))
-        {
-            Debug.Log("Cant load comport settings");
-            comPort = "COM0";
-        }
-    }
-
     public void MainMenu()
     {
-
         Cursor.visible = false;
         SceneManager.LoadScene(0);
         Tracker.Instance.TurnOn();
@@ -140,44 +140,33 @@ public class GameManager : Singleton<GameManager>
         Cursor.visible = false;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            MainMenu();
-        }
-    }
-
     private void FindFireSystems()
     {
-        if(FireSeekGameMode)
+        if (FireSeekGameMode)
             _seekingFireHandler = GameObject.Find("FireSystem").GetComponent<SeekingFireSystemHandler>();
-        if(FireAimGameMode)
+        if (FireAimGameMode)
             _aimFireHandler = GameObject.Find("FireSystem").GetComponent<AimFireSystemHandler>();
-        
+
         _afterLevelMenuDisplayer = FindFirstObjectByType<AfterLevelMenuDisplayer>();
         _afterLevelMenuDisplayer.gameObject.SetActive(false);
 
         Timer.gameObject.SetActive(false);
-        if(FireAimGameMode)
+        if (FireAimGameMode)
             Hearts.SetActive(false);
     }
 
-    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Level Loaded");
-        Debug.Log(scene.name);
-        Debug.Log(mode);
+        UnityEngine.Debug.Log("Level Loaded");
+        UnityEngine.Debug.Log(scene.name);
+        UnityEngine.Debug.Log(mode);
         if (scene.name == "SceneOne" || scene.name == "SceneTwo")
         {
             Cursor.visible = false;
             FindFireSystems();
         }
 
-        if (scene.name == "MainMenu")
-        {
-            Cursor.visible = false;
-        }
+        if (scene.name == "MainMenu") Cursor.visible = false;
 
         switch (scene.name)
         {
@@ -192,8 +181,6 @@ public class GameManager : Singleton<GameManager>
                 break;
             case "SceneTwoPartTwo":
                 _currentLevel = 3;
-                break;
-            default:
                 break;
         }
 
@@ -212,31 +199,26 @@ public class GameManager : Singleton<GameManager>
         {
             if (_aimFireHandler == null)
                 FindFireSystems();
-            
+
             _aimFireHandler.StartFire();
         }
 
         if (FireSeekGameMode)
         {
-            if (_seekingFireHandler == null)
-            {   
-                FindFireSystems();
-            }
-            
+            if (_seekingFireHandler == null) FindFireSystems();
+
             _seekingFireHandler.StartFire();
         }
-        
-        Debug.Log("Manager starting fire");
 
-        
+        UnityEngine.Debug.Log("Manager starting fire");
+
+
         Timer.gameObject.SetActive(true);
-        if(FireAimGameMode)
+        if (FireAimGameMode)
             Hearts.SetActive(true);
 
-        foreach (GameObject trigger in GameObject.FindGameObjectsWithTag("Kid"))
-        {
+        foreach (var trigger in GameObject.FindGameObjectsWithTag("Kid"))
             trigger.GetComponent<Animator>().SetTrigger("Fire");
-        }
 
         IsFireStarted = true;
     }
@@ -244,23 +226,23 @@ public class GameManager : Singleton<GameManager>
     public void EndScene(bool isWin)
     {
         IsFireStarted = false;
-        
+
         _afterLevelMenuDisplayer.gameObject.SetActive(true);
-        
+
         _afterLevelMenuDisplayer.Show(isWin);
-        
+
         Timer.gameObject.SetActive(false);
-        
+
         PauseButton.SetActive(false);
         PauseButton = null;
-        
-       if (FireAimGameMode)
-       { 
-           Hearts.SetActive(false); 
-           _aimFireHandler.gameObject.SetActive(false);
-       }
-            
-        if(FireSeekGameMode)
+
+        if (FireAimGameMode)
+        {
+            Hearts.SetActive(false);
+            _aimFireHandler.gameObject.SetActive(false);
+        }
+
+        if (FireSeekGameMode)
             _seekingFireHandler.gameObject.SetActive(false);
     }
 }

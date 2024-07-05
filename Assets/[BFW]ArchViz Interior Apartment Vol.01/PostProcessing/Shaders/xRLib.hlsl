@@ -33,7 +33,8 @@ float2 UnityStereoScreenSpaceUVAdjust(float2 uv, float4 scaleAndOffset)
 
 float4 UnityStereoScreenSpaceUVAdjust(float4 uv, float4 scaleAndOffset)
 {
-    return float4(UnityStereoScreenSpaceUVAdjust(uv.xy, scaleAndOffset), UnityStereoScreenSpaceUVAdjust(uv.zw, scaleAndOffset));
+    return float4(UnityStereoScreenSpaceUVAdjust(uv.xy, scaleAndOffset),
+                  UnityStereoScreenSpaceUVAdjust(uv.zw, scaleAndOffset));
 }
 
 float2 UnityStereoClampScaleOffset(float2 uv, float4 scaleAndOffset)

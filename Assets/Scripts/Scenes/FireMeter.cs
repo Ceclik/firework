@@ -8,8 +8,7 @@ namespace Scenes
     public class FireMeter : MonoBehaviour //The name of the script should be given according to the action this script
     //is handling. Example for this script: FireScaleHandler
     {
-
-        public Image pile;  //fields should be private
+        public Image pile; //fields should be private
         public Image fire;
         public Image ok;
         public Timer timer;
@@ -19,23 +18,24 @@ namespace Scenes
         public float percent = 1f;
         public float fadeTime = 2f;
 
-        private bool _active = false;
-        private float _fadeTimer = 0f; //initialization of such fields should be in Start() or Awake() methods
+        private bool _active;
         private CanvasGroup _canvasGroup;
-    
-        void Start()
+        private float _fadeTimer; //initialization of such fields should be in Start() or Awake() methods
+
+        private void Start()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
         }
-    
-        void Update()
+
+        private void Update()
         {
-            if (_active && _fadeTimer<fadeTime)
+            if (_active && _fadeTimer < fadeTime)
             {
                 _fadeTimer += Time.deltaTime;
-                _canvasGroup.alpha = _fadeTimer/fadeTime;
+                _canvasGroup.alpha = _fadeTimer / fadeTime;
             }
-            pile.transform.position = new Vector2(pile.rectTransform.position.x, pileMin + (pileMax * (1f-percent)));        
+
+            pile.transform.position = new Vector2(pile.rectTransform.position.x, pileMin + pileMax * (1f - percent));
         }
 
         public void Show()

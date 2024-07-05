@@ -14,7 +14,7 @@
 #elif defined(SHADER_API_XBOXONE)
     #include "API/XboxOne.hlsl"
 #elif defined(SHADER_API_D3D11)
-    #include "API/D3D11.hlsl"
+#include "API/D3D11.hlsl"
 #elif defined(SHADER_API_D3D12)
     #include "API/D3D12.hlsl"
 #elif defined(SHADER_API_D3D9) || defined(SHADER_API_D3D11_9X)
@@ -149,38 +149,38 @@ float4 PositivePow(float4 base, float4 power)
 // NaN checker
 bool IsNan(float x)
 {
-#if !defined(SHADER_API_GLES)
+    #if !defined(SHADER_API_GLES)
     return isnan(x) || isinf(x);
-#else
+    #else
     return (x <= 0.0 || 0.0 <= x) ? false : true;
-#endif
+    #endif
 }
 
 bool AnyIsNan(float2 x)
 {
-#if !defined(SHADER_API_GLES)
+    #if !defined(SHADER_API_GLES)
     return any(isnan(x)) || any(isinf(x));
-#else
+    #else
     return IsNan(x.x) || IsNan(x.y);
-#endif
+    #endif
 }
 
 bool AnyIsNan(float3 x)
 {
-#if !defined(SHADER_API_GLES)
+    #if !defined(SHADER_API_GLES)
     return any(isnan(x)) || any(isinf(x));
-#else
+    #else
     return IsNan(x.x) || IsNan(x.y) || IsNan(x.z);
-#endif
+    #endif
 }
 
 bool AnyIsNan(float4 x)
 {
-#if !defined(SHADER_API_GLES)
+    #if !defined(SHADER_API_GLES)
     return any(isnan(x)) || any(isinf(x));
-#else
+    #else
     return IsNan(x.x) || IsNan(x.y) || IsNan(x.z) || IsNan(x.w);
-#endif
+    #endif
 }
 
 // -----------------------------------------------------------------------------
@@ -191,15 +191,15 @@ float4x4 unity_MatrixVP;
 float4x4 unity_ObjectToWorld;
 float4x4 unity_WorldToCamera;
 float3 _WorldSpaceCameraPos;
-float4 _ProjectionParams;         // x: 1 (-1 flipped), y: near,     z: far,       w: 1/far
+float4 _ProjectionParams; // x: 1 (-1 flipped), y: near,     z: far,       w: 1/far
 float4 unity_ColorSpaceLuminance;
-float4 unity_DeltaTime;           // x: dt,             y: 1/dt,     z: smoothDt,  w: 1/smoothDt
-float4 unity_OrthoParams;         // x: width,          y: height,   z: unused,    w: ortho ? 1 : 0
-float4 _ZBufferParams;            // x: 1-far/near,     y: far/near, z: x/far,     w: y/far
-float4 _ScreenParams;             // x: width,          y: height,   z: 1+1/width, w: 1+1/height
-float4 _Time;                     // x: t/20,           y: t,        z: t*2,       w: t*3
-float4 _SinTime;                  // x: sin(t/20),      y: sin(t),   z: sin(t*2),  w: sin(t*3)
-float4 _CosTime;                  // x: cos(t/20),      y: cos(t),   z: cos(t*2),  w: cos(t*3)
+float4 unity_DeltaTime; // x: dt,             y: 1/dt,     z: smoothDt,  w: 1/smoothDt
+float4 unity_OrthoParams; // x: width,          y: height,   z: unused,    w: ortho ? 1 : 0
+float4 _ZBufferParams; // x: 1-far/near,     y: far/near, z: x/far,     w: y/far
+float4 _ScreenParams; // x: width,          y: height,   z: 1+1/width, w: 1+1/height
+float4 _Time; // x: t/20,           y: t,        z: t*2,       w: t*3
+float4 _SinTime; // x: sin(t/20),      y: sin(t),   z: sin(t*2),  w: sin(t*3)
+float4 _CosTime; // x: cos(t/20),      y: cos(t),   z: cos(t*2),  w: cos(t*3)
 
 // -----------------------------------------------------------------------------
 // Std functions
@@ -281,9 +281,9 @@ VaryingsDefault VertDefault(AttributesDefault v)
     o.vertex = float4(v.vertex.xy, 0.0, 1.0);
     o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
 
-#if UNITY_UV_STARTS_AT_TOP
+    #if UNITY_UV_STARTS_AT_TOP
     o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
-#endif
+    #endif
 
     o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
 

@@ -4,10 +4,10 @@ using System.Linq;
 namespace UnityEditor.Rendering.PostProcessing
 {
     [InitializeOnLoad]
-    sealed class DefineSetter
+    internal sealed class DefineSetter
     {
-        const string k_Define = "UNITY_POST_PROCESSING_STACK_V2";
-        
+        private const string k_Define = "UNITY_POST_PROCESSING_STACK_V2";
+
         static DefineSetter()
         {
             var targets = Enum.GetValues(typeof(BuildTargetGroup))
@@ -33,7 +33,7 @@ namespace UnityEditor.Rendering.PostProcessing
             }
         }
 
-        static bool IsObsolete(BuildTargetGroup group)
+        private static bool IsObsolete(BuildTargetGroup group)
         {
             var attrs = typeof(BuildTargetGroup)
                 .GetField(group.ToString())

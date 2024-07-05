@@ -79,10 +79,10 @@ float TestSamplePair(float frontDepth, float invRange, uint base, int offset)
 
 float TestSamples(uint centerIdx, uint x, uint y, float invDepth, float invThickness)
 {
-#if WIDE_SAMPLING
+    #if WIDE_SAMPLING
     x <<= 1;
     y <<= 1;
-#endif
+    #endif
 
     float invRange = invThickness * invDepth;
     float frontDepth = invThickness - 0.5;
@@ -95,7 +95,7 @@ float TestSamples(uint centerIdx, uint x, uint y, float invDepth, float invThick
             TestSamplePair(frontDepth, invRange, centerIdx, x * TILE_DIM)
         );
     }
-    else if (x == y)
+    if (x == y)
     {
         // Diagonal
         return 0.5 * (
@@ -103,33 +103,31 @@ float TestSamples(uint centerIdx, uint x, uint y, float invDepth, float invThick
             TestSamplePair(frontDepth, invRange, centerIdx, x * TILE_DIM + x)
         );
     }
-    else
-    {
-        // L-Shaped
-        return 0.25 * (
-            TestSamplePair(frontDepth, invRange, centerIdx, y * TILE_DIM + x) +
-            TestSamplePair(frontDepth, invRange, centerIdx, y * TILE_DIM - x) +
-            TestSamplePair(frontDepth, invRange, centerIdx, x * TILE_DIM + y) +
-            TestSamplePair(frontDepth, invRange, centerIdx, x * TILE_DIM - y)
-        );
-    }
+    // L-Shaped
+    return 0.25 * (
+        TestSamplePair(frontDepth, invRange, centerIdx, y * TILE_DIM + x) +
+        TestSamplePair(frontDepth, invRange, centerIdx, y * TILE_DIM - x) +
+        TestSamplePair(frontDepth, invRange, centerIdx, x * TILE_DIM + y) +
+        TestSamplePair(frontDepth, invRange, centerIdx, x * TILE_DIM - y)
+    );
 }
 
 [numthreads(THREAD_COUNT_X, THREAD_COUNT_Y, 1)]
-void MAIN(uint3 Gid : SV_GroupID, uint GI : SV_GroupIndex, uint3 GTid : SV_GroupThreadID, uint3 DTid : SV_DispatchThreadID)
+void MAIN(uint3 Gid : SV_GroupID, uint GI : SV_GroupIndex, uint3 GTid : SV_GroupThreadID,
+          uint3 DTid : SV_DispatchThreadID)
 {
-#if WIDE_SAMPLING
+    #if WIDE_SAMPLING
     float2 QuadCenterUV = int2(DTid.xy + GTid.xy - 7) * gInvSliceDimension.xy;
-#else
+    #else
     float2 QuadCenterUV = int2(DTid.xy + GTid.xy - 3) * gInvSliceDimension.xy;
-#endif
+    #endif
 
     // Fetch four depths and store them in LDS
-#ifdef INTERLEAVE_RESULT
+    #ifdef INTERLEAVE_RESULT
     float4 depths = DepthTex.Gather(samplerDepthTex, float3(QuadCenterUV, DTid.z));
-#else
+    #else
     float4 depths = DepthTex.Gather(samplerDepthTex, QuadCenterUV);
-#endif
+    #endif
     int destIdx = GTid.x * 2 + GTid.y * 2 * TILE_DIM;
     DepthSamples[destIdx] = depths.w;
     DepthSamples[destIdx + 1] = depths.z;
@@ -138,18 +136,18 @@ void MAIN(uint3 Gid : SV_GroupID, uint GI : SV_GroupIndex, uint3 GTid : SV_Group
 
     GroupMemoryBarrierWithGroupSync();
 
-#if WIDE_SAMPLING
+    #if WIDE_SAMPLING
     uint thisIdx = GTid.x + GTid.y * TILE_DIM + 8 * TILE_DIM + 8;
-#else
+    #else
     uint thisIdx = GTid.x + GTid.y * TILE_DIM + 4 * TILE_DIM + 4;
-#endif
+    #endif
     const float invThisDepth = 1.0 / DepthSamples[thisIdx];
 
     float ao = 0.0;
 
-//#define SAMPLE_EXHAUSTIVELY
+    //#define SAMPLE_EXHAUSTIVELY
 
-#ifdef SAMPLE_EXHAUSTIVELY
+    #ifdef SAMPLE_EXHAUSTIVELY
     // 68 samples:  sample all cells in *within* a circular radius of 5
     ao += gSampleWeightTable[0].x * TestSamples(thisIdx, 1, 0, invThisDepth, gInvThicknessTable[0].x);
     ao += gSampleWeightTable[0].y * TestSamples(thisIdx, 2, 0, invThisDepth, gInvThicknessTable[0].y);
@@ -163,7 +161,7 @@ void MAIN(uint3 Gid : SV_GroupID, uint GI : SV_GroupIndex, uint3 GTid : SV_Group
     ao += gSampleWeightTable[1].w * TestSamples(thisIdx, 1, 4, invThisDepth, gInvThicknessTable[1].w);
     ao += gSampleWeightTable[2].y * TestSamples(thisIdx, 2, 3, invThisDepth, gInvThicknessTable[2].y);
     ao += gSampleWeightTable[2].z * TestSamples(thisIdx, 2, 4, invThisDepth, gInvThicknessTable[2].z);
-#else // SAMPLE_CHECKER
+    #else // SAMPLE_CHECKER
     // 36 samples:  sample every-other cell in a checker board pattern
     ao += gSampleWeightTable[0].y * TestSamples(thisIdx, 2, 0, invThisDepth, gInvThicknessTable[0].y);
     ao += gSampleWeightTable[0].w * TestSamples(thisIdx, 4, 0, invThisDepth, gInvThicknessTable[0].w);
@@ -172,12 +170,12 @@ void MAIN(uint3 Gid : SV_GroupID, uint GI : SV_GroupIndex, uint3 GTid : SV_Group
     ao += gSampleWeightTable[2].w * TestSamples(thisIdx, 3, 3, invThisDepth, gInvThicknessTable[2].w);
     ao += gSampleWeightTable[1].z * TestSamples(thisIdx, 1, 3, invThisDepth, gInvThicknessTable[1].z);
     ao += gSampleWeightTable[2].z * TestSamples(thisIdx, 2, 4, invThisDepth, gInvThicknessTable[2].z);
-#endif
+    #endif
 
-#ifdef INTERLEAVE_RESULT
+    #ifdef INTERLEAVE_RESULT
     uint2 OutPixel = DTid.xy << 2 | uint2(DTid.z & 3, DTid.z >> 2);
-#else
+    #else
     uint2 OutPixel = DTid.xy;
-#endif
+    #endif
     Occlusion[OutPixel] = lerp(1, ao, gIntensity);
 }

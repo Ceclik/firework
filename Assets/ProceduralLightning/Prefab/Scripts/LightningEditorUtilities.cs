@@ -5,84 +5,123 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using System;
+using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
-
+using Random = System.Random;
 #if UNITY_EDITOR
-
 using UnityEditor;
 
 #endif
 
 namespace DigitalRuby.ThunderAndLightning
 {
-    [System.Serializable]
+    [Serializable]
     public struct RangeOfIntegers
     {
-        [Tooltip("Minimum value (inclusive)")]
-        public int Minimum;
+        [Tooltip("Minimum value (inclusive)")] public int Minimum;
 
-        [Tooltip("Maximum value (inclusive)")]
-        public int Maximum;
+        [Tooltip("Maximum value (inclusive)")] public int Maximum;
 
-		public int Random() { return UnityEngine.Random.Range(Minimum, Maximum + 1); }
-        public int Random(System.Random r) { return r.Next(Minimum, Maximum + 1); }
+        public int Random()
+        {
+            return UnityEngine.Random.Range(Minimum, Maximum + 1);
+        }
+
+        public int Random(Random r)
+        {
+            return r.Next(Minimum, Maximum + 1);
+        }
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct RangeOfFloats
     {
-        [Tooltip("Minimum value (inclusive)")]
-        public float Minimum;
+        [Tooltip("Minimum value (inclusive)")] public float Minimum;
 
-        [Tooltip("Maximum value (inclusive)")]
-        public float Maximum;
+        [Tooltip("Maximum value (inclusive)")] public float Maximum;
 
-		public float Random() { return UnityEngine.Random.Range(Minimum, Maximum); }
-        public float Random(System.Random r) { return Minimum + ((float)r.NextDouble() * (Maximum - Minimum)); }
+        public float Random()
+        {
+            return UnityEngine.Random.Range(Minimum, Maximum);
+        }
+
+        public float Random(Random r)
+        {
+            return Minimum + (float)r.NextDouble() * (Maximum - Minimum);
+        }
     }
 
-    [System.Serializable]
-    public class ReorderableList_GameObject : ReorderableList<GameObject> { }
+    [Serializable]
+    public class ReorderableList_GameObject : ReorderableList<GameObject>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_Transform : ReorderableList<Transform> { }
+    [Serializable]
+    public class ReorderableList_Transform : ReorderableList<Transform>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_Vector3 : ReorderableList<Vector3> { }
+    [Serializable]
+    public class ReorderableList_Vector3 : ReorderableList<Vector3>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_Rect : ReorderableList<Rect> { }
+    [Serializable]
+    public class ReorderableList_Rect : ReorderableList<Rect>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_RectOffset : ReorderableList<RectOffset> { }
+    [Serializable]
+    public class ReorderableList_RectOffset : ReorderableList<RectOffset>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_Int : ReorderableList<int> { }
+    [Serializable]
+    public class ReorderableList_Int : ReorderableList<int>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_Float : ReorderableList<float> { }
+    [Serializable]
+    public class ReorderableList_Float : ReorderableList<float>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList_String : ReorderableList<string> { }
+    [Serializable]
+    public class ReorderableList_String : ReorderableList<string>
+    {
+    }
 
-    [System.Serializable]
-    public class ReorderableList<T> : ReorderableListBase { public System.Collections.Generic.List<T> List; }
+    [Serializable]
+    public class ReorderableList<T> : ReorderableListBase
+    {
+        public List<T> List;
+    }
 
-    [System.Serializable]
-    public class ReorderableListBase { }
+    [Serializable]
+    public class ReorderableListBase
+    {
+    }
 
     public class ReorderableListAttribute : PropertyAttribute
     {
-        public ReorderableListAttribute(string tooltip) { Tooltip = tooltip; }
+        public ReorderableListAttribute(string tooltip)
+        {
+            Tooltip = tooltip;
+        }
 
-        public string Tooltip { get; private set; }
+        public string Tooltip { get; }
     }
 
     public class SingleLineAttribute : PropertyAttribute
     {
-        public SingleLineAttribute(string tooltip) { Tooltip = tooltip; }
+        public SingleLineAttribute(string tooltip)
+        {
+            Tooltip = tooltip;
+        }
 
-        public string Tooltip { get; private set; }
+        public string Tooltip { get; }
     }
 
     public class SingleLineClampAttribute : SingleLineAttribute
@@ -93,8 +132,8 @@ namespace DigitalRuby.ThunderAndLightning
             MaxValue = maxValue;
         }
 
-        public double MinValue { get; private set; }
-        public double MaxValue { get; private set; }
+        public double MinValue { get; }
+        public double MaxValue { get; }
     }
 
 #if UNITY_EDITOR
@@ -106,66 +145,47 @@ namespace DigitalRuby.ThunderAndLightning
         private void DrawIntTextField(Rect position, string text, string tooltip, SerializedProperty prop)
         {
             EditorGUI.BeginChangeCheck();
-            int value = EditorGUI.IntField(position, new GUIContent(text, tooltip), prop.intValue);
-            SingleLineClampAttribute clamp = attribute as SingleLineClampAttribute;
-            if (clamp != null)
-            {
-                value = Mathf.Clamp(value, (int)clamp.MinValue, (int)clamp.MaxValue);
-            }
-            if (EditorGUI.EndChangeCheck())
-            {
-                prop.intValue = value;
-            }
+            var value = EditorGUI.IntField(position, new GUIContent(text, tooltip), prop.intValue);
+            var clamp = attribute as SingleLineClampAttribute;
+            if (clamp != null) value = Mathf.Clamp(value, (int)clamp.MinValue, (int)clamp.MaxValue);
+            if (EditorGUI.EndChangeCheck()) prop.intValue = value;
         }
 
         private void DrawFloatTextField(Rect position, string text, string tooltip, SerializedProperty prop)
         {
             EditorGUI.BeginChangeCheck();
-            float value = EditorGUI.FloatField(position, new GUIContent(text, tooltip), prop.floatValue);
-            SingleLineClampAttribute clamp = attribute as SingleLineClampAttribute;
-            if (clamp != null)
-            {
-                value = Mathf.Clamp(value, (float)clamp.MinValue, (float)clamp.MaxValue);
-            }
-            if (EditorGUI.EndChangeCheck())
-            {
-                prop.floatValue = value;
-            }
+            var value = EditorGUI.FloatField(position, new GUIContent(text, tooltip), prop.floatValue);
+            var clamp = attribute as SingleLineClampAttribute;
+            if (clamp != null) value = Mathf.Clamp(value, (float)clamp.MinValue, (float)clamp.MaxValue);
+            if (EditorGUI.EndChangeCheck()) prop.floatValue = value;
         }
 
         private void DrawRangeField(Rect position, SerializedProperty prop, bool floatingPoint)
         {
             EditorGUIUtility.labelWidth = 30.0f;
             EditorGUIUtility.fieldWidth = 40.0f;
-            float width = position.width * 0.49f;
-            float spacing = position.width * 0.02f;
+            var width = position.width * 0.49f;
+            var spacing = position.width * 0.02f;
             position.width = width;
             if (floatingPoint)
-            {
                 DrawFloatTextField(position, "Min", "Minimum value", prop.FindPropertyRelative("Minimum"));
-            }
             else
-            {
                 DrawIntTextField(position, "Min", "Minimum value", prop.FindPropertyRelative("Minimum"));
-            }
             position.x = position.xMax + spacing;
             position.width = width;
             if (floatingPoint)
-            {
                 DrawFloatTextField(position, "Max", "Maximum value", prop.FindPropertyRelative("Maximum"));
-            }
             else
-            {
                 DrawIntTextField(position, "Max", "Maximum value", prop.FindPropertyRelative("Maximum"));
-            }
         }
 
         public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, prop);
-            int indent = EditorGUI.indentLevel;
+            var indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
-            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), new GUIContent(label.text, (attribute as SingleLineAttribute).Tooltip));
+            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive),
+                new GUIContent(label.text, (attribute as SingleLineAttribute).Tooltip));
 
             switch (prop.type)
             {
@@ -178,7 +198,8 @@ namespace DigitalRuby.ThunderAndLightning
                     break;
 
                 default:
-                    EditorGUI.HelpBox(position, "[SingleLineDrawer] doesn't work with type '" + prop.type + "'", MessageType.Error);
+                    EditorGUI.HelpBox(position, "[SingleLineDrawer] doesn't work with type '" + prop.type + "'",
+                        MessageType.Error);
                     break;
             }
 
@@ -188,37 +209,38 @@ namespace DigitalRuby.ThunderAndLightning
     }
 
     [CustomPropertyDrawer(typeof(ReorderableListAttribute), true)]
-    public class ReorderableListDrawer : UnityEditor.PropertyDrawer
+    public class ReorderableListDrawer : PropertyDrawer
     {
-        private UnityEditorInternal.ReorderableList list;
+        private ReorderableList list;
         private SerializedProperty prevProperty;
 
-        private UnityEditorInternal.ReorderableList GetList(SerializedProperty property)
+        private ReorderableList GetList(SerializedProperty property)
         {
             if (list == null || prevProperty != property)
             {
                 prevProperty = property;
-                SerializedProperty listProperty = property.FindPropertyRelative("List");
-                list = new UnityEditorInternal.ReorderableList(listProperty.serializedObject, listProperty, true, false, true, true);
-                list.drawElementCallback = (UnityEngine.Rect rect, int index, bool isActive, bool isFocused) =>
+                var listProperty = property.FindPropertyRelative("List");
+                list = new ReorderableList(listProperty.serializedObject, listProperty, true, false, true, true);
+                list.drawElementCallback = (rect, index, isActive, isFocused) =>
                 {
                     EditorGUIUtility.labelWidth = 100.0f;
                     EditorGUI.PropertyField(rect, listProperty.GetArrayElementAtIndex(index), true);
                 };
             }
+
             return list;
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, UnityEngine.GUIContent label)
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return GetList(property).GetHeight();
         }
 
-        public override void OnGUI(UnityEngine.Rect position, SerializedProperty property, UnityEngine.GUIContent label)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            ReorderableListAttribute attr = attribute as ReorderableListAttribute;
-            string tooltip = (attr == null ? string.Empty : attr.Tooltip);
-            UnityEditorInternal.ReorderableList list = GetList(property);
+            var attr = attribute as ReorderableListAttribute;
+            var tooltip = attr == null ? string.Empty : attr.Tooltip;
+            var list = GetList(property);
             float height;
             if (list.serializedProperty.arraySize == 0)
             {
@@ -228,19 +250,15 @@ namespace DigitalRuby.ThunderAndLightning
             {
                 height = 0.0f;
                 for (var i = 0; i < list.serializedProperty.arraySize; i++)
-                {
-                    height = Mathf.Max(height, EditorGUI.GetPropertyHeight(list.serializedProperty.GetArrayElementAtIndex(i)));
-                }
+                    height = Mathf.Max(height,
+                        EditorGUI.GetPropertyHeight(list.serializedProperty.GetArrayElementAtIndex(i)));
             }
-            list.drawHeaderCallback = (Rect r) =>
-            {
-                EditorGUI.LabelField(r, new GUIContent(label.text, tooltip));
-            };
+
+            list.drawHeaderCallback = r => { EditorGUI.LabelField(r, new GUIContent(label.text, tooltip)); };
             list.elementHeight = height;
             list.DoList(position);
         }
     }
 
 #endif
-
 }

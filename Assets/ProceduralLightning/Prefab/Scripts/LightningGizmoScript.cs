@@ -5,14 +5,13 @@
 // Source code may NOT be redistributed or sold.
 // 
 
+using UnityEditor;
 using UnityEngine;
-using System.Collections;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class LightningGizmoScript : MonoBehaviour
     {
-
 #if UNITY_EDITOR
 
         public string Label { get; set; }
@@ -25,26 +24,23 @@ namespace DigitalRuby.ThunderAndLightning
             {
                 return;
             }
-            else if (style == null)
+
+            if (style == null)
             {
                 style = new GUIStyle();
                 style.fontSize = 14;
                 style.fontStyle = FontStyle.Normal;
                 style.normal.textColor = Color.white;
             }
-            Vector3 v = gameObject.transform.position;
-            if ((Label == "0" || Label.StartsWith("0,")))
-            {
+
+            var v = gameObject.transform.position;
+            if (Label == "0" || Label.StartsWith("0,"))
                 Gizmos.DrawIcon(v, "LightningPathStart.png");
-            }
             else
-            {
                 Gizmos.DrawIcon(v, "LightningPathNext.png");
-            }
-            UnityEditor.Handles.Label(v + labelOffset, Label, style);
+            Handles.Label(v + labelOffset, Label, style);
         }
 
 #endif
-
     }
 }

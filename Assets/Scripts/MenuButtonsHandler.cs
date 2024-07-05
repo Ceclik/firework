@@ -2,7 +2,6 @@
 
 public class MenuButtonsHandler : MonoBehaviour
 {
-
     [SerializeField] private GameObject pickGameMode;
     [SerializeField] private GameObject pickLocation;
 

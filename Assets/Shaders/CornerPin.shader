@@ -1,159 +1,139 @@
-﻿
-
-Shader "Distort/CornerPin"
+﻿Shader "Distort/CornerPin"
 
 {
 
-	Properties{
+    Properties
+    {
 
-		_MainTex("Base (RGB)", 2D) = "white" {}
+        _MainTex("Base (RGB)", 2D) = "white" {}
 
-	_DLx("Down Left x", Range(-2.0,2.0)) = 0
+        _DLx("Down Left x", Range(-2.0,2.0)) = 0
 
-		_DLy("Down Left y", Range(-2.0,2.0)) = 0
+        _DLy("Down Left y", Range(-2.0,2.0)) = 0
 
 
 
-		_DRx("Down Right x", Range(-2.0,2.0)) = 0
+        _DRx("Down Right x", Range(-2.0,2.0)) = 0
 
-		_DRy("Down Right y", Range(-2.0,2.0)) = 0
+        _DRy("Down Right y", Range(-2.0,2.0)) = 0
 
 
 
-		_TLx("Top Left x", Range(-2.0,2.0)) = 0
+        _TLx("Top Left x", Range(-2.0,2.0)) = 0
 
-		_TLy("Top Left y", Range(-2.0,2.0)) = 0
+        _TLy("Top Left y", Range(-2.0,2.0)) = 0
 
 
 
-		_TRx("Top Right x", Range(-2.0,2.0)) = 0
+        _TRx("Top Right x", Range(-2.0,2.0)) = 0
 
-		_TRy("Top Right y", Range(-2.0,2.0)) = 0
+        _TRy("Top Right y", Range(-2.0,2.0)) = 0
 
-	}
+    }
 
 
 
-		SubShader{
+    SubShader
+    {
 
-		Pass{
+        Pass
+        {
 
-		ZTest Always Cull Off ZWrite Off
+            ZTest Always Cull Off ZWrite Off
 
-		Fog{ Mode off }
+            Fog
+            {
+                Mode off
+            }
 
 
 
-		CGPROGRAM
+            CGPROGRAM
+            #pragma vertex vert
 
-#pragma vertex vert
+            #pragma fragment frag
 
-#pragma fragment frag
+            #pragma fragmentoption ARB_precision_hint_fastest
 
-#pragma fragmentoption ARB_precision_hint_fastest 
+            #include "UnityCG.cginc"
 
-#include "UnityCG.cginc"
 
+            uniform sampler2D _MainTex;
 
 
-		uniform sampler2D _MainTex;
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
 
+                float2 uv : TEXCOORD0;
+            };
 
 
-	struct v2f {
+            float _DRx;
 
-		float4 pos : SV_POSITION;
+            float _DRy;
 
-		float2 uv : TEXCOORD0;
 
-	};
+            float _DLx;
 
+            float _DLy;
 
 
-	float _DRx;
+            float _TLx;
 
-	float _DRy;
+            float _TLy;
 
 
+            float _TRx;
 
-	float _DLx;
+            float _TRy;
 
-	float _DLy;
 
+            v2f vert(appdata_img v)
 
+            {
+                v2f o;
 
-	float _TLx;
+                o.pos = UnityObjectToClipPos(v.vertex);
 
-	float _TLy;
+                o.uv = v.texcoord;
 
 
+                o.pos.x += _DLx * o.uv.x * o.uv.y;
 
-	float _TRx;
+                o.pos.y += _DLy * o.uv.x * o.uv.y;
 
-	float _TRy;
 
+                o.pos.x += _DRx * (1 - o.uv.x) * o.uv.y;
 
+                o.pos.y += _DRy * (1 - o.uv.x) * o.uv.y;
 
-	v2f vert(appdata_img v)
 
-	{
+                o.pos.x += _TLx * o.uv.x * (1 - o.uv.y);
 
-		v2f o;
+                o.pos.y += _TLy * o.uv.x * (1 - o.uv.y);
 
-		o.pos = UnityObjectToClipPos(v.vertex);
 
-		o.uv = v.texcoord;
+                o.pos.x += _TRx * (1 - o.uv.x) * (1 - o.uv.y);
 
+                o.pos.y += _TRy * (1 - o.uv.x) * (1 - o.uv.y);
 
 
-		o.pos.x += _DLx*o.uv.x*o.uv.y;
+                return o;
+            }
 
-		o.pos.y += _DLy*o.uv.x*o.uv.y;
 
+            float4 frag(v2f i) : SV_Target
 
+            {
+                return tex2D(_MainTex, i.uv);
+            }
+            ENDCG
 
-		o.pos.x += _DRx*(1 - o.uv.x)*o.uv.y;
+        }
 
-		o.pos.y += _DRy*(1 - o.uv.x)*o.uv.y;
+    }
 
-
-
-		o.pos.x += _TLx*o.uv.x*(1 - o.uv.y);
-
-		o.pos.y += _TLy*o.uv.x*(1 - o.uv.y);
-
-
-
-		o.pos.x += _TRx*(1 - o.uv.x)*(1 - o.uv.y);
-
-		o.pos.y += _TRy*(1 - o.uv.x)*(1 - o.uv.y);
-
-
-
-		return o;
-
-	}
-
-
-
-	float4 frag(v2f i) : SV_Target
-
-	{
-
-
-
-
-
-		return tex2D(_MainTex, i.uv);
-
-	}
-
-		ENDCG
-
-	}
-
-	}
-
-		Fallback off
+    Fallback off
 
 }

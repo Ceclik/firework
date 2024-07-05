@@ -5,7 +5,7 @@ namespace UnityEngine.Rendering.PostProcessing
 {
     public sealed class PropertySheetFactory
     {
-        readonly Dictionary<Shader, PropertySheet> m_Sheets;
+        private readonly Dictionary<Shader, PropertySheet> m_Sheets;
 
         public PropertySheetFactory()
         {

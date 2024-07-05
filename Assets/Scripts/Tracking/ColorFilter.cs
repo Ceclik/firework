@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using Unity.Collections;
 using Unity.Jobs;
-using Unity.Collections;
+using UnityEngine;
 
 namespace Assets.Scripts.Tracking
 {
-    public class ColorFilter:MonoBehaviour
+    public class ColorFilter : MonoBehaviour
     {
-        [SerializeField]
-        WebCam webcam;
+        [SerializeField] private WebCam webcam;
 
-        JobHandle m_RGBComplementBurstJobHandle;
+        private NativeArray<Color32> m_NativeColors;
 
-        NativeArray<Color32> m_NativeColors;
+        private JobHandle m_RGBComplementBurstJobHandle;
     }
 }

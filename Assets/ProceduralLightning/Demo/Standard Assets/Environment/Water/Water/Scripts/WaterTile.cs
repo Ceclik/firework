@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace UnityStandardAssets.Water
@@ -16,34 +15,6 @@ namespace UnityStandardAssets.Water
         }
 
 
-        void AcquireComponents()
-        {
-            if (!reflection)
-            {
-                if (transform.parent)
-                {
-                    reflection = transform.parent.GetComponent<PlanarReflection>();
-                }
-                else
-                {
-                    reflection = transform.GetComponent<PlanarReflection>();
-                }
-            }
-
-            if (!waterBase)
-            {
-                if (transform.parent)
-                {
-                    waterBase = transform.parent.GetComponent<WaterBase>();
-                }
-                else
-                {
-                    waterBase = transform.GetComponent<WaterBase>();
-                }
-            }
-        }
-
-
 #if UNITY_EDITOR
         public void Update()
         {
@@ -54,13 +25,27 @@ namespace UnityStandardAssets.Water
 
         public void OnWillRenderObject()
         {
-            if (reflection)
+            if (reflection) reflection.WaterTileBeingRendered(transform, Camera.current);
+            if (waterBase) waterBase.WaterTileBeingRendered(transform, Camera.current);
+        }
+
+
+        private void AcquireComponents()
+        {
+            if (!reflection)
             {
-                reflection.WaterTileBeingRendered(transform, Camera.current);
+                if (transform.parent)
+                    reflection = transform.parent.GetComponent<PlanarReflection>();
+                else
+                    reflection = transform.GetComponent<PlanarReflection>();
             }
-            if (waterBase)
+
+            if (!waterBase)
             {
-                waterBase.WaterTileBeingRendered(transform, Camera.current);
+                if (transform.parent)
+                    waterBase = transform.parent.GetComponent<WaterBase>();
+                else
+                    waterBase = transform.GetComponent<WaterBase>();
             }
         }
     }

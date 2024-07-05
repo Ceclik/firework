@@ -1,136 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Drawing;
 using Emgu.CV;
-using Emgu.CV.Cvb;
-using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using System;
-using UnityEngine.UI;
 using Emgu.CV.Util;
-using System.Drawing;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class CamFilter : MonoBehaviour
 {
-
-    private Emgu.CV.VideoCapture _capture = null;
-    private bool _captureInProgress;
-
-    private bool drawCircles;
-
-    #region Materials
-    private Mat _frame = new Mat();
-    private Mat _convertedFrame = new Mat();
-
-    VectorOfMat _hsvChannels = new VectorOfMat();
-    VectorOfMat _channels = new VectorOfMat();
-    Mat _redImage = new Mat();
-    Mat _greenImage = new Mat();
-    Mat _blueImage = new Mat();
-    Mat _edges = new Mat();
-
-    Mat _hsv = new Mat();
-
-    Mat _hue = new Mat();
-    Mat _value = new Mat();
-    Mat _sat = new Mat();
-
-    Mat _hueT = new Mat();
-    Mat _valueT = new Mat();
-    Mat _satT = new Mat();
-
-    Mat _rgb = new Mat();
-
-    Mat _crop = new Mat();
-
-    Mat _pyrDown = new Mat();
-
-    #endregion    
-
-    #region Thresold Values
-
-    private byte HMin = 0;
-    private byte HMax = 255;
-    private byte SMin = 0;
-    private byte SMax = 255;
-    private byte VMin = 0;
-    private byte VMax = 255;
-
-    #endregion
-
     public CircleF[] circles;
-
-    private Texture2D tex;
-    private Texture2D texCrop;
-    private Texture2D texPreview;
-    private Byte[] rawImage;
-    private Byte[] rawImagePreview;
-    private Byte[] cropPreview;
     public RawImage filteredImage;
     public RawImage previewImage;
     public RawImage cropImage;
 
+    private VideoCapture _capture;
+    private bool _captureInProgress;
+    private byte[] cropPreview;
 
-    #region ThresoldSetup
-    public bool SetHMin(byte hMin)
-    {
-        if (hMin <= HMax)
-        {
-            HMin = hMin;
-            return true;
-        }
-        return false;
-    }
-    public bool SetHMax(byte hMax)
-    {
-        if (hMax >= HMin)
-        {
-            HMax = hMax;
-        }
-        return false;
-    }
-    public bool SetSMin(byte sMin)
-    {
-        if (sMin <= SMax)
-        {
-            SMin = sMin;
-        }
-        return false;
-    }
-    public bool SetSMax(byte sMax)
-    {
-        if (sMax >= SMin)
-        {
-            SMax = sMax;
-        }
-        return false;
-    }
-    public bool SetVMin(byte vMin)
-    {
-        if (vMin <= VMax)
-        {
-            VMin = vMin;
-        }
-        return false;
-    }
-    public bool SetVMax(byte vMax)
-    {
-        if (vMax >= VMin)
-        {
-            VMax = vMax;
-        }
-        return false;
-    }
-    #endregion
+    private bool drawCircles;
+    private byte[] rawImage;
+    private byte[] rawImagePreview;
 
+    private Texture2D tex;
+    private Texture2D texCrop;
 
-    public void SwitchCircles(bool isOn)
-    {
-        drawCircles = isOn;
-    }
+    private Texture2D texPreview;
+
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         CvInvoke.UseOpenCL = false;
         try
@@ -146,16 +44,17 @@ public class CamFilter : MonoBehaviour
             _capture.SetCaptureProperty(CapProp.Autofocus, 5);
             _capture.SetCaptureProperty(CapProp.WhiteBalanceRedV, -1);
             _capture.SetCaptureProperty(CapProp.Focus, 1);
-            Debug.Log(_capture.CaptureSource);
-            Debug.Log(_capture.Width);
-            Debug.Log(_capture.Height);
-            Debug.Log("autofocus:" + _capture.GetCaptureProperty(CapProp.Autofocus));
+            UnityEngine.Debug.Log(_capture.CaptureSource);
+            UnityEngine.Debug.Log(_capture.Width);
+            UnityEngine.Debug.Log(_capture.Height);
+            UnityEngine.Debug.Log("autofocus:" + _capture.GetCaptureProperty(CapProp.Autofocus));
         }
         catch (NullReferenceException excpt)
         {
-            Debug.Log(excpt.Message);
+            UnityEngine.Debug.Log(excpt.Message);
         }
-        _capture.Start(null);
+
+        _capture.Start();
         tex = new Texture2D(_capture.Width, _capture.Height, TextureFormat.RGB24, false, true);
         texPreview = new Texture2D(_capture.Width, _capture.Height, TextureFormat.RGB24, false, true);
         texCrop = new Texture2D(_capture.Width, _capture.Height, TextureFormat.RGB24, false, true);
@@ -165,11 +64,28 @@ public class CamFilter : MonoBehaviour
         previewImage.texture = texPreview;
     }
 
-    private void OnApplicationQuit()
+    // Update is called once per frame
+    private void Update()
     {
-        _capture.ImageGrabbed -= ProcessFrame;
-        _capture.Stop();
-        _capture.Dispose();
+        if (rawImage != null)
+        {
+            tex.LoadRawTextureData(rawImage);
+            tex.Apply();
+        }
+
+        if (rawImagePreview != null)
+        {
+            texPreview.LoadRawTextureData(rawImagePreview);
+            texPreview.Apply();
+        }
+
+        if (cropPreview != null)
+        {
+            texCrop.LoadRawTextureData(cropPreview);
+            texCrop.Apply();
+        }
+
+        if (Input.GetKeyDown(KeyCode.A)) UnityEngine.Debug.Log(_capture.GetCaptureProperty(CapProp.Focus));
     }
 
     private void OnDisable()
@@ -178,30 +94,19 @@ public class CamFilter : MonoBehaviour
         _capture.Stop();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnApplicationQuit()
     {
-        if (rawImage != null)
-        {
-            tex.LoadRawTextureData(rawImage);
-            tex.Apply();            
-        }
-        if (rawImagePreview !=null)
-        {
-            texPreview.LoadRawTextureData(rawImagePreview);
-            texPreview.Apply();
-        }
-        if (cropPreview !=null)
-        {
-            texCrop.LoadRawTextureData(cropPreview);
-            texCrop.Apply();
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Debug.Log(_capture.GetCaptureProperty(CapProp.Focus));
-        }
+        _capture.ImageGrabbed -= ProcessFrame;
+        _capture.Stop();
+        _capture.Dispose();
     }
+
+
+    public void SwitchCircles(bool isOn)
+    {
+        drawCircles = isOn;
+    }
+
     private Mat BgrToRgb(Mat bgr)
     {
         CvInvoke.CvtColor(bgr, _rgb, ColorConversion.Bgr2Rgb);
@@ -241,15 +146,15 @@ public class CamFilter : MonoBehaviour
         //CvInvoke.Threshold(_sat, _satT, SMin, SMax, ThresholdType.Binary);
 
         CvInvoke.InRange(_hue, new ScalarArray(new MCvScalar(HMin, HMin, HMin)),
-                           new ScalarArray(new MCvScalar(HMax, HMax, HMax)), _hueT);
+            new ScalarArray(new MCvScalar(HMax, HMax, HMax)), _hueT);
 
         CvInvoke.InRange(_sat, new ScalarArray(new MCvScalar(SMin, SMin, SMin)),
-                           new ScalarArray(new MCvScalar(SMax, SMax, SMax)), _satT);
+            new ScalarArray(new MCvScalar(SMax, SMax, SMax)), _satT);
 
         CvInvoke.InRange(_value, new ScalarArray(new MCvScalar(VMin, VMin, VMin)),
-                           new ScalarArray(new MCvScalar(VMax, VMax, VMax)), _valueT);
+            new ScalarArray(new MCvScalar(VMax, VMax, VMax)), _valueT);
 
-        CvInvoke.Merge(new VectorOfMat(_hueT, _satT, _valueT), _hsv);        
+        CvInvoke.Merge(new VectorOfMat(_hueT, _satT, _valueT), _hsv);
         //CvInvoke.CvtColor(_hsv, _rgb, ColorConversion.Hsv2Rgb);
         return _hsv;
     }
@@ -257,25 +162,26 @@ public class CamFilter : MonoBehaviour
     private Mat CropWhite()
     {
         CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)),
-                            new ScalarArray(new MCvScalar(255, 255, 255)),_hueT);
+            new ScalarArray(new MCvScalar(255, 255, 255)), _hueT);
         CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)),
-                            new ScalarArray(new MCvScalar(255, 255, 255)), _satT);
+            new ScalarArray(new MCvScalar(255, 255, 255)), _satT);
         CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)),
-                            new ScalarArray(new MCvScalar(255, 255, 255)), _valueT);
+            new ScalarArray(new MCvScalar(255, 255, 255)), _valueT);
         CvInvoke.Merge(new VectorOfMat(_hueT, _satT, _valueT), _crop);
         return _crop;
     }
 
-    private CircleF[] FindCircles(Mat image)        
-    {             
-        double cannyThreshold = 200.0;
+    private CircleF[] FindCircles(Mat image)
+    {
+        var cannyThreshold = 200.0;
         double circleAccumulatorThreshold = 2;
-        Debug.Log("look for circles");                       
+        UnityEngine.Debug.Log("look for circles");
 
-        CircleF[] circles = CvInvoke.HoughCircles(image, HoughType.Gradient, 1.0, 50.0, cannyThreshold, circleAccumulatorThreshold, 1,15);
-        Debug.Log("circles founded:" + circles.Length);
+        var circles = CvInvoke.HoughCircles(image, HoughType.Gradient, 1.0, 50.0, cannyThreshold,
+            circleAccumulatorThreshold, 1, 15);
+        UnityEngine.Debug.Log("circles founded:" + circles.Length);
         return circles;
-    }    
+    }
 
     private Mat SmoothImage(Mat image)
     {
@@ -285,15 +191,16 @@ public class CamFilter : MonoBehaviour
 
     private Mat DrawCircles(Mat image)
     {
-        int maxDrawed = 10;
-        int drawed = 0;
-        if (circles!=null)
+        var maxDrawed = 10;
+        var drawed = 0;
+        if (circles != null)
             foreach (var circle in circles)
             {
-                CvInvoke.Circle(image, Point.Round(circle.Center), (int)circle.Radius, new MCvScalar(200, 0, 0),2);                
+                CvInvoke.Circle(image, Point.Round(circle.Center), (int)circle.Radius, new MCvScalar(200, 0, 0), 2);
                 drawed++;
                 if (drawed > maxDrawed) break;
             }
+
         return image;
     }
 
@@ -303,10 +210,10 @@ public class CamFilter : MonoBehaviour
         if (_capture != null && _capture.Ptr != IntPtr.Zero)
         {
             //_frame = _capture.QueryFrame();
-            _capture.Retrieve(_frame, 0);
+            _capture.Retrieve(_frame);
             if (_frame != null)
             {
-                CvInvoke.CvtColor(_frame, _hsv, ColorConversion.Bgr2Hsv);//BBG to HSV
+                CvInvoke.CvtColor(_frame, _hsv, ColorConversion.Bgr2Hsv); //BBG to HSV
 
                 CvInvoke.Split(_hsv, _hsvChannels); //Split HSV
                 _hue = _hsvChannels[0];
@@ -314,44 +221,44 @@ public class CamFilter : MonoBehaviour
                 _value = _hsvChannels[2];
 
                 CvInvoke.InRange(_hue, new ScalarArray(new MCvScalar(HMin, HMin, HMin)), //HSV Thresold
-                           new ScalarArray(new MCvScalar(HMax, HMax, HMax)), _hueT);
+                    new ScalarArray(new MCvScalar(HMax, HMax, HMax)), _hueT);
 
                 CvInvoke.InRange(_sat, new ScalarArray(new MCvScalar(SMin, SMin, SMin)),
-                                   new ScalarArray(new MCvScalar(SMax, SMax, SMax)), _satT);
+                    new ScalarArray(new MCvScalar(SMax, SMax, SMax)), _satT);
 
                 CvInvoke.InRange(_value, new ScalarArray(new MCvScalar(VMin, VMin, VMin)),
-                                   new ScalarArray(new MCvScalar(VMax, VMax, VMax)), _valueT);
+                    new ScalarArray(new MCvScalar(VMax, VMax, VMax)), _valueT);
 
                 CvInvoke.Merge(new VectorOfMat(_hueT, _satT, _valueT), _hsv);
 
-                rawImage = _hsv.GetData();//Images assignment
+                rawImage = _hsv.GetData(); //Images assignment
                 rawImagePreview = BgrToRgb(_frame).GetData();
 
-                CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)),//Extracting white values
-                            new ScalarArray(new MCvScalar(255, 255, 255)), _hueT);
+                CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)), //Extracting white values
+                    new ScalarArray(new MCvScalar(255, 255, 255)), _hueT);
                 CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)),
-                                    new ScalarArray(new MCvScalar(255, 255, 255)), _satT);
+                    new ScalarArray(new MCvScalar(255, 255, 255)), _satT);
                 CvInvoke.InRange(_hsv, new ScalarArray(new MCvScalar(250, 250, 250)),
-                                    new ScalarArray(new MCvScalar(255, 255, 255)), _valueT);
+                    new ScalarArray(new MCvScalar(255, 255, 255)), _valueT);
                 CvInvoke.Merge(new VectorOfMat(_hueT, _satT, _valueT), _crop);
 
-                Mat grayImage = new Mat();//Convert Image to gray and smooth result
+                var grayImage = new Mat(); //Convert Image to gray and smooth result
                 CvInvoke.CvtColor(_crop, grayImage, ColorConversion.Bgr2Gray);
 
                 //use image pyr to remove noise
-                Mat pyrDown = new Mat();                
+                var pyrDown = new Mat();
                 CvInvoke.PyrDown(grayImage, pyrDown);
                 CvInvoke.PyrUp(pyrDown, grayImage);
 
-                CvInvoke.GaussianBlur(grayImage, pyrDown,new Size(7,9),6);
+                CvInvoke.GaussianBlur(grayImage, pyrDown, new Size(7, 9), 6);
 
                 //Contrast Up
 
                 CvInvoke.EqualizeHist(pyrDown, grayImage);
-                                               
+
 
                 if (drawCircles)
-                {                    
+                {
                     circles = FindCircles(grayImage);
                     cropPreview = DrawCircles(_rgb).GetData();
                 }
@@ -363,5 +270,92 @@ public class CamFilter : MonoBehaviour
                 }
             }
         }
-    }    
+    }
+
+    #region Materials
+
+    private readonly Mat _frame = new();
+    private Mat _convertedFrame = new();
+
+    private readonly VectorOfMat _hsvChannels = new();
+    private VectorOfMat _channels = new();
+    private Mat _redImage = new();
+    private Mat _greenImage = new();
+    private Mat _blueImage = new();
+    private Mat _edges = new();
+
+    private readonly Mat _hsv = new();
+
+    private Mat _hue = new();
+    private Mat _value = new();
+    private Mat _sat = new();
+
+    private readonly Mat _hueT = new();
+    private readonly Mat _valueT = new();
+    private readonly Mat _satT = new();
+
+    private readonly Mat _rgb = new();
+
+    private readonly Mat _crop = new();
+
+    private readonly Mat _pyrDown = new();
+
+    #endregion
+
+    #region Thresold Values
+
+    private byte HMin;
+    private byte HMax = 255;
+    private byte SMin;
+    private byte SMax = 255;
+    private byte VMin;
+    private byte VMax = 255;
+
+    #endregion
+
+
+    #region ThresoldSetup
+
+    public bool SetHMin(byte hMin)
+    {
+        if (hMin <= HMax)
+        {
+            HMin = hMin;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool SetHMax(byte hMax)
+    {
+        if (hMax >= HMin) HMax = hMax;
+        return false;
+    }
+
+    public bool SetSMin(byte sMin)
+    {
+        if (sMin <= SMax) SMin = sMin;
+        return false;
+    }
+
+    public bool SetSMax(byte sMax)
+    {
+        if (sMax >= SMin) SMax = sMax;
+        return false;
+    }
+
+    public bool SetVMin(byte vMin)
+    {
+        if (vMin <= VMax) VMin = vMin;
+        return false;
+    }
+
+    public bool SetVMax(byte vMax)
+    {
+        if (vMax >= VMin) VMax = vMax;
+        return false;
+    }
+
+    #endregion
 }

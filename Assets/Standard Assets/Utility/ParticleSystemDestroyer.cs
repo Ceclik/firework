@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,9 +12,9 @@ namespace UnityStandardAssets.Utility
 
         public float minDuration = 8;
         public float maxDuration = 10;
+        private bool m_EarlyStop;
 
         private float m_MaxLifetime;
-        private bool m_EarlyStop;
 
 
         private IEnumerator Start()
@@ -24,18 +23,13 @@ namespace UnityStandardAssets.Utility
 
             // find out the maximum lifetime of any particles in this effect
             foreach (var system in systems)
-            {
                 m_MaxLifetime = Mathf.Max(system.main.startLifetime.constant, m_MaxLifetime);
-            }
 
             // wait for random duration
 
-            float stopTime = Time.time + Random.Range(minDuration, maxDuration);
+            var stopTime = Time.time + Random.Range(minDuration, maxDuration);
 
-            while (Time.time < stopTime || m_EarlyStop)
-            {
-                yield return null;
-            }
+            while (Time.time < stopTime || m_EarlyStop) yield return null;
             Debug.Log("stopping " + name);
 
             // turn off emission
@@ -44,6 +38,7 @@ namespace UnityStandardAssets.Utility
                 var emission = system.emission;
                 emission.enabled = false;
             }
+
             BroadcastMessage("Extinguish", SendMessageOptions.DontRequireReceiver);
 
             // wait for any remaining particles to expire

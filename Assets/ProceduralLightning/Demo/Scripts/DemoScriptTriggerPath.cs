@@ -5,17 +5,19 @@
 // Source code may NOT be redistributed or sold.
 // 
 
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace DigitalRuby.ThunderAndLightning
 {
     public class DemoScriptTriggerPath : MonoBehaviour
     {
         public LightningSplineScript Script;
-        public UnityEngine.UI.Toggle SplineToggle;
+        public Toggle SplineToggle;
 
-        private readonly List<Vector3> points = new List<Vector3>();
+        private readonly List<Vector3> points = new();
 
         private void Start()
         {
@@ -29,13 +31,11 @@ namespace DigitalRuby.ThunderAndLightning
                 DemoScript.ReloadCurrentScene();
                 return;
             }
-            else if (Input.GetMouseButton(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+
+            if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
             {
-                Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                if (Camera.main.orthographic)
-                {
-                    worldPos.z = 0.0f;
-                }
+                var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (Camera.main.orthographic) worldPos.z = 0.0f;
                 if (points.Count == 0 || (points[points.Count - 1] - worldPos).magnitude > 8.0f)
                 {
                     points.Add(worldPos);
