@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Tracking;
 
 namespace Assets.Scripts.Tracking.CamFilters
 {

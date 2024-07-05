@@ -1,8 +1,9 @@
 ﻿using System.Drawing;
+using Assets.Scripts.Tracking.CamFilters;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 
-namespace Assets.Scripts.Tracking.CamFilters
+namespace Tracking.CamFilters
 {
     public class BlurFilter : ICamFilter
     {

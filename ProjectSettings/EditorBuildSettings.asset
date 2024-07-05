@@ -12,13 +12,13 @@ EditorBuildSettings:
     path: Assets/Scenes/SchoolFireSeekSecond.unity
     guid: 3a0f2fd6a5de56c40b02af11463c9c7d
   - enabled: 1
-    path: Assets/Scenes/SchoolFireSeekScene.unity
+    path: Assets/Scenes/SchoolFireSeekScene/SchoolFireSeekScene.unity
     guid: e2b0bf8e975495f43860787472056bac
   - enabled: 1
-    path: Assets/Scenes/HomeFireAimTVScene.unity
+    path: Assets/Scenes/HomeFireAimTVScene/HomeFireAimTVScene.unity
     guid: ca84d959780d8af4bbba4b4959b7cbe2
   - enabled: 1
-    path: Assets/Scenes/HomeFireAimGasScene.unity
+    path: Assets/Scenes/HomeFireAimGasScene/HomeFireAimGasScene.unity
     guid: 25268d808d0386c47ae0f0c32b9a018b
   - enabled: 1
     path: Assets/Scenes/Calibrate.unity

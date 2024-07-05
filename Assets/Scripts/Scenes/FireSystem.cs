@@ -1,7 +1,6 @@
-﻿using Standard_Assets.ParticleSystems.Scripts;
+﻿using ExternalAssets.Standard_Assets.ParticleSystems.Scripts;
 using Tracking;
 using UnityEngine;
-using UnityStandardAssets.Effects;
 
 namespace Scenes
 {

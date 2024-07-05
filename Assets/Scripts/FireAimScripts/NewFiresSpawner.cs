@@ -1,4 +1,4 @@
-using Standard_Assets.ParticleSystems.Scripts;
+using ExternalAssets.Standard_Assets.ParticleSystems.Scripts;
 using UnityEngine;
 
 namespace FireAimScripts

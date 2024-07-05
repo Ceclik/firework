@@ -3,7 +3,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
-namespace Assets.Scripts.Tracking
+namespace Tracking
 {
     public class CircleFinder
     {

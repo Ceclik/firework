@@ -1,8 +1,7 @@
+using ExternalAssets.Standard_Assets.ParticleSystems.Scripts;
 using FireSeekingScripts;
-using Standard_Assets.ParticleSystems.Scripts;
 using Tracking;
 using UnityEngine;
-using UnityStandardAssets.Effects;
 
 namespace FireAimScripts
 {

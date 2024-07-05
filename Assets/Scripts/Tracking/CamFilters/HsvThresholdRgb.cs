@@ -1,8 +1,9 @@
-﻿using Emgu.CV;
+﻿using Assets.Scripts.Tracking.CamFilters;
+using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
-namespace Assets.Scripts.Tracking.CamFilters
+namespace Tracking.CamFilters
 {
     public class HsvThresholdRgb : ICamFilter
     {

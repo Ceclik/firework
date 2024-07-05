@@ -124,33 +124,6 @@ namespace Tracking
             }
 
             _circles = circ.ToArray();
-
-            /*
-                //var points = _detector.Detect(frame);
-                //Debug.Log("poins count:" + points.Length);
-                //var circ = new CircleF[points.Length];
-                //for (int i = 0; i < points.Length; i++)
-                //{
-                //    circ[i].Center = points[i].Point;
-                //    circ[i].Radius = points[i].Size;
-                //    Debug.Log("finded blob: " + points[i].Point);
-                //}
-                //_circles = circ;
-
-
-                //double cannyThreshold = 100.0;
-                //double circleAccumulatorThreshold = 1;
-
-                //_circles = CvInvoke.HoughCircles(frame, HoughType.Gradient, 1.0, 50.0, cannyThreshold, circleAccumulatorThreshold, 2, 15);
-
-                //CvInvoke.cvSetImageCOI(frame, 0);
-                //Point minPoint= new Point();
-                //Point maxPoint=new Point();
-                //double minVal=0;
-                //double maxVal=255;
-                //CvInvoke.MinMaxLoc(frame, ref minVal, ref maxVal, ref minPoint, ref maxPoint);
-                //_circles = new CircleF[] {new CircleF(maxPoint,5)};
-                */
         }
 
         private void ProcessFrame(object sender, Mat frame)
@@ -179,7 +152,6 @@ namespace Tracking
                     if (distPoint != null)
                     {
                         trackingPosition = distPoint;
-                        //_cursor.transform.position = trackingPosition;                        
                         isTracked = true;
                         return;
                     }
