@@ -62,7 +62,7 @@ namespace Assets.Scripts.Tracking
 
         private void OnApplicationQuit()
         {
-            _capture.Dispose();
+            //_capture.Dispose();
             OnDisable();
         }
 

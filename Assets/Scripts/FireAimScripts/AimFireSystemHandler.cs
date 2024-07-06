@@ -1,41 +1,20 @@
 using ExternalAssets.Standard_Assets.ParticleSystems.Scripts;
 using FireSeekingScripts;
+using Scenes;
 using Tracking;
 using UnityEngine;
 
 namespace FireAimScripts
 {
-    public class AimFireSystemHandler : MonoBehaviour
+    public class AimFireSystemHandler : FireSystem
     {
-        [SerializeField] private GameObject[] fires;
-        [SerializeField] private float fireStopSpeed = 1f;
-        [SerializeField] private float fireGrowSpeed = 1f;
-        [SerializeField] private FireLight fireLight;
-        [SerializeField] private float overallLife;
-        [SerializeField] private FireStopper stopper;
-        [SerializeField] private GameObject explosion;
-        [SerializeField] private GameObject sounds;
-
-        public bool fake;
-        public bool startOver;
-        private AudioSource _aSoundFire;
-        private AudioSource _aSoundStart;
-        private bool _ended;
-        private float[] _expandTimers;
-
-        private float[] _firesLife;
-        private AudioSource _sound;
         private SpawnAdditionalFires _spawnAdditionalFires;
-
         private FireSplitter[] _splitters;
-        private bool _started;
-        private float _startFireIntensity;
-
-        public int LivesCount { get; private set; } = 3;
+        private int _livesCount  = 3;
 
         public int AmountOfActiveFires { get; set; }
 
-        private void Start()
+        protected override void Start()
         {
             _spawnAdditionalFires = GameObject.Find("Fires").GetComponent<SpawnAdditionalFires>();
             if (!GameManager.Instance.FireAimGameMode)
@@ -47,30 +26,17 @@ namespace FireAimScripts
                 _splitters[i] = fires[i].GetComponent<FireSplitter>();
                 _splitters[i].OnFireSplitted += DecreaseLive;
             }
-
-
-            _firesLife = new float[fires.Length];
-            _expandTimers = new float[fires.Length];
-            for (var i = 0; i < _firesLife.Length; i++)
-            {
-                _firesLife[i] = 100f;
-                _expandTimers[i] = 0f;
-                fires[i].SetActive(false);
-            }
-
-            _startFireIntensity = fireLight.intensity;
+            
+            base.Start();
         }
 
-        private void Update()
+        protected override void Update()
         {
-            if ((_started && AmountOfActiveFires == 0 && !_ended) || LivesCount <= 0)
-                /*if ((_started && AmountOfActiveFires == 0 && !_ended))*/
+            if ((Started && AmountOfActiveFires == 0 && !Ended) || _livesCount <= 0)
             {
-                _ended = true;
-                if (LivesCount <= 0)
-                {
+                Ended = true;
+                if (_livesCount <= 0)
                     GameManager.Instance.EndScene(false);
-                }
                 else
                 {
                     GameObject.Find("Fires").GetComponent<ScoreCounterInAimMode>().CountScore();
@@ -82,9 +48,9 @@ namespace FireAimScripts
             var ray = Camera.main!.ScreenPointToRay(new Vector2(MyInput.Instance.X, MyInput.Instance.Y));
 
             float allLightsMult = 0;
-            var activeFiresCount = 0;
-            var hittedFire = 0;
-            var hittedFireLastIndex = 0;
+            int activeFiresCount = 0;
+            int hitFire = 0;
+            int hitFireLastIndex = 0;
             for (var i = 0; i < fires.Length; i++)
             {
                 if (fires[i].GetComponent<ParticleSystemMultiplier>().multiplier == 0 && fires[i].activeSelf)
@@ -92,7 +58,6 @@ namespace FireAimScripts
 
                 //check mouse cursor in fire            
                 UnityEngine.Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
-                RaycastHit hit;
                 var particle = fires[i].GetComponent<ParticleSystemMultiplier>();
                 var fireCollider = fires[i].GetComponent<Collider>();
 
@@ -104,89 +69,36 @@ namespace FireAimScripts
 
                 if (particle.multiplier > 0 && fires[i].activeSelf)
                 {
-                    if (fireCollider.Raycast(ray, out hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor &&
+                    if (fireCollider.Raycast(ray, out var hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor &&
                         fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
                     {
                         if (!fires[i].GetComponent<FireSplitter>().IsExtinguishing)
                             fires[i].GetComponent<FireSplitter>().IsExtinguishing = true;
 
-                        stopper.Orient(hit.point);
-
                         fireStopSpeed = fires[i].GetComponent<FireSplitter>().FireStopSpeed;
 
-                        if (!(fake && i == 0) && !(startOver && i == 0))
-                            particle.multiplier -= fireStopSpeed * Time.deltaTime;
-                        if (startOver && particle.multiplier >= 0.1f && i == 0)
-                            particle.multiplier -= fireStopSpeed * Time.deltaTime;
-
+                        ExtinguishFire(ref particle, ref hit, ref hitFire, ref hitFireLastIndex, i, particleGrowSpeedValue);
+                        
                         CountFireComplexParameters(i);
-
-                        _firesLife[i] = particle.multiplier * 100f;
-                        hittedFire++;
-                        hittedFireLastIndex = i;
-                        if (_firesLife[i] <= 0) //check fire life and turn off
-                        {
-                            particle.Stop();
-                            _expandTimers = new float[fires.Length];
-                        }
-
-                        if (fake && i == 0)
-                        {
-                            if (particle.multiplier < 1f && fires[i].activeSelf)
-                            {
-                                particle.multiplier += particleGrowSpeedValue * Time.deltaTime;
-                                _firesLife[i] = particle.multiplier * 100f;
-                            }
-
-                            if (particle.multiplier >= 1f && fires[i].activeSelf)
-                                _expandTimers[i] = _expandTimers[i] + Time.deltaTime;
-                        }
                     }
                     else
                     {
                         if (fires[i].GetComponent<FireSplitter>().IsExtinguishing)
                             fires[i].GetComponent<FireSplitter>().IsExtinguishing = false;
 
-                        if (particle.multiplier < 1f && fires[i].activeSelf)
-                        {
-                            particle.multiplier += particleGrowSpeedValue * Time.deltaTime;
-                            _firesLife[i] = particle.multiplier * 100f;
-                        }
-
-                        if (particle.multiplier >= 1f && fires[i].activeSelf)
-                            _expandTimers[i] = _expandTimers[i] + Time.deltaTime;
+                        GrowFire(ref particle, i, particleGrowSpeedValue);
                     }
                 }
 
                 activeFiresCount++;
                 allLightsMult += particle.multiplier;
-                _sound.volume = overallLife;
+                Sound.volume = overallLife;
             }
 
-            if (fires.Length > 0)
-                overallLife = allLightsMult / fires.Length;
-            else
-                overallLife = 0;
-            if (overallLife < 0.008f) overallLife = 0;
-            if (activeFiresCount == 0) overallLife = 0;
-            fireLight.intensity = _startFireIntensity * overallLife;
-
-            if (hittedFire > 0)
-                stopper.StartFireStopping(hittedFireLastIndex, fake, startOver);
-            else
-                stopper.StopFireStopping();
+            HandleFireLife(allLightsMult, activeFiresCount, hitFire, hitFireLastIndex);
         }
 
-        private void OnEnable()
-        {
-            _sound = GetComponent<AudioSource>();
-            var allSounds = sounds.GetComponents<AudioSource>();
-            _aSoundStart = allSounds[0];
-            _aSoundFire = allSounds[1];
-            StartCoroutine(AudioFade.FadeIn(_aSoundStart, 2f));
-        }
-
-        private void OnDisable()
+        protected override void OnDisable()
         {
             foreach (var splitter in _splitters)
                 splitter.OnFireSplitted -= DecreaseLive;
@@ -196,7 +108,7 @@ namespace FireAimScripts
 
         private void DecreaseLive()
         {
-            LivesCount--;
+            _livesCount--;
         }
 
         private void DisableFire(int i)
@@ -220,18 +132,18 @@ namespace FireAimScripts
             }
         }
 
-        public void StartFire()
+        public override void StartFire()
         {
             if (explosion != null) explosion.SetActive(true);
 
             var particle = fires[0].GetComponent<ParticleSystemMultiplier>();
             particle.multiplier = 0.8f;
-            _started = true;
+            Started = true;
             UnityEngine.Debug.Log("Start fire!");
-            _sound.Play();
-            _sound.volume = 0;
-            if (_aSoundStart.volume >= 0.1) StartCoroutine(AudioFade.FadeOut(_aSoundStart, 5f));
-            StartCoroutine(AudioFade.FadeIn(_aSoundFire, 0.5f));
+            Sound.Play();
+            Sound.volume = 0;
+            if (ASoundStart.volume >= 0.1) StartCoroutine(AudioFade.FadeOut(ASoundStart, 5f));
+            StartCoroutine(AudioFade.FadeIn(ASoundFire, 0.5f));
         }
     }
 }

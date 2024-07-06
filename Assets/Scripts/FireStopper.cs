@@ -64,7 +64,7 @@ public class FireStopper : MonoBehaviour
 
     public void Hide()
     {
-        _pSystem.Stop();
+        //_pSystem.Stop();
         if (lightning != null) lightning.SetActive(false);
         if (danger != null) danger.SetActive(false);
     }
