@@ -92,15 +92,14 @@ namespace FireSeekingScripts
             var hitFireLastIndex = 0;
             for (var i = 0; i < fires.Length; i++)
             {
-                if (fires[i].GetComponent<ParticleSystemMultiplier>().multiplier == 0 && fires[i].activeSelf)
-                    DisableFire(i);
-
-
                 //check mouse cursor in fire            
                 UnityEngine.Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
                 var particle = fires[i].GetComponent<ParticleSystemMultiplier>();
                 var fireCollider = fires[i].GetComponent<Collider>();
-
+                
+                if (particle.multiplier == 0 && fires[i].activeSelf)
+                    DisableFire(i);
+                
                 if (particle.multiplier > 0 && fires[i].activeSelf)
                 {
                     if (fireCollider.Raycast(ray, out var hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor)

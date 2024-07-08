@@ -53,29 +53,29 @@ namespace FireAimScripts
             int hitFireLastIndex = 0;
             for (var i = 0; i < fires.Length; i++)
             {
-                if (fires[i].GetComponent<ParticleSystemMultiplier>().multiplier == 0 && fires[i].activeSelf)
-                    DisableFire(i);
-
-                //check mouse cursor in fire            
                 UnityEngine.Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
                 var particle = fires[i].GetComponent<ParticleSystemMultiplier>();
                 var fireCollider = fires[i].GetComponent<Collider>();
+                var splitter = fires[i].GetComponent<FireSplitter>();
+                
+                if (particle.multiplier == 0 && fires[i].activeSelf)
+                    DisableFire(i, ref particle, ref splitter);
 
                 var particleGrowSpeedValue = fireGrowSpeed;
 
-                if (!fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
+                if (!particle.IsGrown)
                     particleGrowSpeedValue = 2f;
 
 
                 if (particle.multiplier > 0 && fires[i].activeSelf)
                 {
                     if (fireCollider.Raycast(ray, out var hit, Mathf.Infinity) && MyInput.Instance.IsTrackedCursor &&
-                        fires[i].GetComponent<ParticleSystemMultiplier>().IsGrown)
+                        particle.IsGrown)
                     {
-                        if (!fires[i].GetComponent<FireSplitter>().IsExtinguishing)
-                            fires[i].GetComponent<FireSplitter>().IsExtinguishing = true;
+                        if (!splitter.IsExtinguishing)
+                            splitter.IsExtinguishing = true;
 
-                        fireStopSpeed = fires[i].GetComponent<FireSplitter>().FireStopSpeed;
+                        fireStopSpeed = splitter.FireStopSpeed;
 
                         ExtinguishFire(ref particle, ref hit, ref hitFire, ref hitFireLastIndex, i, particleGrowSpeedValue);
                         
@@ -83,8 +83,8 @@ namespace FireAimScripts
                     }
                     else
                     {
-                        if (fires[i].GetComponent<FireSplitter>().IsExtinguishing)
-                            fires[i].GetComponent<FireSplitter>().IsExtinguishing = false;
+                        if (splitter.IsExtinguishing)
+                            splitter.IsExtinguishing = false;
 
                         GrowFire(ref particle, i, particleGrowSpeedValue);
                     }
@@ -111,13 +111,13 @@ namespace FireAimScripts
             _livesCount--;
         }
 
-        private void DisableFire(int i)
+        private void DisableFire(int i, ref ParticleSystemMultiplier particle, ref FireSplitter splitter)
         {
             if (_spawnAdditionalFires.IsNewSpawned)
                 _spawnAdditionalFires.IsNewSpawned = false;
             AmountOfActiveFires--;
-            fires[i].GetComponent<ParticleSystemMultiplier>().IsFinished = true;
-            fires[i].GetComponent<FireSplitter>().OnEndExtinguishing();
+            particle.IsFinished = true;
+            splitter.OnEndExtinguishing();
             fires[i].SetActive(false);
             UnityEngine.Debug.Log($"Amount of active fires: {AmountOfActiveFires}\ndisabled fire index: {i}");
         }
