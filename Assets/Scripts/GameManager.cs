@@ -13,8 +13,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private string comPort;
 
     private AfterLevelMenuDisplayer _afterLevelMenuDisplayer;
-
-    //private FireSystem _fireSystem;
+    
     private AimFireSystemHandler _aimFireHandler;
     private int _currentLevel;
     private SeekingFireSystemHandler _seekingFireHandler;
@@ -73,25 +72,9 @@ public class GameManager : Singleton<GameManager>
         _settings.SaveSettings();
     }
 
-    public void UpdateLevelSettings(int levelIndex, LevelSettings settings)
-    {
-        _settings.levelSettings[levelIndex] = settings;
-    }
-
     public LevelSettings GetLevelSettings(int levelIndex)
     {
         return _settings.GetSettings(levelIndex);
-    }
-
-    public LevelSettings GetLevelSettings()
-    {
-        return _settings.GetSettings(_currentLevel);
-    }
-
-    public void LoadSchoolFireAimScene()
-    {
-        Cursor.visible = false;
-        SceneManager.LoadScene("SchoolFireAim");
     }
 
     public void LoadSchoolFireSeekScene()
@@ -99,7 +82,6 @@ public class GameManager : Singleton<GameManager>
         Cursor.visible = false;
         SceneManager.LoadScene("SchoolFireSeekScene");
     }
-
 
     public void LoadHomeFireAimTVScene()
     {
@@ -160,29 +142,8 @@ public class GameManager : Singleton<GameManager>
         UnityEngine.Debug.Log("Level Loaded");
         UnityEngine.Debug.Log(scene.name);
         UnityEngine.Debug.Log(mode);
-        if (scene.name == "SceneOne" || scene.name == "SceneTwo")
-        {
-            Cursor.visible = false;
-            FindFireSystems();
-        }
 
         if (scene.name == "MainMenu") Cursor.visible = false;
-
-        switch (scene.name)
-        {
-            case "SceneOne":
-                _currentLevel = 0;
-                break;
-            case "SceneOnePartTwo":
-                _currentLevel = 1;
-                break;
-            case "SceneTwo":
-                _currentLevel = 2;
-                break;
-            case "SceneTwoPartTwo":
-                _currentLevel = 3;
-                break;
-        }
 
         MyInput.Instance.Init();
     }
@@ -197,22 +158,18 @@ public class GameManager : Singleton<GameManager>
     {
         if (FireAimGameMode)
         {
-            if (_aimFireHandler == null)
-                FindFireSystems();
-
+            if (_aimFireHandler == null) FindFireSystems();
             _aimFireHandler.StartFire();
         }
 
         if (FireSeekGameMode)
         {
             if (_seekingFireHandler == null) FindFireSystems();
-
             _seekingFireHandler.StartFire();
         }
 
         UnityEngine.Debug.Log("Manager starting fire");
-
-
+        
         Timer.gameObject.SetActive(true);
         if (FireAimGameMode)
             Hearts.SetActive(true);
